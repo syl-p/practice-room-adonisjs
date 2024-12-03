@@ -1,0 +1,16 @@
+@layout()
+  <ul class="divide-y">
+    @each(user in users)
+      <li class="py-3">
+        <div class="flex space-x-3 align-middle">
+          @!users.avatar({
+            user: user
+          })
+          <div>
+            <a href="{{ route('users.show', {id: user.id}) }}" class="hover:underline">{{ user.username }}</a>
+          </div>
+        </div>
+      </li>
+    @end
+  </ul>
+@end

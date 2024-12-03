@@ -1,0 +1,8 @@
+@let(node = $props.has('href') ? "a" : "button")
+@let(classNames = "border p-3")
+
+<{{node}} {{$props.merge({
+  class: [classNames]
+}).toAttrs()}}>
+  {{{await $slots.main()}}}
+</{{node}}>

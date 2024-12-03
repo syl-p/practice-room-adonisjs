@@ -1,0 +1,56 @@
+@layout()
+  <section class="mx-auto container">
+    <form class="space-y-4 md:space-y-6" method="post" action="{{ route('auth.register.store') }}">
+      {{ csrfField() }}
+      @!ui.form.input({
+        name: 'username',
+        label: 'username'
+      })
+
+      @!ui.form.input({
+        name: 'email',
+        label: 'email',
+        type: 'email'
+      })
+
+      @!ui.form.input({
+        name: 'password',
+        label: 'password',
+        type: 'password'
+      })
+
+      @!ui.form.input({
+        name: 'confirm-password',
+        label: 'confirm-password',
+        type: 'password'
+      })
+
+      {{-- <div class="flex items-start">
+        <div class="flex items-center h-5">
+          <input
+            id="terms"
+            aria-describedby="terms"
+            type="checkbox"
+            class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-gray-600 dark:ring-offset-gray-800"
+            required=""
+          />
+        </div>
+        <div class="ml-3 text-sm">
+          <label for="terms" class="font-light text-gray-500 dark:text-gray-300">I accept the <a class="font-medium text-gray-600 hover:underline dark:text-gray-500" href="#">Terms and Conditions</a></label>
+        </div>
+      </div> --}}
+
+      @ui.button({type: "submit"})
+        Create an account
+      @end
+      
+      <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+        Déjà inscrit ? <a
+          href="{{ route('auth.login.show') }}"
+          class="font-medium text-gray-600 hover:underline dark:text-gray-500"
+        >Connectez vous ici</a>
+      </p>
+    </form>
+  </section>
+
+@end

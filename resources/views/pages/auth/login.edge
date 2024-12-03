@@ -1,0 +1,30 @@
+@layout()
+  <section class="mx-auto container">
+    <form class="space-y-4 md:space-y-6" method="post" action="{{ route('auth.login.store') }}">
+      {{ csrfField() }}
+      @!ui.form.input({
+        name: 'email',
+        label: 'email',
+        type: 'email'
+      })
+
+      @!ui.form.input({
+        name: 'password',
+        label: 'password',
+        type: 'password'
+      })
+
+      @ui.button({type: "submit"})
+        Se connecter
+      @end
+      
+      <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+        Vous n'avez pas encore de compte ? <a
+          href="{{ route('auth.register.show') }}"
+          class="font-medium text-gray-600 hover:underline dark:text-gray-500"
+        >Inscrivez vous ici</a>
+      </p>
+    </form>
+  </section>
+
+@end

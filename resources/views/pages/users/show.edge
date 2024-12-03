@@ -1,0 +1,16 @@
+@layout()
+  <h1>
+    {{ user.username }}
+  </h1>
+  <hr />
+  <p>
+    Exercices pratiqués
+  </p>
+  <ul>
+    @each(item in user.practicedExercises)
+      <li>
+        {{ item.title }}, {{item.createdAt}} - {{item.$extras.pivot_duration}}, {{item.user.username}}
+      </li>
+    @end
+  </ul>
+@end
