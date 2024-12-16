@@ -1,20 +1,8 @@
 @layout()
-  <ul class="divide-y">
+  <ul class="space-y-6 container">
     @each(exercise in exercises)
-      <li class="py-3">
-        <div class="flex space-x-3 align-middle">
-          <a href="{{ route('users.show', {id: exercise.user.id}) }}">
-            @!users.avatar({
-            user: exercise.user
-            })
-          </a>
-          <div>
-            <small class="block font-light">
-              Posté par {{exercise.user.username}}
-            </small>
-            <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="hover:underline">{{ exercise.title }}</a>
-          </div>
-        </div>
+      <li>
+        @!exercises.card({exercise})
       </li>
     @end
   </ul>

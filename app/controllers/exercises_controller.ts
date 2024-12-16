@@ -6,6 +6,7 @@ export default class ExercisesController {
   async index({ view }: HttpContext) {
     const exercises = await Exercise.query()
       .preload('user')
+      .preload('tags')
       .apply((scope) => scope.public())
       .orderBy('createdAt', 'desc')
     return view.render('pages/exercises/index', { exercises })
@@ -13,7 +14,8 @@ export default class ExercisesController {
 
   async show({ view, params }: HttpContext) {
     const exercise = await Exercise.findByOrFail('slug', params.slug)
-    return view.render('pages/exercises/show', { exercise })
+    const comments = await exercise.related('comments').query().preload('user')
+    return view.render('pages/exercises/show', { exercise, comments })
   }
 
   async store({}: HttpContext) {}

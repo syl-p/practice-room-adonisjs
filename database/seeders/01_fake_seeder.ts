@@ -7,7 +7,10 @@ export default class extends BaseSeeder {
   async run() {
     // Write your database queries inside the run method
     const defaultUsers = await UserFactory.with('exercises', 3, (exercise) =>
-      exercise.apply('public')
+      exercise
+        .apply('public')
+        .with('comments', 10, (comment) => comment.with('user').apply('exercise'))
+        .with('tags', 5, (tag) => tag.apply('exercise'))
     )
       // .with('practicedExercises', 10)
       .with('exercises', 3, (exercise) => exercise.apply('draft'))
@@ -21,8 +24,10 @@ export default class extends BaseSeeder {
     }
 
     const exIds = exercises.map((e) => e.id)
+    const userOds = defaultUsers.map((e) => e.id)
     const promises = defaultUsers.map(async (user) => {
-      return user.related('practicedExercises').attach(this.#getRandom(exIds, 10))
+      await user.related('followers').attach(this.#getRandom(userOds, 10))
+      await user.related('practicedExercises').attach(this.#getRandom(exIds, 10))
     })
 
     await Promise.all(promises)

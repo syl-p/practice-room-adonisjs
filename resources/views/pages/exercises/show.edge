@@ -1,11 +1,23 @@
 @layout()
-  <form action="{{route('exercise.addToPractice', {id: exercise.id})}}" method="POST">
+  <form action="{{ route('exercise.addToPractice', {id: exercise.id}) }}" method="POST">
     {{ csrfField() }}
-    <input type="hidden" name="duration" value="600"/>
+    <input type="hidden" name="duration" value="600" />
     <button type="submit" class="btn btn-primary">Add to Practice</button>
   </form>
+  <hr />
   <h1 class="text-xl font-bold">
     {{ exercise.title }}
   </h1>
   {{ exercise.content }}
+  <hr />
+  <h2>
+    Comments:
+  </h2>
+  <ul>
+    @each(comment in comments)
+      <li>
+        @!comments.comment({comment})
+      </li>
+    @end
+  </ul>
 @end

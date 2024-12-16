@@ -1,13 +1,13 @@
 @layout()
   <h1>
-    {{ user.username }}
+    {{ user.username }} ({{user.followers.length}} abonnés)
   </h1>
   <hr />
   <p>
     Exercices pratiqués
   </p>
   <ul>
-    @each(item in user.practicedExercises)
+    @each(item in practicedExercises)
       <li>
         {{ item.title }}, {{item.createdAt}} - {{item.$extras.pivot_duration}}, {{item.user.username}}
       </li>

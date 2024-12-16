@@ -1,0 +1,27 @@
+<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+  <div class="flex space-x-3 align-middle p-6">
+    <a href="{{ route('users.show', {id: exercise.user.id}) }}">
+      @!users.avatar({
+      user: exercise.user
+      })
+    </a>
+    <div>
+      <small class="block font-light text-sm text-muted-foreground">
+        Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>
+      </small>
+      <h3 class="text-2xl font-semibold leading-none tracking-tight">
+        <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="hover:underline">{{ exercise.title }}</a>
+      </h3>
+    </div>
+  </div>
+  <div class="px-6">
+    {{ exercise.content?.substring(0, 100) + "..." }}
+  </div>
+  <footer class="mx-6 mb-6">
+    @each(tag in exercise.tags)
+      @ui.badge()
+        {{ tag.label }}
+      @end
+    @end
+  </footer>
+</div>

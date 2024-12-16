@@ -9,12 +9,12 @@ export default class UsersController {
 
   async show({ view, params }: HttpContext) {
     const user = await User.findOrFail(params.id)
+    // await user.load('practicedExercises', (practicedExercise) => {
+    //   practicedExercise.preload('user')
+    // })
+    const practicedExercises = await user.related('practicedExercises').query().preload('user')
+    await user.load('followers')
 
-    await user.load('practicedExercises', (practicedExercise) => {
-      practicedExercise.preload('user')
-    })
-
-    // const practicedExercises = await user.related('practicedExercises').query().preload('user')
-    return view.render('pages/users/show', { user })
+    return view.render('pages/users/show', { user, practicedExercises })
   }
 }

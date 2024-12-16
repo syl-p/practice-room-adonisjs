@@ -39,6 +39,22 @@ export default class User extends compose(BaseModel, AuthFinder) {
   })
   declare practicedExercises: ManyToMany<typeof Exercise>
 
+  @manyToMany(() => User, {
+    pivotTable: 'followers',
+    pivotForeignKey: 'follower_id',
+    pivotRelatedForeignKey: 'following_id',
+    pivotTimestamps: true,
+  })
+  declare followings: ManyToMany<typeof User>
+
+  @manyToMany(() => User, {
+    pivotTable: 'followers',
+    pivotForeignKey: 'following_id',
+    pivotRelatedForeignKey: 'follower_id',
+    pivotTimestamps: true,
+  })
+  declare followers: ManyToMany<typeof User>
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

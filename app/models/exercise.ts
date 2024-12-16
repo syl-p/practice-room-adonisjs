@@ -1,10 +1,20 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, belongsTo, column, manyToMany, scope } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeCreate,
+  belongsTo,
+  column,
+  hasMany,
+  manyToMany,
+  scope,
+} from '@adonisjs/lucid/orm'
 import ExerciseStatuses from '#enums/exercise_statuses'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import User from './user.js'
-import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import ExerciseStatus from './exercise_status.js'
+import Tag from './tag.js'
+import Comment from '#models/comment'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })
@@ -50,6 +60,18 @@ export default class Exercise extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasMany(() => Tag, {
+    foreignKey: 'taggableId',
+    onQuery: (query) => query.where('taggable_type', 'Exercise'),
+  })
+  declare tags: HasMany<typeof Tag>
+
+  @hasMany(() => Comment, {
+    foreignKey: 'commentableId',
+    onQuery: (query) => query.where('commentable_type', 'Exercise'),
+  })
+  declare comments: HasMany<typeof Comment>
 
   @beforeCreate()
   static async makeSlug(exercise: Exercise) {
