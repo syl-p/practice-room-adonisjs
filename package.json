@@ -63,6 +63,8 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^3.0.0",
     "@dimerapp/markdown": "^8.0.1",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
     "@vinejs/vine": "^2.1.0",
     "edge.js": "^6.2.0",
     "luxon": "^3.5.0",

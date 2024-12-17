@@ -1,19 +1,21 @@
 {{-- @let(node = $props.has('href') ? "a" : "button") --}}
-@let(classNames = "w-10 h-10 rounded-full")
+@let(size = $props.has('size') ? $props.get('size') : 'default')
+@let(classSize = "w-10 h-10")
+@let(classNames = "rounded-full relative overflow-hidden flex flex-col items-center justify-center")
+
+@if(size == "small")
+  @assign(classSize = "w-8 h-8")
+@else
+  @assign(classSize = "w-10 h-10")
+@end
 
 @if(user.avatarUrl)
-  <img src="{{ user.avatarUrl }}" {{ $props.merge({class: [classNames]}).toAttrs() }} />
+  <div {{ $props.merge({class: [classNames, classSize]}).toAttrs() }}>
+
+    <img src="{{ user.avatarUrl }}" {{ $props.merge({class: ["w-full h-full object-cover"]}).toAttrs() }} />
+  </div>
 @else
-  <div
-    {{ $props.merge({class: [classNames, "relative overflow-hidden bg-gray-100 dark:bg-gray-600"]}).toAttrs() }}
-  >
-    <svg
-      class="absolute w-12 h-12 text-gray-400 -left-1"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-    </svg>
+  <div {{ $props.merge({class: [classNames, classSize, "bg-gray-100 dark:bg-gray-600"]}).toAttrs() }}>
+    {{ auth.user.username[0] }}
   </div>
 @end

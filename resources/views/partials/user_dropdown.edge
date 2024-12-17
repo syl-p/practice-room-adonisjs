@@ -1,0 +1,39 @@
+<div class="relative" data-controller="dropdown" data-dropdown-toggle-class="hidden">
+  <button
+    type="button"
+    data-dropdown-target="button"
+    data-action="click->dropdown#toggle"
+    class="flex text-sm bg-white rounded-full group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+    id="user-menu-button"
+  >
+    <span class="sr-only">Open user menu</span>
+    @!users.avatar({user: auth.user, size: "small"})
+  </button>
+  <div
+    data-dropdown-target="menu"
+    class="absolute right-0 z-10 mt-4 w-56 bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none divide-y divide-gray-100"
+    role="menu"
+    aria-orientation="vertical"
+    aria-labelledby="menu-button"
+    tabindex="-1"
+  >
+    <div class="py-1" role="none">
+      <p class="truncate px-3.5 py-3">
+        <span class="block text-xs text-gray-500" role="none">Connecté en tant que...</span>
+        <span class="mt-0.5 font-semibold" role="none">
+          {{ auth.user.username }}
+        </span>
+      </p>
+    </div>
+    <ul class="py-1" role="none">
+      <li>
+        <form method="POST" action="{{ route('auth.logout') }}">
+          {{ csrfField() }}
+          @ui.button({type: "submit"})
+            Se déconnecter
+          @end
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>

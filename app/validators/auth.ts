@@ -1,3 +1,4 @@
+import { uniqueRule } from '#start/rules/unique'
 import vine from '@vinejs/vine'
 
 export const registerValidator = vine.compile(
@@ -7,11 +8,7 @@ export const registerValidator = vine.compile(
       .string()
       .email()
       .normalizeEmail({})
-      .unique(async (db, value, _field) => {
-        const result = await db.from('users').select('id').where('email', value)
-
-        return result.length ? false : true
-      }),
+      .use(uniqueRule({ table: 'users', column: 'email' })),
     password: vine.string().minLength(8),
   })
 )

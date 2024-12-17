@@ -2,7 +2,9 @@
   <form action="{{ route('exercise.addToPractice', {id: exercise.id}) }}" method="POST">
     {{ csrfField() }}
     <input type="hidden" name="duration" value="600" />
-    <button type="submit" class="btn btn-primary">Add to Practice</button>
+    @ui.button({type: "submit"})
+      Pratiquer !
+    @end
   </form>
   <hr />
   <h1 class="text-xl font-bold">

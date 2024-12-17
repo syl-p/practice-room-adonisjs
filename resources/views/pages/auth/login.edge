@@ -2,6 +2,12 @@
   <section class="mx-auto container">
     <form class="space-y-4 md:space-y-6" method="post" action="{{ route('auth.login.store') }}">
       {{ csrfField() }}
+      {{-- {{ inspect(flashMessages.all()) }} --}}
+      @error('E_INVALID_CREDENTIALS')
+        @ui.alert()
+          {{ $message }}
+        @end
+      @end
       @!ui.form.input({
         name: 'email',
         label: 'email',

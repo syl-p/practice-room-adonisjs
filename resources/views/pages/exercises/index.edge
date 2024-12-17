@@ -1,9 +1,12 @@
 @layout()
-  <ul class="space-y-6 container">
-    @each(exercise in exercises)
-      <li>
-        @!exercises.card({exercise})
-      </li>
-    @end
-  </ul>
+  <section class="container">
+    <h1 class="text-3xl mb-6">Liste des exercices</h1>
+    <ul class="space-y-6">
+      @each(exercise in exercises)
+        <li>
+          @!exercises.card({exercise})
+        </li>
+      @end
+    </ul>
+  </section>
 @end
