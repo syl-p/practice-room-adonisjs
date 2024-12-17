@@ -1,0 +1,27 @@
+@layout()
+  <section class="mx-auto container">
+    <h1>
+      Mettre à jour ton profil
+    </h1>
+    <form method="PATCH" action="{{ route('auth.register.update', {}, {qs:{method: 'PATCH' }}) }}">
+      {{ csrfField() }}
+      {{ inspect(flashMessages.all()) }}
+      @error('E_INVALID_CREDENTIALS')
+        @ui.alert()
+          {{ $message }}
+        @end
+      @end
+      
+      @!ui.form.input({name: "username", label:"Username", type: "text"})
+      @!ui.form.input({name: "email", label:"email", type: "email"})
+
+      <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
+
+      @!ui.form.input({name: "password", label: "Nouveau mot de passe", type: "password"})
+      @!ui.form.input({name: "password_confirm", label: "Mot de passe de confirmation", type: "password"})
+      @ui.button({type: "submit", class: "mt-6"})
+        Enregistrer
+      @end
+    </form>
+  </section>
+@end

@@ -27,11 +27,16 @@
     </div>
     <ul class="py-1" role="none">
       <li>
+        <a href="{{ route('auth.register.edit') }}" class="block px-4 py-2 text-sm text-gray-700">Mes informations</a>
+      </li>
+      <li>
         <form method="POST" action="{{ route('auth.logout') }}">
           {{ csrfField() }}
-          @ui.button({type: "submit"})
-            Se déconnecter
-          @end
+          <input
+            type="submit"
+            value="Se déconnecter"
+            class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+          />
         </form>
       </li>
     </ul>
