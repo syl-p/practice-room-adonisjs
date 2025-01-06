@@ -12,6 +12,7 @@ const RegistersController = () => import('#controllers/auth/registers_controller
 const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const CommentsController = () => import('#controllers/exercises/comments_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 const ExercisesController = () => import('#controllers/exercises_controller')
 const PagesController = () => import('#controllers/pages_controller')
@@ -22,15 +23,20 @@ router
   .as('page.show')
   .where('slug', router.matchers.slug())
 
-router.resource('exercises', ExercisesController)
+router.resource('exercises', ExercisesController).except(['show'])
+router.resource('exercises.comments', CommentsController)
 
 router
-  .get('/exercise/:slug', [ExercisesController, 'show'])
+  .get('/practice-time', [UsersController, 'practiceTime'])
+  .as('practiceTime')
+  .use(middleware.auth())
+router
+  .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
   .where('slug', router.matchers.slug())
 
 router
-  .post('/exercise/practice/:id', [ExercisesController, 'addToPractice'])
+  .post('/exercises/practice/:id', [ExercisesController, 'addToPractice'])
   .as('exercise.addToPractice')
 
 router
@@ -64,3 +70,5 @@ router
   .as('auth')
 
 router.resource('users', UsersController).only(['index', 'show', 'edit'])
+router.post('user/:id/follow', [UsersController, 'follow']).as('users.follow')
+router.delete('user/:id/unfollow', [UsersController, 'unfollow']).as('users.unfollow')

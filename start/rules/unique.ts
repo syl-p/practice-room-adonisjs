@@ -1,5 +1,4 @@
 import db from '@adonisjs/lucid/services/db'
-import { unique } from '@adonisjs/lucid/utils'
 import type { FieldContext } from '@vinejs/vine/types'
 import vine from '@vinejs/vine'
 
@@ -17,6 +16,9 @@ async function isUnique(value: unknown, options: Options, field: FieldContext) {
     .from(options.table)
     .select(options.column)
     .where(options.column, value)
+    .if(field.meta.userId, (query) => {
+      query.whereNot('id', field.meta.userId)
+    })
     .first()
 
   if (result) {

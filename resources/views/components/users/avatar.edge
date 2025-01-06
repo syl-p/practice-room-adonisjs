@@ -4,18 +4,17 @@
 @let(classNames = "rounded-full relative overflow-hidden flex flex-col items-center justify-center")
 
 @if(size == "small")
-  @assign(classSize = "w-8 h-8")
+  @assign(classSize = "w-6 h-6")
 @else
   @assign(classSize = "w-10 h-10")
 @end
 
-@if(user.avatarUrl)
+@if(user.avatarUrl != undefined)
   <div {{ $props.merge({class: [classNames, classSize]}).toAttrs() }}>
-
     <img src="{{ user.avatarUrl }}" {{ $props.merge({class: ["w-full h-full object-cover"]}).toAttrs() }} />
   </div>
 @else
   <div {{ $props.merge({class: [classNames, classSize, "bg-gray-100 dark:bg-gray-600"]}).toAttrs() }}>
-    {{ auth.user.username[0] }}
+    {{ user.username[0] }}
   </div>
 @end

@@ -1,0 +1,12 @@
+<form
+  id="comment-form"
+  hx-swap="outerHTML"
+  hx-post="{{ route(`${controller_name}.comments.store`, {exercise_id: commentable_id}) }}"
+>
+  {{ csrfField() }}
+  <label for="comment" class="sr-only">Your comment</label>
+  @!ui.form.textarea({name: "content"})
+  @ui.button({type: "submit", class: "mt-6"})
+    Envoyer
+  @end
+</form>

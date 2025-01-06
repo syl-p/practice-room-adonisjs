@@ -1,0 +1,10 @@
+@if(comment.createdAt)
+  <div hx-swap-oob="afterbegin:#comments">
+    @!comments.comment({comment})
+  </div>
+@end
+
+@!comments.form({
+  commentable_id: comment.commentableId,
+  controller_name: "exercises"
+})

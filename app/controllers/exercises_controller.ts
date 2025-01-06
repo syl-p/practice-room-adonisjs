@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Exercise from '#models/exercise'
-import User from '#models/user'
+import CacheService from '#services/cache_service'
 
 export default class ExercisesController {
   async index({ view }: HttpContext) {
@@ -14,7 +14,12 @@ export default class ExercisesController {
 
   async show({ view, params }: HttpContext) {
     const exercise = await Exercise.findByOrFail('slug', params.slug)
-    const comments = await exercise.related('comments').query().preload('user')
+    await exercise.load('user')
+    const comments = await exercise
+      .related('comments')
+      .query()
+      .orderBy('createdAt', 'desc')
+      .preload('user')
     return view.render('pages/exercises/show', { exercise, comments })
   }
 
@@ -22,11 +27,18 @@ export default class ExercisesController {
 
   async delete({}: HttpContext) {}
 
-  async addToPractice({ response, params }: HttpContext) {
+  async addToPractice({ view, params, auth }: HttpContext) {
     const exercise = await Exercise.findByOrFail('id', params.id)
-    const user = await User.query().first()
-    await user.related('practicedExercises').attach([exercise.id])
+    const user = auth.user
+    await user?.related('practicedExercises').create({ exerciseId: exercise.id, duration: 90 })
 
-    response.redirect().toPath(`/users/${user.id}`)
+    const practices = await auth.user
+      ?.related('practicedExercises')
+      .query()
+      .apply((scope) => scope.today())
+
+    await CacheService.delete(`practiced_time:${user?.id}`)
+    const time = practices?.reduce((accumulator, practice) => accumulator + practice.duration, 0)
+    return view.render('fragments/practice_time', { time })
   }
 }

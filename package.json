@@ -58,6 +58,7 @@
     "@adonisjs/auth": "^9.2.3",
     "@adonisjs/core": "^6.14.1",
     "@adonisjs/lucid": "^21.3.0",
+    "@adonisjs/redis": "^9.1.0",
     "@adonisjs/session": "^7.5.0",
     "@adonisjs/shield": "^8.1.1",
     "@adonisjs/static": "^1.1.1",
@@ -67,6 +68,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@vinejs/vine": "^2.1.0",
     "edge.js": "^6.2.0",
+    "htmx.org": "^1.9.12",
     "luxon": "^3.5.0",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2"

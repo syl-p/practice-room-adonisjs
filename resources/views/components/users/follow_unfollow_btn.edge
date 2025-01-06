@@ -1,0 +1,11 @@
+@let(action = user.followers.find(f => f.id === auth.user.id))
+
+<form
+  hx-{{action ? 'delete' : 'post'}}="{{ route(`users.${action ? 'unfollow' : 'follow'}`, {id: user.id}) }}"
+  hx-swap="outerHTML"
+>
+  {{ csrfField() }}
+  @ui.button({type: "submit"})
+    {{ action ? 'Ne plus suivre' :  'suivre' }}
+  @end
+</form>

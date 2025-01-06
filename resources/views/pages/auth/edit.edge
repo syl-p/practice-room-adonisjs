@@ -3,7 +3,7 @@
     <h1>
       Mettre à jour ton profil
     </h1>
-    <form method="PATCH" action="{{ route('auth.register.update', {}, {qs:{method: 'PATCH' }}) }}">
+    <form method="post" action="{{ route('auth.register.update', {}, {qs: {_method: 'PATCH' }}) }}">
       {{ csrfField() }}
       {{ inspect(flashMessages.all()) }}
       @error('E_INVALID_CREDENTIALS')
@@ -12,8 +12,8 @@
         @end
       @end
       
-      @!ui.form.input({name: "username", label:"Username", type: "text"})
-      @!ui.form.input({name: "email", label:"email", type: "email"})
+      @!ui.form.input({name: "username", label:"Username", type: "text", value: auth.user.username})
+      @!ui.form.input({name: "email", label:"email", type: "email", value: auth.user.email})
 
       <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
 

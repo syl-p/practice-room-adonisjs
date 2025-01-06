@@ -1,25 +1,53 @@
 @layout()
-  <form action="{{ route('exercise.addToPractice', {id: exercise.id}) }}" method="POST">
-    {{ csrfField() }}
-    <input type="hidden" name="duration" value="600" />
-    @ui.button({type: "submit"})
-      Pratiquer !
-    @end
-  </form>
-  <hr />
-  <h1 class="text-xl font-bold">
-    {{ exercise.title }}
-  </h1>
-  {{ exercise.content }}
-  <hr />
-  <h2>
-    Comments:
-  </h2>
-  <ul>
-    @each(comment in comments)
-      <li>
-        @!comments.comment({comment})
-      </li>
-    @end
-  </ul>
+  <header class="bg-secondary py-6">
+    <div class="container flex space-x-3">
+      <a href="{{ route('users.show', {id: exercise.id}) }}">
+        @!users.avatar({user: exercise.user})
+      </a>
+      <div class="flex-1 flex ">
+        <div>
+          <small class="block font-light text-sm text-muted-foreground">
+            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>
+          </small>
+          <h1 class="text-xl font-bold">
+            {{ exercise.title }}
+          </h1>
+          <p>
+            {{ excerpt(exercise.content, 200) }}
+          </p>
+        </div>
+        <form
+          hx-post="{{ route('exercise.addToPractice', {id: exercise.id}) }}"
+          hx-target="#practiceTime"
+          hx-swap="outerHTML"
+        >
+          {{ csrfField() }}
+        <input type="hidden" name="duration" value="600" />
+          @ui.button({type: "submit"})
+            Pratiquer !
+          @end
+        </form>
+      </div>
+    </div>
+  </header>
+  <section class="container">
+    <article class="my-6">
+      {{ exercise.content }}
+    </article>
+    <article>
+      <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+        Discussion ({{comments.length}})
+      </h2>
+
+      @if(auth.isAuthenticated)
+        @!comments.form({commentable_id: exercise.id, controller_name: "exercises"})
+      @end
+      
+      <div id="comments">
+        @each(comment in comments)
+          @!comments.comment({comment})
+        @end
+      </div>
+    </article>
+  </section>
 @end

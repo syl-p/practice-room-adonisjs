@@ -1,17 +1,15 @@
 <div class="relative" data-controller="dropdown" data-dropdown-toggle-class="hidden">
   <button
     type="button"
-    data-dropdown-target="button"
-    data-action="click->dropdown#toggle"
-    class="flex text-sm bg-white rounded-full group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+    class="flex items-center space-x-3 text-sm bg-white rounded-full group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
     id="user-menu-button"
   >
-    <span class="sr-only">Open user menu</span>
+    <span id="practiceTime">{{ practiceTime }}</span>
     @!users.avatar({user: auth.user, size: "small"})
   </button>
   <div
     data-dropdown-target="menu"
-    class="absolute right-0 z-10 mt-4 w-56 bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none divide-y divide-gray-100"
+    class="hidden absolute right-0 z-10 mt-4 w-56 bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none divide-y divide-gray-100"
     role="menu"
     aria-orientation="vertical"
     aria-labelledby="menu-button"

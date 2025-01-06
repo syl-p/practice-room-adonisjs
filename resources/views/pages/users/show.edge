@@ -1,16 +1,45 @@
 @layout()
-  <h1>
-    {{ user.username }} ({{user.followers.length}} abonnés)
-  </h1>
-  <hr />
-  <p>
-    Exercices pratiqués
-  </p>
-  <ul>
-    @each(item in practicedExercises)
-      <li>
-        {{ item.title }}, {{item.createdAt}} - {{item.$extras.pivot_duration}}, {{item.user.username}}
-      </li>
-    @end
-  </ul>
+  <header class="bg-secondary py-6 mb-6">
+    <div class="container flex space-x-3">
+      <div class="flex-1">
+        <h1 class="text-3xl">
+          {{ user.username }} ({{user.followers.length}} abonnés)
+        </h1>
+        <p>
+          {{ user.bio }}
+        </p>
+      </div>
+      <div>
+        @if(auth.isAuthenticated)
+          @!users.followUnfollowBtn({user})
+        @end
+      </div>
+    </div>
+  </header>
+  <section class="flex space-x-3 container">
+    <aside>
+      <h2 class="text-xl">
+        Followers ({{user.followers.length}})
+      </h2>
+      <div class="flex space-x-3">
+        @each(follower in user.followers)
+          <a href="{{ route('users.show', {id: follower.id}) }}">
+            @!users.avatar({user: follower, size: "small"})
+          </a>
+        @end
+      </div>
+    </aside>
+    <article class="flex-1">
+      <h2 class="text-xl">
+        Exercices pratiqués
+      </h2>
+      <ul>
+        @each(item in practicedExercises)
+          <li>
+            {{ item.exercise.title }}, {{item.createdAt}} - {{item.duration}}, {{item.user.username}}
+          </li>
+        @end
+      </ul>
+    </article>
+  </section>
 @end

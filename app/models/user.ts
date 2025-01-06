@@ -3,8 +3,9 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import Exercise from './exercise.js'
+import Exercise from '#models/exercise'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import PracticedExercise from '#models/practiced_exercise'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -22,7 +23,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare email: string
 
   @column()
-  declare avatarUrl: string
+  declare avatarUrl: string | null
 
   @column({ serializeAs: null })
   declare password: string
@@ -30,14 +31,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Exercise)
   declare exercises: HasMany<typeof Exercise>
 
-  @manyToMany(() => Exercise, {
-    pivotTable: 'practiced_exercises',
-    pivotForeignKey: 'user_id',
-    pivotRelatedForeignKey: 'exercise_id',
-    pivotColumns: ['duration'],
-    pivotTimestamps: true,
-  })
-  declare practicedExercises: ManyToMany<typeof Exercise>
+  @hasMany(() => PracticedExercise)
+  declare practicedExercises: HasMany<typeof PracticedExercise>
 
   @manyToMany(() => User, {
     pivotTable: 'followers',

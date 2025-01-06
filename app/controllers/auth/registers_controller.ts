@@ -1,5 +1,5 @@
 import User from '#models/user'
-import { registerValidator } from '#validators/auth'
+import { registerEditValidator, registerValidator } from '#validators/auth'
 import { HttpContext } from '@adonisjs/core/http'
 
 export default class RegistersController {
@@ -19,13 +19,14 @@ export default class RegistersController {
   }
 
   async update({ request, view, auth }: HttpContext) {
-    console.log('hello !', auth.use('web').user)
-    const data = await request.validateUsing(registerValidator)
     const user = auth.use('web').user
+    const data = await request.validateUsing(registerEditValidator, {
+      meta: {
+        userId: user!.id,
+      },
+    })
     user?.merge(data)
     await user?.save()
-
-    console.log(user)
     return view.render('pages/auth/edit')
   }
 }
