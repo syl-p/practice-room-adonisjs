@@ -1,0 +1,23 @@
+<div class="relative" x-data="{isOpen: false}" @keydown.esc.window="isOpen = false">
+  <button
+    type="button"
+    @click="isOpen = !isOpen"
+    @click.outside="isOpen = false"
+    class="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-md border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm font-medium tracking-wide transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800 dark:border-neutral-700 dark:bg-neutral-900 dark:focus-visible:outline-neutral-300"
+    aria-haspopup="true"
+    @keydown.space.prevent="isOpen = true"
+    @keydown.enter.prevent="isOpen = true"
+    @keydown.down.prevent="isOpen = true"
+    :class="isOpen ? 'text-neutral-900 dark:text-white' : 'text-neutral-600 dark:text-neutral-300'"
+    :aria-expanded="isOpen"
+    id="user-menu-button"
+  >
+    {{{ await $slots.trigger() }}}
+  </button>
+  <div
+    class="absolute right-0 z-10 mt-4 w-56 bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none divide-y divide-gray-100"
+    x-show="isOpen"
+  >
+    {{{ await $slots.menu() }}}
+  </div>
+</div>

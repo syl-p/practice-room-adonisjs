@@ -16,17 +16,19 @@
             {{ excerpt(exercise.content, 200) }}
           </p>
         </div>
-        <form
-          hx-post="{{ route('exercise.addToPractice', {id: exercise.id}) }}"
-          hx-target="#practiceTime"
-          hx-swap="outerHTML"
-        >
-          {{ csrfField() }}
-        <input type="hidden" name="duration" value="600" />
-          @ui.button({type: "submit"})
-            Pratiquer !
-          @end
-        </form>
+        @if(auth.isAuthenticated)
+          <form
+            hx-post="{{ route('exercise.addToPractice', {id: exercise.id}) }}"
+            hx-target="#practiceTime"
+            hx-swap="outerHTML"
+          >
+            {{ csrfField() }}
+            <input type="hidden" name="duration" value="600" />
+            @ui.button({type: "submit"})
+              Pratiquer !
+            @end
+          </form>
+        @end
       </div>
     </div>
   </header>
@@ -43,10 +45,13 @@
         @!comments.form({commentable_id: exercise.id, controller_name: "exercises"})
       @end
       
-      <div id="comments">
-        @each(comment in comments)
-          @!comments.comment({comment})
-        @end
+      <div
+        id="comments"
+        hx-swap="outerHTML"
+        hx-get="{{ route('exercises.comments.index', {exercise_id: exercise.id}) }}"
+        hx-trigger="load"
+      >
+        Chargement des commentaires...
       </div>
     </article>
   </section>

@@ -1,5 +1,5 @@
 @let(node = $props.has('href') ? "a" : "button")
-@let(classNames = "border p-3")
+@let(classNames = "border p-3 disabled:cursor-not-allowed disabled:opacity-50")
 
 <{{node}} {{$props.merge({
   class: [classNames]
