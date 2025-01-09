@@ -3,7 +3,7 @@
 @let(value = valueOld || $props.value)
 
 <div>
-  <label for="{{ name || '' }}" class="block mb-2 text-sm font-medium text-gray-900 ">
+  <label for="{{ name || '' }}" class="block mb-2 text-sm font-medium text-gray-900">
     @if($slots.label || label)
       @if($slots.label)
         {{ await $slots.label() }}

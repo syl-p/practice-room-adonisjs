@@ -4,26 +4,52 @@
       Mettre à jour ton profil
     </h1>
     <form
+      id="editRegistration"
       method="post"
       enctype="multipart/form-data"
       action="{{ route('auth.register.update', {}, {qs: {_method: 'PATCH' }}) }}"
     >
       {{ csrfField() }}
-      {{ inspect(auth.user.avatarUrl) }}
       {{-- Avatar --}}
-      <div x-data="fileUpload" class="flex space-x-3 items-center mb-3">
-        <div
-          x-show="imageUrl"
-          class="rounded-full relative overflow-hidden flex flex-col items-center justify-center w-10 h-10"
-          x-ref="preview"
-        >
-          <img :src="imageUrl" x-if="imageUrl" class="w-full h-full object-cover" />
-        </div>
-        <template x-if="!imageUrl">
-          @!users.avatar({user: auth.user})
-        </template>
+      <label class="block mb-2 text-sm font-medium text-gray-900">Votre avatar</label>
 
+      <div
+        x-data="fileUpload"
+        class="flex space-x-3 items-center mb-3"
+        @if(auth.user.avatarUrl)
+          x-init="imageUrl = '{{auth.user.avatarUrl}}'"
+        @end
+      >
+        <div
+          class="rounded-full relative overflow-hidden flex flex-col items-center justify-center w-10 h-10 bg-gray-100 dark:bg-gray-600"
+        >
+          <img :src="imageUrl" x-show="imageUrl" class="w-full h-full object-cover" />
+          <template x-if="!imageUrl">
+            <span>{{ auth.user.username[0] }}</span>
+          </template>
+        </div>
+
+        <div x-show="imageUrl">
+          <div class="relative">
+            <button
+              x-on:click.prevent="reset(); document.forms.editRegistration.avatarUrl.value = null"
+              class="absolute -top-1 -right-1 bg-white rounded-full text-red-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
         <input name="avatar" type="file" x-ref="file" @change="file = $refs.file.files[0]" />
+        <input name="avatarUrl" type="hidden" value="{{ auth.user.avatarUrl }}" />
       </div>
 
       {{-- Basic info --}}

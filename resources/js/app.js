@@ -14,6 +14,10 @@ Alpine.data('fileUpload', () => ({
       }
     })
   },
+  reset() {
+    this.file = null
+    this.imageUrl = null
+  },
 }))
 
 Alpine.start()

@@ -9,12 +9,10 @@
   @assign(classSize = "w-10 h-10")
 @end
 
-@if(user.avatarUrl != undefined)
-  <div {{ $props.merge({class: [classNames, classSize]}).toAttrs() }}>
+<div {{ $props.merge({class: [classNames, classSize, "bg-gray-100 dark:bg-gray-600"]}).toAttrs() }}>
+  @if(user.avatarUrl != undefined)
     <img src="{{ user.avatarUrl }}" {{ $props.merge({class: ["w-full h-full object-cover"]}).toAttrs() }} />
-  </div>
-@else
-  <div {{ $props.merge({class: [classNames, classSize, "bg-gray-100 dark:bg-gray-600"]}).toAttrs() }}>
+  @else
     {{ user.username[0] }}
-  </div>
-@end
+  @end
+</div>
