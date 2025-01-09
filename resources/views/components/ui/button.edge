@@ -1,8 +1,21 @@
 @let(node = $props.has('href') ? "a" : "button")
-@let(classNames = "border p-3 disabled:cursor-not-allowed disabled:opacity-50")
+@let(variant = $props.has('variant') ? $props.variant : "default")
+@let(classNames = "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2")
+@let(variantClasses = "bg-primary text-primary-foreground hover:bg-primary/90")
+
+@if(variant === 'secondary')
+  @assign(variantClasses = 'bg-secondary text-secondary-foreground hover:bg-secondary/80')
+@elseif(variant === 'error')
+  @assign(variantClasses = 'bg-destructive text-destructive-foreground hover:bg-destructive/90')
+@elseif(variant === 'outline')
+  @assign(variantClasses = 'border border-input bg-background hover:bg-accent hover:text-accent-foreground')
+@elseif(variant === 'ghost')
+  @assign(variantClasses = 'hover:bg-accent hover:text-accent-foreground')
+@end
+
 
 <{{node}} {{$props.merge({
-  class: [classNames]
+  class: [classNames, variantClasses]
 }).toAttrs()}}>
   {{{await $slots.main()}}}
 </{{node}}>

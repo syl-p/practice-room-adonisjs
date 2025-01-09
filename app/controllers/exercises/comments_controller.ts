@@ -28,6 +28,7 @@ export default class CommentsController {
       await exercise.related('comments').save(comment)
       await comment.load('user')
     } catch (error) {
+      // HTMX RESP
       if (error instanceof errors.E_VALIDATION_ERROR) {
         session.flashValidationErrors(error)
         response.status(422)

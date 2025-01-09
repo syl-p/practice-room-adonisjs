@@ -17,9 +17,9 @@
   <div class="px-6">
     {{ exercise.content?.substring(0, 100) + "..." }}
   </div>
-  <footer class="mx-6 mb-6">
+  <footer class="p-6">
     @each(tag in exercise.tags)
-      @ui.badge()
+      @ui.badge({variant: "secondary"})
         {{ tag.label }}
       @end
     @end

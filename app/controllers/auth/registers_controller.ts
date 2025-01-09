@@ -1,6 +1,7 @@
 import User from '#models/user'
 import { registerEditValidator, registerValidator } from '#validators/auth'
 import { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
 
 export default class RegistersController {
   async show({ view }: HttpContext) {
@@ -22,11 +23,25 @@ export default class RegistersController {
     const user = auth.use('web').user
     const data = await request.validateUsing(registerEditValidator, {
       meta: {
-        userId: user!.id,
+        userEmail: user!.email,
       },
     })
-    user?.merge(data)
-    await user?.save()
+
+    if (data.avatar) {
+      await data.avatar.move(app.makePath('storage/avatars'))
+      auth.user!.avatarUrl = `/avatars/${data.avatar.fileName}`
+    } else if (!data.avatarUrl) {
+      auth.user!.avatarUrl = null
+    }
+
+    if (!data.password) {
+      delete data.password
+    }
+
+    const { username, bio, email, password } = data
+
+    auth.user?.merge({ username, bio, email, password })
+    await auth.user?.save()
     return view.render('pages/auth/edit')
   }
 }

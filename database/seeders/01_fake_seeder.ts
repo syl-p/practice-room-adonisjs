@@ -27,7 +27,7 @@ export default class extends BaseSeeder {
     const userOds = defaultUsers.map((e) => e.id)
     const promises = defaultUsers.map(async (user) => {
       await user.related('followers').attach(this.#getRandom(userOds, 10))
-      await user.related('practicedExercises').attach(this.#getRandom(exIds, 10))
+      // await user.related('practicedExercises').attach(this.#getRandom(exIds, 10))
     })
 
     await Promise.all(promises)

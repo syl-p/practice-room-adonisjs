@@ -1,24 +1,41 @@
 @layout()
   <section class="mx-auto container">
-    <h1>
+    <h1 class="text-3xl mb-3">
       Mettre à jour ton profil
     </h1>
-    <form method="post" action="{{ route('auth.register.update', {}, {qs: {_method: 'PATCH' }}) }}">
+    <form
+      method="post"
+      enctype="multipart/form-data"
+      action="{{ route('auth.register.update', {}, {qs: {_method: 'PATCH' }}) }}"
+    >
       {{ csrfField() }}
-      {{ inspect(flashMessages.all()) }}
-      @error('E_INVALID_CREDENTIALS')
-        @ui.alert()
-          {{ $message }}
-        @end
-      @end
-      
+      {{ inspect(auth.user.avatarUrl) }}
+      {{-- Avatar --}}
+      <div x-data="fileUpload" class="flex space-x-3 items-center mb-3">
+        <div
+          x-show="imageUrl"
+          class="rounded-full relative overflow-hidden flex flex-col items-center justify-center w-10 h-10"
+          x-ref="preview"
+        >
+          <img :src="imageUrl" x-if="imageUrl" class="w-full h-full object-cover" />
+        </div>
+        <template x-if="!imageUrl">
+          @!users.avatar({user: auth.user})
+        </template>
+
+        <input name="avatar" type="file" x-ref="file" @change="file = $refs.file.files[0]" />
+      </div>
+
+      {{-- Basic info --}}
       @!ui.form.input({name: "username", label:"Username", type: "text", value: auth.user.username})
       @!ui.form.input({name: "email", label:"email", type: "email", value: auth.user.email})
+      @!ui.form.textarea({name: "bio", label:"bio", type: "text", value: auth.user.bio})
 
       <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
 
+      {{-- Password --}}
       @!ui.form.input({name: "password", label: "Nouveau mot de passe", type: "password"})
-      @!ui.form.input({name: "password_confirm", label: "Mot de passe de confirmation", type: "password"})
+      @!ui.form.input({name: "password_confirmation", label: "Mot de passe de confirmation", type: "password"})
       @ui.button({type: "submit", class: "mt-6"})
         Enregistrer
       @end

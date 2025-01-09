@@ -12,12 +12,15 @@ const RegistersController = () => import('#controllers/auth/registers_controller
 const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const DashboardController = () => import('#controllers/dashboard_controller')
 const CommentsController = () => import('#controllers/exercises/comments_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 const ExercisesController = () => import('#controllers/exercises_controller')
 const PagesController = () => import('#controllers/pages_controller')
 
 router.get('/', [PagesController, 'index']).as('home')
+router.get('/avatars/:filename', [UsersController, 'avatar'])
+
 router
   .get('/pages/:slug', [PagesController, 'show'])
   .as('page.show')
@@ -26,10 +29,6 @@ router
 router.resource('exercises', ExercisesController).except(['show'])
 router.resource('exercises.comments', CommentsController)
 
-router
-  .get('/practice-time', [UsersController, 'practiceTime'])
-  .as('practiceTime')
-  .use(middleware.auth())
 router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
@@ -70,5 +69,14 @@ router
   .as('auth')
 
 router.resource('users', UsersController).only(['index', 'show', 'edit'])
-router.post('user/:id/follow', [UsersController, 'follow']).as('users.follow')
-router.delete('user/:id/unfollow', [UsersController, 'unfollow']).as('users.unfollow')
+
+router
+  .post('user/:id/follow', [UsersController, 'follow'])
+  .use(middleware.auth())
+  .as('users.follow')
+router
+  .delete('user/:id/unfollow', [UsersController, 'unfollow'])
+  .use(middleware.auth())
+  .as('users.unfollow')
+
+router.get('dashboard', [DashboardController, 'index']).use(middleware.auth()).as('dashboard')

@@ -2,7 +2,7 @@ import redis from '@adonisjs/redis/services/main'
 
 class CacheService {
   async has(...keys: string[]) {
-    return await redis.exists(keys)
+    return redis.exists(keys)
   }
 
   async get(key: string) {
@@ -11,12 +11,11 @@ class CacheService {
   }
 
   async fetch(key: string, callback: () => any) {
-    if (await this.has(key)) {
-      console.log('use cache')
-      return await this.get(key)
+    let value = await this.get(key)
+    if (value) {
+      return value
     } else {
-      console.log('construct cache')
-      const value: any = await callback()
+      value = await callback()
       await this.set(key, value)
       return value && JSON.parse(value)
     }

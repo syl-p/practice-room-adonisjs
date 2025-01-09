@@ -1,8 +1,22 @@
 @let(node = $props.has('href') ? "a" : "span")
 @let(classNames = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2")
 
+@let(variantClasses = "bg-primary text-primary-foreground hover:bg-primary/90")
+
+@if(variant === 'secondary')
+  @assign(variantClasses = 'bg-secondary text-secondary-foreground hover:bg-secondary/80')
+@elseif(variant === 'error')
+  @assign(variantClasses = 'bg-destructive text-destructive-foreground hover:bg-destructive/90')
+@elseif(variant === 'outline')
+  @assign(variantClasses = 'border border-input bg-background hover:bg-accent hover:text-accent-foreground')
+@elseif(variant === 'ghost')
+  @assign(variantClasses = 'hover:bg-accent hover:text-accent-foreground')
+@end
+
+
+
 <{{node}} {{$props.merge({
-  class: [classNames]
+  class: [classNames, variantClasses]
 }).toAttrs()}}>
 {{{await $slots.main()}}}
 </{{node}}>
