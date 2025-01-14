@@ -15,6 +15,7 @@ import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relat
 import ExerciseStatus from './exercise_status.js'
 import Tag from './tag.js'
 import Comment from '#models/comment'
+import CommentableType from '#enums/commentable_types'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })
@@ -63,13 +64,13 @@ export default class Exercise extends BaseModel {
 
   @hasMany(() => Tag, {
     foreignKey: 'taggableId',
-    onQuery: (query) => query.where('taggable_type', 'Exercise'),
+    onQuery: (query) => query.where('taggable_type', CommentableType.EXERCISE),
   })
   declare tags: HasMany<typeof Tag>
 
   @hasMany(() => Comment, {
     foreignKey: 'commentableId',
-    onQuery: (query) => query.where('commentable_type', 'Exercise'),
+    onQuery: (query) => query.where('commentable_type', CommentableType.EXERCISE),
   })
   declare comments: HasMany<typeof Comment>
 

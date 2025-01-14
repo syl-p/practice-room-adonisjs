@@ -15,7 +15,7 @@ export default class RegistersController {
     return response.redirect().toRoute('home')
   }
 
-  async edit({ view, auth }: HttpContext) {
+  async edit({ view }: HttpContext) {
     return view.render('pages/auth/edit')
   }
 

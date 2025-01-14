@@ -42,7 +42,7 @@
       </h2>
 
       @if(auth.isAuthenticated)
-        @!comments.form({commentable_id: exercise.id, controller_name: "exercises"})
+        @!comments.form({controller_name: "exercises", params: {exercise_id: exercise.id}})
       @end
       
       <div

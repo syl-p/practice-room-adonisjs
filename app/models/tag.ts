@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, computed } from '@adonisjs/lucid/orm'
+import TaggableType from '#enums/taggable_type'
 
 export default class Tag extends BaseModel {
   @column({ isPrimary: true })
@@ -15,7 +16,7 @@ export default class Tag extends BaseModel {
   declare label: string
 
   @column()
-  declare taggableType: string
+  declare taggableType: TaggableType
 
   @column()
   declare taggableId: number
@@ -31,6 +32,7 @@ export default class Tag extends BaseModel {
       Exercise: () => import('#models/exercise'),
     }
 
+    //@ts-ignore
     return models[type]?.().then((module) => module.default)
   }
 }

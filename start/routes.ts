@@ -13,7 +13,8 @@ const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 const DashboardController = () => import('#controllers/dashboard_controller')
-const CommentsController = () => import('#controllers/exercises/comments_controller')
+const ExercisesCommentsController = () => import('#controllers/exercises/comments_controller')
+const CommentsCommentsController = () => import('#controllers/comments/comments_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 const ExercisesController = () => import('#controllers/exercises_controller')
 const PagesController = () => import('#controllers/pages_controller')
@@ -27,7 +28,8 @@ router
   .where('slug', router.matchers.slug())
 
 router.resource('exercises', ExercisesController).except(['show'])
-router.resource('exercises.comments', CommentsController)
+router.resource('exercises.comments', ExercisesCommentsController)
+router.resource('comments.comments', CommentsCommentsController)
 
 router
   .get('/exercises/:slug', [ExercisesController, 'show'])

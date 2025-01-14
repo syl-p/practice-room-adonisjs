@@ -1,10 +1,15 @@
 @if(comment.id)
-  <div hx-swap-oob="afterbegin:#comments">
+  <div
+    hx-swap-oob="afterbegin:#{{ comment.commentableType === 'Exercise' ? 'comments' : `comment_${comment.commentableId}_replies` }}"
+  >
     @!comments.comment({comment})
   </div>
 @end
 
 @!comments.form({
-  commentable_id: comment.commentableId,
-  controller_name: "exercises"
+  params: {
+    ...(comment.commentableType === "Exercise" && {exercise_id: comment.commentableId}),
+    ...(comment.commentableType === "Comment" && {comment_id: comment.commentableId})
+  },
+  controller_name: (comment.commentableType === "Exercise" ? "exercises" : "comments")
 })

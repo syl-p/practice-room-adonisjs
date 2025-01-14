@@ -1,5 +1,6 @@
 import factory from '@adonisjs/lucid/factories'
 import Tag from '#models/tag'
+import TaggableType from '#enums/taggable_type'
 
 export const TagFactory = factory
   .define(Tag, async ({ faker }) => {
@@ -8,6 +9,6 @@ export const TagFactory = factory
     }
   })
   .state('exercise', (row) => {
-    row.taggableType = 'Exercise'
+    row.taggableType = TaggableType.EXERCISE
   })
   .build()

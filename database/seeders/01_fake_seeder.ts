@@ -9,7 +9,12 @@ export default class extends BaseSeeder {
     const defaultUsers = await UserFactory.with('exercises', 3, (exercise) =>
       exercise
         .apply('public')
-        .with('comments', 10, (comment) => comment.with('user').apply('exercise'))
+        .with('comments', 10, (comment) =>
+          comment
+            .with('user')
+            .apply('exercise')
+            .with('replies', 4, (commentRow) => commentRow.apply('comment'))
+        )
         .with('tags', 5, (tag) => tag.apply('exercise'))
     )
       // .with('practicedExercises', 10)
@@ -23,7 +28,7 @@ export default class extends BaseSeeder {
       exercises = [...exercises, ...user.exercises]
     }
 
-    const exIds = exercises.map((e) => e.id)
+    // const exIds = exercises.map((e) => e.id)
     const userOds = defaultUsers.map((e) => e.id)
     const promises = defaultUsers.map(async (user) => {
       await user.related('followers').attach(this.#getRandom(userOds, 10))
