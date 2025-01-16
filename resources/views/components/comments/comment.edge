@@ -47,10 +47,18 @@
             <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
           </li>
           <li>
-            <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+            <form
+              method="POST"
+              action="{{ route('comments.destroy', {id: comment.id}, {qs: {_method: 'DELETE' }}) }}"
+            >
+              {{ csrfField() }}
+
+              <input
+                type="submit"
+                value="Supprimer"
+                class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              />
+            </form>
           </li>
         </ul>
       @end
@@ -62,7 +70,7 @@
   </p>
 
   <div class="flex items-center mt-4 space-x-4">
-    @if(comment.commentableType !== "Comment")
+    @if(comment.commentableType !== "Comment" && comment.replies)
       <span class="text-sm text-gray-500">
         {{ comment.replies.length }} Réponses,
       </span>
@@ -105,14 +113,15 @@
       @end
     </div>
 
-    @if(comment.replies)
-      <ul class="space-y-3 divide-y" id="comment_{{ comment.id }}_replies">
+    <ul class="space-y-3 divide-y" id="comment_{{ comment.id }}_replies">
+      @if(comment.replies)
         @each(reply in comment.replies)
           <li>
             @!comments.comment({comment: reply})
           </li>
         @end
-      </ul>
-    @end
-  </div>
+      @end
+    </ul>
+  </ul>
+</div>
 </article>
