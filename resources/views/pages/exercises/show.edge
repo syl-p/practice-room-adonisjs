@@ -4,7 +4,7 @@
       <a href="{{ route('users.show', {id: exercise.id}) }}">
         @!users.avatar({user: exercise.user})
       </a>
-      <div class="flex-1 flex ">
+      <div class="flex-1 flex items-center space-x-3">
         <div>
           <small class="block font-light text-sm text-muted-foreground">
             Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>
@@ -17,16 +17,35 @@
           </p>
         </div>
         @if(auth.isAuthenticated)
+          {{-- TODO: Convert to components --}}
           <form
             hx-post="{{ route('exercise.addToPractice', {id: exercise.id}) }}"
             hx-target="#practiceTime"
             hx-swap="outerHTML"
+            x-data="timer"
           >
             {{ csrfField() }}
-            <input type="hidden" name="duration" value="600" />
-            @ui.button({type: "submit"})
-              Pratiquer !
+            <div class="flex space-x-3 mb-3">
+              <p
+                x-ref="display"
+                class="flex space-x-3 items-center text-xl bg-white text-primary h-fit px-4 py-2"
+              >
+                @svg('heroicons:clock')
+                <span>00:00:00</span>
+              </p>
+
+              @ui.button({variant: 'outline', "@click.prevent": 'start()', "x-show":"!started"})
+                @svg('heroicons:play')
+              @end
+              @ui.button({variant: 'outline', "@click.prevent": 'stop()', "x-show":"started"})
+                @svg('heroicons:pause')
+              @end
+            </div>
+
+            @ui.button({type: "submit", "x-show": "elapsedTime !== 0", "@click": "reset()"})
+              Enregistrer la pratique
             @end
+            <input type="hidden" name="duration" x-ref="input" />
           </form>
         @end
       </div>

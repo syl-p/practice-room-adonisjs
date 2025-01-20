@@ -1,6 +1,6 @@
 @ui.dropdown()
   @slot('trigger')
-    <span id="practiceTime">{{ practiceTime }}</span>
+    <span id="practiceTime">{{ utils.secondsToTime(practiceTime) }}</span>
     @!users.avatar({user: auth.user, size: "small"})
   @end
   
