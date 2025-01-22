@@ -7,6 +7,10 @@
 |
 */
 
+const SearchController = () => import('#controllers/search_controller')
+
+const PracticedExercisesController = () => import('#controllers/practiced_exercises_controller')
+
 const UsersController = () => import('#controllers/users_controller')
 const RegistersController = () => import('#controllers/auth/registers_controller')
 const LoginController = () => import('#controllers/auth/login_controller')
@@ -31,19 +35,18 @@ router
   .where('slug', router.matchers.slug())
 
 router.resource('exercises', ExercisesController).except(['show'])
-
-router.resource('comments', CommentsController)
-router.resource('exercises.comments', ExercisesCommentsController)
-router.resource('comments.comments', CommentsCommentsController)
-
+router.resource('comments', CommentsController).only(['destroy'])
+router.resource('exercises.comments', ExercisesCommentsController).only(['index', 'store'])
+router.resource('comments.comments', CommentsCommentsController).only(['store'])
 router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
   .where('slug', router.matchers.slug())
 
 router
-  .post('/exercises/practice/:id', [ExercisesController, 'addToPractice'])
+  .post('/exercises/practice/:id', [PracticedExercisesController, 'store'])
   .as('exercise.addToPractice')
+  .use(middleware.auth())
 
 router
   .group(() => {
@@ -76,7 +79,6 @@ router
   .as('auth')
 
 router.resource('users', UsersController).only(['index', 'show', 'edit'])
-
 router
   .post('user/:id/follow', [UsersController, 'follow'])
   .use(middleware.auth())
@@ -86,4 +88,5 @@ router
   .use(middleware.auth())
   .as('users.unfollow')
 
+router.get('search', [SearchController, 'index']).as('search')
 router.get('dashboard', [DashboardController, 'index']).use(middleware.auth()).as('dashboard')

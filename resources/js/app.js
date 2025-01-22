@@ -31,7 +31,7 @@ Alpine.data('timer', () => ({
       this.elapsedTime += 1000
       const value = this.formattedElapsedTime(this.elapsedTime)
       this.$refs.display.innerHTML = value
-      this.$refs.display.input = value
+      this.$refs.input.value = this.elapsedTime / 1000
     }, 1000)
   },
   stop() {

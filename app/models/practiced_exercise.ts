@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, belongsTo, column, scope } from '@adonisjs/lucid/orm'
+import { afterDelete, BaseModel, beforeSave, belongsTo, column, scope } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import Exercise from '#models/exercise'
@@ -31,6 +31,7 @@ export default class PracticedExercise extends BaseModel {
   declare updatedAt: DateTime
 
   @beforeSave()
+  @afterDelete()
   static async invalidCache(practicedExercise: PracticedExercise) {
     await CacheService.delete(`practice_time:${practicedExercise.userId}`)
   }

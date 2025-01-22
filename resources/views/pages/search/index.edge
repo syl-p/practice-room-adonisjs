@@ -1,0 +1,35 @@
+@layout()
+  <form method="get" action="{{ route('search') }}">
+    @!ui.form.input({name: "pattern"})
+    @ui.button({type: submit})
+      Rechercher
+    @end
+  </form>
+  <hr />
+  <h3>
+    Results:
+  </h3>
+  <ul id="search_results">
+    <li>
+      Utilisateurs:
+      <ul>
+        @each(user in users)
+          <li>
+            {{ user.username }}
+          </li>
+        @end
+      </ul>
+    </li>
+    <li>
+      Exercices:
+      <ul>
+        @each(exercise in exercises)
+          <li>
+            {{ exercise.title }}
+          </li>
+        @end
+      </ul>
+    </li>
+  </ul>
+
+@end
