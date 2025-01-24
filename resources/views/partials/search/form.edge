@@ -1,0 +1,32 @@
+<form method="get" hx-get="{{ route('search') }}" hx-swap="outerHTML">
+  @!ui.form.input({name: "pattern"})
+  @ui.button({type: submit})
+    Rechercher
+  @end
+  <hr class="shrink-0 bg-border h-[1px] w-full my-4" />
+  <ul id="search_results" class="space-y-3">
+    <li>
+      <span class="block font-semibold uppercase text-sm text-muted-foreground mb-3">Utilisateurs:</span>
+      <ul role="list" class="flex space-x-3">
+        @each(user in users)
+          <li>
+            <a href="{{ route('users.show', {id: user.id}) }}">
+              @!users.avatar({user})
+              <span class="sr-only">{{ user.username }}</span>
+            </a>
+          </li>
+        @end
+      </ul>
+    </li>
+    <li>
+      <span class="block font-semibold uppercase text-sm text-muted-foreground mb-3">Exercices:</span>
+      <ul role="list" class="divide-y divide-gray-200">
+        @each(exercise in exercises)
+          <li class="hover:bg-gray-50">
+            <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="p-4 block">{{ exercise.title }}</a>
+          </li>
+        @end
+      </ul>
+    </li>
+  </ul>
+</form>

@@ -9,6 +9,6 @@ export default class SearchController {
     const { pattern } = await request.validateUsing(searchValidator)
     const exercises = await ExerciseService.search(pattern)
     const users = await UserService.search(pattern)
-    return view.render('pages/search/index', { exercises, users })
+    return view.render('fragments/search_results', { exercises, users })
   }
 }

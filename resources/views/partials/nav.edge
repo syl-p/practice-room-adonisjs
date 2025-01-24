@@ -49,20 +49,18 @@
       </nav>
     </div>
     <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-      <nav class="flex items-center space-x-3">
+      <nav class="flex items-center space-x-3 items-center">
         @if(auth.isAuthenticated)
           @include('partials/user_dropdown')
         @else
           <a href="{{ route('auth.login.show') }}">Se connecter</a>
         @end
-        <button
-          class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 py-2 w-9 px-0"
-          type="button"
-        >
+        @include('partials/search/btn_modal')
+        @ui.button({variant: 'ghost'})
           @svg('heroicons:sun', {class: "h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"})
           @svg('heroicons:moon', {class: "absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"})
           <span class="sr-only">Toggle theme</span>
-        </button>
+        @end
       </nav>
     </div>
   </div>
