@@ -1,7 +1,9 @@
 import User from '#models/user'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class UserService {
-  static async search(pattern: string | null | undefined) {
+  async search(pattern: string | null | undefined) {
     const results = await User.query()
       .where('username', 'like', `%${pattern}%`)
       .orWhere('bio', 'like', `%${pattern}%`)

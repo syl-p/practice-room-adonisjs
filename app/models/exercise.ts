@@ -16,6 +16,7 @@ import ExerciseStatus from './exercise_status.js'
 import Tag from './tag.js'
 import Comment from '#models/comment'
 import CommentableType from '#enums/commentable_types'
+import PracticedExercise from './practiced_exercise.js'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })
@@ -47,14 +48,8 @@ export default class Exercise extends BaseModel {
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @manyToMany(() => User, {
-    pivotTable: 'practiced_exercises',
-    pivotForeignKey: 'exercise_id',
-    pivotRelatedForeignKey: 'user_id',
-    pivotColumns: ['duration'],
-    pivotTimestamps: true,
-  })
-  declare practicedBy: ManyToMany<typeof User>
+  @hasMany(() => PracticedExercise)
+  declare practiced: HasMany<typeof PracticedExercise>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

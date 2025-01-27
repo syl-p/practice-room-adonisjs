@@ -8,17 +8,61 @@
       </div>
     </div>
   </header>
-  <section class="container">
-    <h2 class="">
-      Stats
-    </h2>
-    <div class="flex space-x-3">
-      <div class="">
+  <section class="container flex space-x-3">
+    <div class="flex-1">
+      <div class="flex space-x-3 mb-6">
+        @dashboard.statCard()
+          @!dashboard.daily({...dailyExercises})
+        @end
+        @dashboard.statCard()
+          @!dashboard.daily({...dailyPracticeTime})
+        @end
       </div>
-      <div class="">
-      </div>
-      <div class="">
-      </div>
+
+      @dashboard.statCard()
+        <h2 class="text-xl mb-3">
+          Exercices que vous avez le plus pratiqués
+        </h2>
+        <ul>
+          @each(exercise in exerciseTop10)
+            <li>
+              <p class="font-semibold">
+                {{ exercise.title }}
+              </p>
+              <p class="text-sm font-light">
+                Pratiqué {{ exercise.$extras.practiceAssociatedTime }} fois.
+              </p>
+            </li>
+          @end
+        </ul>
+      @end
+    </div>
+    <div>
+      <h2 class="text-xl">
+        Ma pratique
+      </h2>
+      <ul class="divide-y divide-primary-foreground">
+        @each(item in practices)
+          <li>
+            @dashboard.practiceItem({item})
+              @ui.dropdown()
+                @slot('trigger')
+                  @svg('heroicons:ellipsis-horizontal',
+                  {class: "w-4 h-4"})
+                  <span class="sr-only">Practice item settings</span>
+                @end
+                @slot('menu')
+                  <ul
+                    class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="dropdownMenuIconHorizontalButton"
+                  >
+                  </ul>
+                @end
+              @end
+            @end
+          </li>
+        @end
+      </ul>
     </div>
   </section>
 @end
