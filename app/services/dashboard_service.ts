@@ -2,7 +2,7 @@ import Exercise from '#models/exercise'
 import PracticedExercise from '#models/practiced_exercise'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
-import { log } from 'console'
+
 type DailyStat = {
   progress: number
   goal: number

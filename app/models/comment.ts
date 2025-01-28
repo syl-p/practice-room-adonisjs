@@ -3,6 +3,7 @@ import { afterDelete, BaseModel, belongsTo, column, computed, hasMany } from '@a
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import CommentableType from '#enums/commentable_types'
+import MentionService from '#services/mention_service'
 
 export default class Comment extends BaseModel {
   @column({ isPrimary: true })
@@ -23,21 +24,16 @@ export default class Comment extends BaseModel {
   @column()
   declare commentableType: CommentableType
 
-  /*  @computed()
-  get relatedEntity() {
-    const ModelClass = this.getModelClass(this.commentableType)
-    return ModelClass[this.commentableType]
+  @computed()
+  get mentions() {
+    return MentionService.checkMentions(this.content)
   }
 
-  private getModelClass(type: string) {
-    const models = {
-      Exercise: () => import('#models/exercise'),
-      Comment: () => import('#models/comment'),
-    }
-
-    //@ts-ignore
-    return models[type]?.().then((module) => module.default)
-  }*/
+  @computed()
+  get contentParsed() {
+    const content = MentionService.convertMentionsToLinks(this.content)
+    return content
+  }
 
   @hasMany(() => Comment, {
     foreignKey: 'commentableId',

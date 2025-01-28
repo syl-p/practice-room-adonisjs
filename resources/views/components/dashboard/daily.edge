@@ -4,6 +4,7 @@
 @let(circumference = normalizedRadius * 2 * Math.PI)
 @let(progressPourcent = progress * 100 / goal)
 @let(strokeDashoffset = circumference - (progressPourcent / 100) * circumference)
+@let(colorClasses = progressPourcent < 100 ? 'text-primary' : 'text-green-500')
 
 <svg class="w-20 h-20">
   <circle
@@ -16,7 +17,7 @@
     cy="40"
   />
   <circle
-    class="text-primary"
+    class="{{ colorClasses }}"
     stroke-width="5"
     stroke-dasharray="{{ circumference }}"
     stroke-dashoffset="{{ strokeDashoffset }}"
