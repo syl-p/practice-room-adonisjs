@@ -8,6 +8,7 @@ export default class ExerciseService {
       .where('title', 'ILIKE', `%${pattern}%`)
       // .orWhere('description', 'ILIKE', `%${pattern}%`)
       .orWhere('content', 'ILIKE', `%${pattern}%`)
+      .limit(10)
     return results
   }
 }

@@ -16,8 +16,9 @@ export default class PracticedExercisesController {
       ?.related('practicedExercises')
       .query()
       .apply((scope) => scope.today())
+      .sum('duration')
 
-    const time = practices?.reduce((accumulator, practice) => accumulator + practice.duration, 0)
+    const time = practices ? practices[0].$extras.sum : 0
     return view.render('fragments/practice_time', { time })
   }
 }

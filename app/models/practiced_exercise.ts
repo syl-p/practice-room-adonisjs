@@ -1,5 +1,13 @@
 import { DateTime } from 'luxon'
-import { afterDelete, BaseModel, beforeSave, belongsTo, column, scope } from '@adonisjs/lucid/orm'
+import {
+  afterCreate,
+  afterDelete,
+  BaseModel,
+  beforeSave,
+  belongsTo,
+  column,
+  scope,
+} from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import Exercise from '#models/exercise'
@@ -30,10 +38,12 @@ export default class PracticedExercise extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @beforeSave()
+  @afterCreate()
   @afterDelete()
   static async invalidCache(practicedExercise: PracticedExercise) {
-    await CacheService.delete(`practice_time:${practicedExercise.userId}`)
+    await CacheService.delete(
+      `practice_time:${practicedExercise.userId}:${DateTime.now().toFormat('yyyy-LL-dd')}`
+    )
   }
 
   static today = scope((query) => {

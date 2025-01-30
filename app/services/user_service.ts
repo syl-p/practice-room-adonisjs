@@ -7,6 +7,7 @@ export default class UserService {
     const results = await User.query()
       .where('username', 'like', `%${pattern}%`)
       .orWhere('bio', 'like', `%${pattern}%`)
+      .limit(10)
     return results
   }
 }

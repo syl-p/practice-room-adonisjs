@@ -16,6 +16,7 @@ export default class DashboardService {
   async dailyExercises(): Promise<DailyStat> {
     const nbr = await PracticedExercise.query()
       .apply((scope) => scope.today)
+      .where('user_id', this.ctx.auth.user!.id)
       .countDistinct('exercise_id')
 
     return {
@@ -26,9 +27,16 @@ export default class DashboardService {
   }
 
   async dailyPracticeTime(): Promise<DailyStat> {
+    const agr = await PracticedExercise.query()
+      .apply((scope) => scope.today)
+      .where('user_id', this.ctx.auth.user!.id)
+      .sum('duration')
+
+    console.log(agr)
+
     return {
-      progress: 50,
-      goal: 90,
+      progress: agr[0].$extras.sum > 600 ? 600 : agr[0].$extras.sum,
+      goal: 600,
       label: 'Pratiquer au moins 10 minutes',
     }
   }

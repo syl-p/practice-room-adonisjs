@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import CacheService from '#services/cache_service'
+import { DateTime } from 'luxon'
 
 /**
  * Silent auth middleware can be used as a global middleware to silent check
@@ -14,7 +15,7 @@ export default class SilentAuthMiddleware {
 
     // Load PracticeTime info
     if (ctx.auth.isAuthenticated && ctx.auth.user) {
-      const cacheKey = `practice_time:${ctx.auth.user.id}`
+      const cacheKey = `practice_time:${ctx.auth.user.id}:${DateTime.now().toFormat('yyyy-LL-dd')}`
       const practiceTime = await CacheService.fetch(cacheKey, async () => {
         const practices = await ctx.auth.user
           ?.related('practicedExercises')
