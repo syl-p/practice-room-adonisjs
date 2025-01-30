@@ -2,7 +2,7 @@
 @let(stroke = 5)
 @let(normalizedRadius = radius - stroke * 2)
 @let(circumference = normalizedRadius * 2 * Math.PI)
-@let(progressPourcent = progress * 100 / goal)
+@let(progressPourcent = (progress > goal ? goal : progress) * 100 / goal)
 @let(strokeDashoffset = circumference - (progressPourcent / 100) * circumference)
 @let(colorClasses = progressPourcent < 100 ? 'text-primary' : 'text-green-500')
 
@@ -30,6 +30,6 @@
   />
 </svg>
 
-<span class="absolute text-xs">
-  {{ label }}
-</span>
+<p class="text-xs break-words">
+  {{ label }} ({{progress}} / {{goal}})
+</p>

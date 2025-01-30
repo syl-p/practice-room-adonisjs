@@ -54,6 +54,12 @@
   <section class="container">
     <article class="my-6">
       {{ exercise.content }}
+      <hr class="shrink-0 bg-border h-[1px] w-full my-4" />
+      @each(tag in exercise.tags)
+        @ui.badge({variant: "secondary"})
+          {{ tag.label }}
+        @end
+      @end
     </article>
     <article>
       <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">

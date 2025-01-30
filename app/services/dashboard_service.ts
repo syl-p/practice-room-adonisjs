@@ -1,5 +1,4 @@
 import Exercise from '#models/exercise'
-import PracticedExercise from '#models/practiced_exercise'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
@@ -14,28 +13,28 @@ export default class DashboardService {
   constructor(protected ctx: HttpContext) {}
 
   async dailyExercises(): Promise<DailyStat> {
-    const nbr = await PracticedExercise.query()
-      .apply((scope) => scope.today)
-      .where('user_id', this.ctx.auth.user!.id)
+    const practices = await this.ctx.auth.user
+      ?.related('practicedExercises')
+      .query()
+      .apply((scope) => scope.today())
       .countDistinct('exercise_id')
 
     return {
-      progress: nbr[0].$extras.count > 3 ? 3 : nbr[0].$extras.count,
+      progress: practices ? practices[0].$extras.count : 0,
       goal: 3,
       label: 'Pratiquer 3 exercices',
     }
   }
 
   async dailyPracticeTime(): Promise<DailyStat> {
-    const agr = await PracticedExercise.query()
-      .apply((scope) => scope.today)
-      .where('user_id', this.ctx.auth.user!.id)
+    const practices = await this.ctx.auth.user
+      ?.related('practicedExercises')
+      .query()
+      .apply((scope) => scope.today())
       .sum('duration')
 
-    console.log(agr)
-
     return {
-      progress: agr[0].$extras.sum > 600 ? 600 : agr[0].$extras.sum,
+      progress: practices ? practices[0].$extras.sum : 0,
       goal: 600,
       label: 'Pratiquer au moins 10 minutes',
     }

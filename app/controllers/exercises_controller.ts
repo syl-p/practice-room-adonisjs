@@ -14,6 +14,7 @@ export default class ExercisesController {
   async show({ view, params }: HttpContext) {
     const exercise = await Exercise.findByOrFail('slug', params.slug)
     await exercise.load('user')
+    await exercise.load('tags')
     const comments = await exercise
       .related('comments')
       .query()

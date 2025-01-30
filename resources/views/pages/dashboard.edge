@@ -23,11 +23,11 @@
         <h2 class="text-xl mb-3">
           Exercices que vous avez le plus pratiqués
         </h2>
-        <ul>
+        <ul class="divide-y divide-primary-foreground">
           @each(exercise in exerciseTop10)
-            <li>
+            <li class="py-1">
               <p class="font-semibold">
-                {{ exercise.title }}
+                <a href="{{ route('exercise.show', {slug: exercise.slug}) }}">{{ exercise.title }}</a>
               </p>
               <p class="text-sm font-light">
                 Pratiqué {{ exercise.$extras.practiceAssociatedTime }} fois.
