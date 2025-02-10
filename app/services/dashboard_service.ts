@@ -20,7 +20,7 @@ export default class DashboardService {
       .countDistinct('exercise_id')
 
     return {
-      progress: practices ? practices[0].$extras.count : 0,
+      progress: practices?.[0].$extras.count ? practices[0].$extras.count : 0,
       goal: 3,
       label: 'Pratiquer 3 exercices',
     }
@@ -34,7 +34,7 @@ export default class DashboardService {
       .sum('duration')
 
     return {
-      progress: practices ? practices[0].$extras.sum : 0,
+      progress: practices?.[0].$extras.sum ? practices[0].$extras.sum : 0,
       goal: 600,
       label: 'Pratiquer au moins 10 minutes',
     }

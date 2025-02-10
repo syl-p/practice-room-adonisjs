@@ -42,7 +42,6 @@ router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
   .where('slug', router.matchers.slug())
-
 router
   .post('/exercises/practice/:id', [PracticedExercisesController, 'store'])
   .as('exercise.addToPractice')
@@ -79,10 +78,12 @@ router
   .as('auth')
 
 router.resource('users', UsersController).only(['index', 'show', 'edit'])
+
 router
   .post('user/:id/follow', [UsersController, 'follow'])
   .use(middleware.auth())
   .as('users.follow')
+
 router
   .delete('user/:id/unfollow', [UsersController, 'unfollow'])
   .use(middleware.auth())
@@ -90,3 +91,9 @@ router
 
 router.get('search', [SearchController, 'index']).as('search')
 router.get('dashboard', [DashboardController, 'index']).use(middleware.auth()).as('dashboard')
+
+router
+  .resource('practices', PracticedExercisesController)
+  .only(['index'])
+  .use(['index'], middleware.auth())
+router.post('practices', [PracticedExercisesController, 'index'])

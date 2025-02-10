@@ -8,8 +8,8 @@
       </div>
     </div>
   </header>
-  <section class="container flex space-x-3">
-    <div class="flex-1">
+  <section class="container lg:grid lg:grid-cols-3 gap-6 mb-6">
+    <div class="lg:col-span-2 mb-6">
       <div class="flex space-x-3 mb-6">
         @dashboard.statCard()
           @!dashboard.daily({...dailyExercises})
@@ -41,27 +41,15 @@
       <h2 class="text-xl">
         Ma pratique
       </h2>
-      <ul class="divide-y divide-primary-foreground">
-        @each(item in practices)
-          <li>
-            @dashboard.practiceItem({item})
-              @ui.dropdown()
-                @slot('trigger')
-                  @svg('heroicons:ellipsis-horizontal',
-                  {class: "w-4 h-4"})
-                  <span class="sr-only">Practice item settings</span>
-                @end
-                @slot('menu')
-                  <ul
-                    class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="dropdownMenuIconHorizontalButton"
-                  >
-                  </ul>
-                @end
-              @end
-            @end
-          </li>
+      <form hx-post="{{ route('practices.index') }}" hx-target="#practices-list" class="flex space-x-3">
+        {{ csrfField() }}
+        @!ui.form.input({name: 'date', type: 'date'})
+        @ui.button()
+          Selectionner
         @end
+      </form>
+      <ul id="practices-list" hx-get="{{ route('practices.index') }}" hx-trigger="load">
+        ...
       </ul>
     </div>
   </section>

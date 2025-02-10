@@ -1,4 +1,3 @@
-import Exercise from '#models/exercise'
 import ExerciseService from '#services/exercise_service'
 import UserService from '#services/user_service'
 import { searchValidator } from '#validators/search'

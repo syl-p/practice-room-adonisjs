@@ -1,17 +1,10 @@
 import { DateTime } from 'luxon'
-import {
-  afterCreate,
-  afterDelete,
-  BaseModel,
-  beforeSave,
-  belongsTo,
-  column,
-  scope,
-} from '@adonisjs/lucid/orm'
+import { afterCreate, afterDelete, BaseModel, belongsTo, column, scope } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import Exercise from '#models/exercise'
 import CacheService from '#services/cache_service'
+import type { Valid } from 'luxon/src/_util.js'
 
 export default class PracticedExercise extends BaseModel {
   @column({ isPrimary: true })
@@ -50,5 +43,11 @@ export default class PracticedExercise extends BaseModel {
     query
       .where('createdAt', '>=', DateTime.now().startOf('day').toSQL())
       .andWhere('createdAt', '<=', DateTime.now().endOf('day').toSQL())
+  })
+
+  static atSpecificDate = scope((query, date: DateTime<Valid>) => {
+    query
+      .where('createdAt', '>=', date.startOf('day').toSQL())
+      .andWhere('createdAt', '<=', date.endOf('day').toSQL())
   })
 }

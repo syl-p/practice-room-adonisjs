@@ -1,0 +1,27 @@
+<ul
+  id="practices-list"
+  class="divide-y divide-primary-foreground"
+  hx-swap="outerHTML"
+  hx-swap-oob="outerHTML"
+>
+  @each(item in practices)
+    <li>
+      @dashboard.practiceItem({item})
+        @ui.dropdown()
+          @slot('trigger')
+            @svg('heroicons:ellipsis-horizontal',
+            {class: "w-4 h-4"})
+            <span class="sr-only">Practice item settings</span>
+          @end
+          @slot('menu')
+            <ul
+              class="py-1 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownMenuIconHorizontalButton"
+            >
+            </ul>
+          @end
+        @end
+      @end
+    </li>
+  @end
+</ul>

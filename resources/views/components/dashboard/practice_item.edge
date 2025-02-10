@@ -3,7 +3,7 @@
     <div class="hidden flex-shrink-0 md:block">
       {{ utils.secondsToTime(item.duration) }}
     </div>
-    <div class="flex-1 min-w-0 font-semibold">
+    <div class="min-w-0 font-semibold truncate">
       <a href="{{ route('exercise.show', {slug: item.exercise.slug}) }}">{{ item.exercise.title }}</a>
     </div>
   </div>
