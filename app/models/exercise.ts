@@ -1,17 +1,9 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  beforeCreate,
-  belongsTo,
-  column,
-  hasMany,
-  manyToMany,
-  scope,
-} from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column, hasMany, scope } from '@adonisjs/lucid/orm'
 import ExerciseStatuses from '#enums/exercise_statuses'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import User from './user.js'
-import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import ExerciseStatus from './exercise_status.js'
 import Tag from './tag.js'
 import Comment from '#models/comment'

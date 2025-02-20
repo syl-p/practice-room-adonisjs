@@ -94,6 +94,5 @@ router.get('dashboard', [DashboardController, 'index']).use(middleware.auth()).a
 
 router
   .resource('practices', PracticedExercisesController)
-  .only(['index'])
-  .use(['index'], middleware.auth())
-router.post('practices', [PracticedExercisesController, 'index'])
+  .only(['index', 'store', 'destroy'])
+  .use(['index', 'store', 'destroy'], middleware.auth())

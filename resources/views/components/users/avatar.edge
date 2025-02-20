@@ -5,8 +5,8 @@
 
 @if(size == "small")
   @assign(classSize = "w-6 h-6")
-@else
-  @assign(classSize = "w-10 h-10")
+@elseif(size == "large")
+  @assign(classSize = "w-14 h-14")
 @end
 
 <div {{ $props.merge({class: [classNames, classSize, "bg-gray-100 dark:bg-gray-600"]}).toAttrs() }}>

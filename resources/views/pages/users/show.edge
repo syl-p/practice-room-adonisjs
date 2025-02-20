@@ -1,13 +1,16 @@
 @layout()
   <header class="bg-secondary py-6 mb-6">
-    <div class="container flex space-x-3">
-      <div class="flex-1">
-        <h1 class="text-3xl">
-          {{ user.username }} ({{user.followers.length}} abonnés)
-        </h1>
-        <p>
-          {{ user.bio }}
-        </p>
+    <div class="container flex space-x-3 items-center">
+      <div class="flex-1 flex items-center justify-between space-x-3">
+        @!users.avatar({user, size: 'large'})
+        <div class="flex-1">
+          <h1 class="text-3xl">
+            {{ user.username }}
+          </h1>
+          <p class="font-light text-sm text-muted-foreground">
+            A rejoins la plateforme {{utils.timeago(user.createdAt)}}
+          </p>
+        </div>
       </div>
       <div>
         @if(auth.isAuthenticated && user.id !== auth.user.id)
@@ -16,9 +19,26 @@
       </div>
     </div>
   </header>
-  <section class="grid grid-cols-3 gap-3 space-x-3 container">
-    @each(exercise in exercises)
-      @!exercises.card({exercise})
-    @end
-  </section>
+  <section class="grid grid-cols-6 gap-x-3 gap-y-3 container">
+    <aside class="col-span-2">
+      <h2 class="text-xl mb-3">A propos</h2>
+      <p class="mb-6">{{user.bio}}</p>
+      <h2 class="text-xl mb-3">Suivi par {{user.followers.length}} abonnés</h2>
+      <ul class="flex space-x-3">
+        @each(follower in user.followers)
+          <li>
+            <a href="{{ route('users.show', {id: follower.id}) }}"
+              title="{{follower.username}}">
+              @!users.avatar({user: follower, size: 'small'})
+            </a>
+          </li>
+        @end
+      </ul>
+    </aside>
+    <article class="col-span-4 space-y-3">
+      @each(exercise in exercises)
+        @!exercises.card({exercise})
+      @end
+    </article>
+</section>
 @end

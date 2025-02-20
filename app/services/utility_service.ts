@@ -1,7 +1,5 @@
 import string from '@adonisjs/core/helpers/string'
-// import { parse } from 'node-html-parser'
 import { DateTime } from 'luxon'
-// import dinero, { Currency } from 'dinero.js'
 
 export default class UtilityService {
   /**
@@ -20,27 +18,6 @@ export default class UtilityService {
     }
 
     return isPlural ? string.pluralize(str) : str
-  }
-
-  /**
-   * strips HTML tags from a string
-   * @param html
-   * @returns
-   */
-  // static stripHTML(html: string) {
-  //   return parse(html).textContent
-  // }
-
-  /**
-   * truncates a string to length
-   * @param string
-   * @param length
-   * @param stripHTML
-   * @returns
-   */
-  static truncate(text: string, length: number = 255, stripHTML: boolean = true) {
-    const str = stripHTML ? this.stripHTML(text) : text
-    return str.length > length ? str.slice(0, length) + '...' : str
   }
 
   /**
@@ -165,23 +142,6 @@ export default class UtilityService {
 
   static formatNumber(number: number) {
     return number.toLocaleString()
-  }
-
-  // static formatCurrency(amount: number, currencyCode: Currency | undefined = 'USD') {
-  //   return dinero({ amount, currency: currencyCode }).toFormat('$0,0.00')
-  // }
-
-  // static centsToDollars(
-  //   amount: number,
-  //   showChange: boolean = false,
-  //   currencyCode: Currency | undefined = 'USD'
-  // ) {
-  //   const format = showChange ? '0,0.00' : '0,0'
-  //   return dinero({ amount, currency: currencyCode }).toFormat(format)
-  // }
-
-  static displaySocialUrl(url: string) {
-    return url.replace('https://', '').replace('http://', '')
   }
 
   static getRandom<T>(array: T[]) {

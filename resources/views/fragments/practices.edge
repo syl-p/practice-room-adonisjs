@@ -1,0 +1,61 @@
+<div id="practices_week" hx-boost="true" hx-swap="outerHTML" hx-target="#practices_week">
+  <div class="flex space-x-3 items-center">
+    <a href="" class="block">
+      @svg('heroicons:chevron-left')
+    </a>
+    <ul class="flex flex-wrap space-x-3 items-center justify-center">
+      @each(weekDay in weekAndDurations)
+        <li class="mb-6">
+          <a
+            href="{{ route('practices.index', {}, {qs:{date: weekDay.date }}) }}"
+            title="{{ weekDay.date }} - {{ utils.secondsToTime(weekDay.duration) }}"
+            class="{{ html.classNames([
+              'block text-center p-1 rounded-full border relative',
+              {'bg-primary-foreground': weekDay.date == current}
+            ]) }}"
+          >
+            <span class="block">{{ weekDay.luxonObject.day }}</span>
+            <span class="block text-sm">{{ weekDay.luxonObject.monthShort }}</span>
+            @if(weekDay.duration)
+              <span class="bg-primary absolute top-0 right-0 w-3 h-3 block rounded-full"></span>
+            @end
+          </a>
+        </li>
+      @end
+    </ul>
+    <a href="" class="block">
+      @svg('heroicons:chevron-right')
+    </a>
+  </div>
+  <ul id="practices-list">
+    @each(item in practices)
+      <li>
+        @practices.item({item})
+          @ui.dropdown()
+            @slot('trigger')
+              @svg('heroicons:ellipsis-horizontal',
+              {class: "w-4 h-4"})
+              <span class="sr-only">Practice item settings</span>
+            @end
+            @slot('menu')
+              <ul
+                class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownMenuIconHorizontalButton"
+              >
+                <form
+                  method="POST"
+                  action="{{ route('practices.destroy', {id: item.id}, {qs: {_method: 'DELETE' }}) }}"
+                >
+                  {{ csrfField() }}
+                  @ui.button()
+                    Supprimer
+                  @end
+                </form>
+              </ul>
+            @end
+          @end
+        @end
+      </li>
+    @end
+  </ul>
+</div>
