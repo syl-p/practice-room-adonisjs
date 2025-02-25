@@ -1,0 +1,7 @@
+<article id="comment_{{ comment.id }}">
+  @!comments.form({
+    comment,
+    controller_name: 'comments',
+    params: {id: comment.id}
+  })
+</article>

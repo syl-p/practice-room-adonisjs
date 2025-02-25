@@ -7,9 +7,11 @@ import db from '@adonisjs/lucid/services/db'
 
 export default class PracticedExercisesController {
   async index({ auth, request, view }: HttpContext) {
-    const { date } = request.qs()
+    let { date } = request.qs()
+    date = DateTime.fromISO(date)
 
-    const current = date ? DateTime.fromISO(date) : DateTime.now().startOf('day')
+    // GET INPUTS VALIDS
+    const current = date.isValid ? date : DateTime.now()
     const weekStart = current.startOf('week')
     const weekEnd = current.endOf('week')
 
@@ -21,12 +23,13 @@ export default class PracticedExercisesController {
       .andWhere('created_at', '<=', weekEnd.toSQLDate())
       .groupBy('date')
 
+    // CONSTRUCT MY WEEK
     const myWeek = Array.from({ length: 7 }, (_, i) => weekStart.plus({ days: i }))
-    const weekAndDurations = myWeek.map((date) => ({
-      date: date.toISO(),
-      luxonObject: date,
+    const weekAndDurations = myWeek.map((wd) => ({
+      date: wd.toISO(),
+      luxonObject: wd,
       duration:
-        groupedByDays.find((p) => date.equals(DateTime.fromJSDate(p.$extras.date)))?.$extras
+        groupedByDays.find((p) => wd.equals(DateTime.fromJSDate(p.$extras.date)))?.$extras
           .total_duration || 0,
     }))
 

@@ -7,7 +7,7 @@
       <div class="flex-1 flex items-center space-x-3">
         <div>
           <small class="block font-light text-sm text-muted-foreground">
-            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>
+            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ createdAt }}">{{ exercise.createdAt }}</time>
           </small>
           <h1 class="text-xl font-bold">
             {{ exercise.title }}

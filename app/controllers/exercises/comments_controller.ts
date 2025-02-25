@@ -2,8 +2,8 @@ import Comment from '#models/comment'
 import Exercise from '#models/exercise'
 import { newCommentValidator } from '#validators/comment'
 import { HttpContext } from '@adonisjs/core/http'
-import { errors } from '@vinejs/vine'
 import CommentableType from '#enums/commentable_types'
+import { errors } from '@vinejs/vine'
 
 export default class CommentsController {
   async index({ params, view }: HttpContext) {
@@ -11,6 +11,7 @@ export default class CommentsController {
       .preload('user')
       .preload('replies', (query) => {
         query.preload('user')
+        query.orderBy('createdAt', 'asc')
       })
       .where('commentableId', params.exercise_id)
       .andWhere('commentableType', CommentableType.EXERCISE)
@@ -21,24 +22,19 @@ export default class CommentsController {
 
   async store({ request, params, auth, view, session, response }: HttpContext) {
     const exercise = await Exercise.findByOrFail({ id: params.exercise_id })
-    let comment = new Comment()
-    comment.userId = auth.user!.id
-    comment.commentableType = CommentableType.EXERCISE
-    comment.commentableId = params.exercise_id
 
-    try {
-      const data = await request.validateUsing(newCommentValidator)
-      comment.merge(data)
-      await exercise.related('comments').save(comment)
-      await comment.load('user')
-    } catch (error) {
-      // HTMX RESP
-      if (error instanceof errors.E_VALIDATION_ERROR) {
-        session.flashValidationErrors(error)
-        response.status(422)
-      }
-    }
+    const data = await request.validateUsing(newCommentValidator)
+    const comment = new Comment()
+    comment.merge({
+      ...data,
+      userId: auth.user!.id,
+      commentableId: comment.id,
+      commentableType: CommentableType.EXERCISE,
+    })
 
-    return view.render('fragments/comment', { comment })
+    await exercise.related('comments').save(comment)
+    await comment.load('user')
+
+    return view.render('fragments/comment', { comment, exercise_id: params.exercise_id })
   }
 }

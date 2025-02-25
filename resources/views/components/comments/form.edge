@@ -1,15 +1,19 @@
+@let(action = comment ? `comments.update` : `${controller_name}.comments.store`)
+@let(method = comment ? 'put' : 'post')
+
 <form
   x-ref="form"
-  x-data="{content: ''}"
+  x-data="{content: '{{ comment ? comment.content : '' }}'}"
   id="comment-form"
+  hx-select="#comment-form"
   hx-swap="outerHTML"
-  hx-post="{{ route(`${controller_name}.comments.store`, {...params}) }}"
+  hx-{{method}}="{{ route(action, {...params}) }}"
   {{ $props.except(['class', 'controller_name', 'params']).toAttrs() }}
 >
   {{ csrfField() }}
   <label for="comment" class="sr-only">Your comment</label>
-  @!ui.form.textarea({name: "content", 'x-model': 'content'})
-  @ui.button({type: "submit", class: "mt-6", ":disabled": 'content.length < 1'})
+  @!ui.form.textarea({name: "content", 'x-model': 'content', value: "test"})
+  @ui.button({type: "submit", class: "mt-6"})
     Envoyer
   @end
 </form>

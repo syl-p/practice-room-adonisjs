@@ -5,11 +5,3 @@
     @!comments.comment({comment})
   </div>
 @end
-
-@!comments.form({
-  params: {
-    ...(comment.commentableType === "Exercise" && {exercise_id: comment.commentableId}),
-    ...(comment.commentableType === "Comment" && {comment_id: comment.commentableId})
-  },
-  controller_name: (comment.commentableType === "Exercise" ? "exercises" : "comments")
-})

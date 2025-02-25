@@ -29,11 +29,12 @@ export default class Comment extends BaseModel {
     return MentionService.checkMentions(this.content)
   }
 
-  @computed()
-  get contentParsed() {
-    const content = MentionService.convertMentionsToLinks(this.content)
-    return content
-  }
+  // TODO: Convert mention into links BEFORE Update
+  // @computed()
+  // get contentParsed() {
+  //   const content = MentionService.convertMentionsToLinks(this.content)
+  //   return content
+  // }
 
   @hasMany(() => Comment, {
     foreignKey: 'commentableId',
