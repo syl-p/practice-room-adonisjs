@@ -1,6 +1,6 @@
 import 'htmx.org'
 import Alpine from 'alpinejs'
-import { DateTime } from 'luxon'
+
 window.Alpine = Alpine
 Alpine.data('fileUpload', () => ({
   file: null,

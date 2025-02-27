@@ -15,6 +15,7 @@ export default class ExercisesController {
     const exercise = await Exercise.findByOrFail('slug', params.slug)
     await exercise.load('user')
     await exercise.load('tags')
+    await exercise.load('media')
     const comments = await exercise
       .related('comments')
       .query()

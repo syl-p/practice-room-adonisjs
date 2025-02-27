@@ -9,6 +9,7 @@ export default class extends BaseSeeder {
     const defaultUsers = await UserFactory.with('exercises', 3, (exercise) =>
       exercise
         .apply('public')
+        .with('media', 3)
         .with('comments', 10, (comment) =>
           comment
             .with('user')

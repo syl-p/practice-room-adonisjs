@@ -11,7 +11,7 @@ export default class PracticedExercisesController {
     date = DateTime.fromISO(date)
 
     // GET INPUTS VALIDS
-    const current = date.isValid ? date : DateTime.now()
+    const current = date.isValid ? date : DateTime.now().startOf('day')
     const weekStart = current.startOf('week')
     const weekEnd = current.endOf('week')
 

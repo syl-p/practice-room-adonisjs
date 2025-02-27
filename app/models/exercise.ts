@@ -1,14 +1,23 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, belongsTo, column, hasMany, scope } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeCreate,
+  belongsTo,
+  column,
+  hasMany,
+  manyToMany,
+  scope,
+} from '@adonisjs/lucid/orm'
 import ExerciseStatuses from '#enums/exercise_statuses'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import User from './user.js'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import ExerciseStatus from './exercise_status.js'
 import Tag from './tag.js'
 import Comment from '#models/comment'
 import CommentableType from '#enums/commentable_types'
-import PracticedExercise from './practiced_exercise.js'
+import PracticedExercise from '#models/practiced_exercise'
+import Medium from '#models/medium'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })
@@ -43,12 +52,6 @@ export default class Exercise extends BaseModel {
   @hasMany(() => PracticedExercise)
   declare practiced: HasMany<typeof PracticedExercise>
 
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-
   @hasMany(() => Tag, {
     foreignKey: 'taggableId',
     onQuery: (query) => query.where('taggable_type', CommentableType.EXERCISE),
@@ -60,6 +63,20 @@ export default class Exercise extends BaseModel {
     onQuery: (query) => query.where('commentable_type', CommentableType.EXERCISE),
   })
   declare comments: HasMany<typeof Comment>
+
+  @manyToMany(() => Medium, {
+    pivotTable: 'exercise_medium',
+    pivotForeignKey: 'exercise_id',
+    pivotRelatedForeignKey: 'medium_id',
+    pivotTimestamps: true,
+  })
+  declare media: ManyToMany<typeof Medium>
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
 
   @beforeCreate()
   static async makeSlug(exercise: Exercise) {

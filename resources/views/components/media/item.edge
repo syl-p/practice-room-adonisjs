@@ -1,0 +1,16 @@
+<div class="flex flex-1 space-x-6 items-center min-w-0">
+  <div class="hidden flex-shrink-0 md:block">
+    @svg('heroicons:document')
+  </div>
+  <div class="flex-1 min-w-0">
+    <p class="overflow-hidden m-0 text-sm font-medium text-ellipsis">
+      <a href="{{ item.fileUrl }}" target="_blank">{{ item.fileUrl }}</a>
+    </p>
+    <p class="text-xs font-light text-gray-500">
+      {{ item.description }}
+    </p>
+  </div>
+</div>
+<div>
+  {{{ await $slots.actions() }}}
+</div>
