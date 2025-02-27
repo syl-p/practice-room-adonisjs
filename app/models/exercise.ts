@@ -4,6 +4,7 @@ import {
   beforeCreate,
   belongsTo,
   column,
+  computed,
   hasMany,
   manyToMany,
   scope,
@@ -77,6 +78,11 @@ export default class Exercise extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @computed()
+  get publishedAt() {
+    return this.createdAt.setLocale('fr').toFormat('dd LLLL yyyy à HH:mm')
+  }
 
   @beforeCreate()
   static async makeSlug(exercise: Exercise) {

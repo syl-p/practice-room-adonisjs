@@ -35,15 +35,18 @@
             class="py-1 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconHorizontalButton"
           >
-            <li>
-              <a
-                hx-boost="true"
-                hx-target="#comment_{{ comment.id }}"
-                hx-swap="outerHTML"
-                href="{{ route('comments.edit', {id: comment.id}) }}"
-                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >Edit</a>
-            </li>
+            @can('CommentPolicy.edit', comment)
+              <li>
+                <a
+                  hx-boost="true"
+                  hx-target="#comment_{{ comment.id }}"
+                  hx-swap="outerHTML"
+                  hx-push-url="false"
+                  href="{{ route('comments.edit', {id: comment.id}) }}"
+                  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Edit</a>
+              </li>
+            @end
             @can('CommentPolicy.delete', comment)
               <li>
                 <form

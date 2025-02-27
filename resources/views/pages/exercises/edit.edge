@@ -1,0 +1,27 @@
+@layout()
+  <section class="mx-auto container">
+    <form
+      class="space-y-4 md:space-y-6"
+      method="post"
+      action="{{ route('exercises.update', {id: exercise.id}, {qs: {_method: 'PUT' } }) }}"
+    >
+      {{ csrfField() }}
+      @!ui.form.input({
+        name: 'title',
+        label: 'Le titre de l\'exercice',
+        value: exercise.title
+      })
+
+      @!ui.form.textarea({
+        name: 'content',
+        label: 'Le contenu de l\'exercice',
+        type: 'textarea',
+        value: exercise.content
+      })
+
+      @ui.button({type: 'submit'})
+        Enregistrer
+      @end
+    </form>
+  </section>
+@end

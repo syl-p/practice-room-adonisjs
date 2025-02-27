@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Exercise from '#models/exercise'
+import { exerciseValidator } from '#validators/exercise'
 
 export default class ExercisesController {
   async index({ view }: HttpContext) {
@@ -22,6 +23,20 @@ export default class ExercisesController {
       .orderBy('createdAt', 'desc')
       .preload('user')
     return view.render('pages/exercises/show', { exercise, comments })
+  }
+
+  async edit({ view, params }: HttpContext) {
+    const exercise = await Exercise.findOrFail(params.id)
+    return view.render('pages/exercises/edit', { exercise })
+  }
+
+  async update({ request, response, params }: HttpContext) {
+    const exercise = await Exercise.findOrFail(params.id)
+    const { title, content } = await request.validateUsing(exerciseValidator)
+    exercise.merge({ title, content })
+
+    await exercise.save()
+    return response.redirect().toRoute('exercises.edit', { id: exercise.id })
   }
 
   async store({}: HttpContext) {}

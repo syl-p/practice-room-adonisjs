@@ -12,7 +12,7 @@
 >
   {{ csrfField() }}
   <label for="comment" class="sr-only">Your comment</label>
-  @!ui.form.textarea({name: "content", 'x-model': 'content', value: "test"})
+  @!ui.form.textarea({name: "content", 'x-model': 'content'})
   @ui.button({type: "submit", class: "mt-6"})
     Envoyer
   @end

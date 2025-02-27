@@ -7,13 +7,16 @@
       <div class="flex-1 flex items-center space-x-3">
         <div>
           <small class="block font-light text-sm text-muted-foreground">
-            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ createdAt }}">{{ exercise.createdAt }}</time>
+            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
           </small>
           <h1 class="text-xl font-bold">
             {{ exercise.title }}
           </h1>
           <p>
             {{ excerpt(exercise.content, 200) }}
+          </p>
+          <p>
+            <a href="{{ route('exercises.edit', {id: exercise.id}) }}" class="text-primary hover:underline">Editer</a>
           </p>
         </div>
         @if(auth.isAuthenticated)
@@ -51,33 +54,52 @@
       </div>
     </div>
   </header>
-  <section class="container">
-    <article class="my-6">
-      {{ exercise.content }}
+  <section class="my-6 container">
+    <article class="lg:flex space-y-3 lg:space-x-3 lg:space-y-0">
+      <div>
+        {{ exercise.content }}
+      </div>
+      <div>
+        <h3 class="text-xl mb-3">
+          Media associés
+        </h3>
+        <ul class="divide-y divide-gray-200">
+          @each(medium in exercise.media)
+            <li class="flex space-x-6 relative items-center p-4 hover:bg-gray-50">
+              @media.item({item: medium})
+                @slot('actions')
+                @end
+              @end
+            </li>
+          @end
+        </ul>
+      </div>
+    </article>
+    <footer>
       <hr class="shrink-0 bg-border h-[1px] w-full my-4" />
       @each(tag in exercise.tags)
         @ui.badge({variant: "secondary"})
           {{ tag.label }}
         @end
       @end
-    </article>
-    <article>
-      <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-        Discussion ({{comments.length}})
-      </h2>
+    </footer>
+  </section>
+  <section class="container">
+    <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+      Discussion ({{comments.length}})
+    </h2>
 
-      @if(auth.isAuthenticated)
-        @!comments.form({controller_name: "exercises", params: {exercise_id: exercise.id}})
-      @end
-      
-      <div
-        id="comments"
-        hx-swap="outerHTML"
-        hx-get="{{ route('exercises.comments.index', {exercise_id: exercise.id}) }}"
-        hx-trigger="load"
-      >
-        Chargement des commentaires...
-      </div>
-    </article>
+    @if(auth.isAuthenticated)
+      @!comments.form({controller_name: "exercises", params: {exercise_id: exercise.id}})
+    @end
+    
+    <div
+      id="comments"
+      hx-swap="outerHTML"
+      hx-get="{{ route('exercises.comments.index', {exercise_id: exercise.id}) }}"
+      hx-trigger="load"
+    >
+      Chargement des commentaires...
+    </div>
   </section>
 @end

@@ -38,6 +38,7 @@ router.resource('exercises', ExercisesController).except(['show'])
 router.resource('comments', CommentsController).only(['edit', 'update', 'destroy'])
 router.resource('exercises.comments', ExercisesCommentsController).only(['index', 'store'])
 router.resource('comments.comments', CommentsCommentsController).only(['store'])
+
 router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
