@@ -1,0 +1,42 @@
+<div class="space-y-3">
+  <label
+    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+    for=":rn:-form-item"
+  >
+    @if($slots.label || label)
+      @if($slots.label)
+        {{ await $slots.label() }}
+      @else
+        {{ label }}
+      @end
+    @end
+  </label>
+  <div
+    role="radiogroup"
+    aria-required="false"
+    dir="ltr"
+    class="gap-2 flex flex-col space-y-1"
+    id=":rn:-form-item"
+    aria-describedby=":rn:-form-item-description"
+    aria-invalid="false"
+    tabindex="0"
+    style="outline: none;"
+  >
+    @each(option in options)
+      <div class="flex items-center space-x-3 space-y-0">
+        <input
+          type="radio"
+          name="{{ name || '' }}"
+          value="{{ option }}"
+          {{ html.attrs({
+              checked: selected === option,
+            }) }}
+        />
+        <label
+          class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-normal"
+          for=":ro:-form-item"
+        >{{ option }}</label>
+      </div>
+    @end
+  </div>
+</div>

@@ -7,12 +7,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table
-        .integer('status_id')
-        .unsigned()
-        .references('exercise_statuses.id')
-        .notNullable()
-        .defaultTo(ExerciseStatuses.DRAFT)
+      table.string('status').notNullable().defaultTo(ExerciseStatuses.DRAFT)
       table.integer('user_id').unsigned().references('users.id').notNullable()
       table.string('title')
       table.text('content')

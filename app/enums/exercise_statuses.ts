@@ -1,7 +1,7 @@
 enum ExerciseStatuses {
-  DRAFT,
-  PUBLIC,
-  NOT_REFERENCED,
+  DRAFT = 'draft',
+  PUBLIC = 'public',
+  NOT_REFERENCED = 'not_referenced',
 }
 
 export default ExerciseStatuses

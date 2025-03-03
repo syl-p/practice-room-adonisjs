@@ -13,7 +13,6 @@ import ExerciseStatuses from '#enums/exercise_statuses'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import User from './user.js'
 import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
-import ExerciseStatus from './exercise_status.js'
 import Tag from './tag.js'
 import Comment from '#models/comment'
 import CommentableType from '#enums/commentable_types'
@@ -37,12 +36,7 @@ export default class Exercise extends BaseModel {
   declare posterUrl: string | null
 
   @column()
-  declare statusId: number
-
-  @belongsTo(() => ExerciseStatus, {
-    foreignKey: 'statusId',
-  })
-  declare status: BelongsTo<typeof ExerciseStatus>
+  declare status: ExerciseStatuses
 
   @column()
   declare userId: number
@@ -126,14 +120,14 @@ export default class Exercise extends BaseModel {
   }
 
   static public = scope((query) => {
-    query.where('statusId', ExerciseStatuses.PUBLIC)
+    query.where('status', ExerciseStatuses.PUBLIC)
   })
 
   static draft = scope((query) => {
-    query.where('statusId', ExerciseStatuses.DRAFT)
+    query.where('status', ExerciseStatuses.DRAFT)
   })
 
   static private = scope((query) => {
-    query.where('statusId', ExerciseStatuses.NOT_REFERENCED)
+    query.where('status', ExerciseStatuses.NOT_REFERENCED)
   })
 }

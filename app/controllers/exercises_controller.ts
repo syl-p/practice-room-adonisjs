@@ -25,13 +25,34 @@ export default class ExercisesController {
     return view.render('pages/exercises/show', { exercise, comments })
   }
 
-  async edit({ view, params }: HttpContext) {
+  async create({ view }: HttpContext) {
+    return view.render('pages/exercises/create')
+  }
+
+  async store({ request, response, auth }: HttpContext) {
+    const { title, content } = await request.validateUsing(exerciseValidator)
+    const exercise = new Exercise()
+    exercise.merge({ title, content })
+    await auth.user?.related('exercises').save(exercise)
+
+    return response.redirect().toRoute('exercise.show', { slug: exercise.slug })
+  }
+
+  async edit({ view, params, response, bouncer }: HttpContext) {
     const exercise = await Exercise.findOrFail(params.id)
+    if (await bouncer.with('ExercisePolicy').denies('edit', exercise)) {
+      return response.forbidden('Cannot edit this exercise')
+    }
+
     return view.render('pages/exercises/edit', { exercise })
   }
 
-  async update({ request, response, params }: HttpContext) {
+  async update({ request, response, params, bouncer }: HttpContext) {
     const exercise = await Exercise.findOrFail(params.id)
+    if (await bouncer.with('ExercisePolicy').denies('edit', exercise)) {
+      return response.forbidden('Cannot edit this exercise')
+    }
+
     const { title, content } = await request.validateUsing(exerciseValidator)
     exercise.merge({ title, content })
 
@@ -39,7 +60,13 @@ export default class ExercisesController {
     return response.redirect().toRoute('exercises.edit', { id: exercise.id })
   }
 
-  async store({}: HttpContext) {}
+  async destroy({ response, params, bouncer }: HttpContext) {
+    const exercise = await Exercise.findOrFail(params.id)
+    if (await bouncer.with('ExercisePolicy').denies('delete', exercise)) {
+      return response.forbidden('Cannot delete this exercise')
+    }
 
-  async delete({}: HttpContext) {}
+    await exercise.delete()
+    return response.redirect().toRoute('exercises.index')
+  }
 }

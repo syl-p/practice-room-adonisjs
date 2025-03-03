@@ -1,0 +1,29 @@
+@let(formRoute = exercise ? route('exercises.update', {id: exercise.id}, {qs: {_method: 'PUT' } }) : route('exercises.store', {}, {qs: {_method: 'POST' } }))
+
+<form class="space-y-4 md:space-y-6" method="post" action="{{ formRoute }}">
+  {{ csrfField() }}
+  @!ui.form.input({
+    name: 'title',
+    label: 'Le titre de l\'exercice',
+    value: exercise && exercise.title
+  })
+
+  @!ui.form.textarea({
+    name: 'content',
+    label: 'Le contenu de l\'exercice',
+    type: 'textarea',
+    value: exercise && exercise.content
+  })
+
+  @!ui.form.radioGroup({
+    label: 'Status de l\'exercice',
+    name: 'status',
+    value: exercise && exercise.status,
+    options: ExerciseStatuses,
+    selected: exercise ? exercise.status : ExerciseStatuses.DRAFT
+  })
+
+  @ui.button({type: 'submit'})
+    {{ exercise ? 'Modifier' : 'Créer' }} l'exercice
+  @end
+</form>

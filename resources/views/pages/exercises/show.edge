@@ -5,7 +5,7 @@
         @!users.avatar({user: exercise.user})
       </a>
       <div class="flex-1 flex items-center space-x-3">
-        <div>
+        <div class="flex-1">
           <small class="block font-light text-sm text-muted-foreground">
             Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
           </small>
@@ -15,9 +15,28 @@
           <p>
             {{ excerpt(exercise.content, 200) }}
           </p>
-          <p>
-            <a href="{{ route('exercises.edit', {id: exercise.id}) }}" class="text-primary hover:underline">Editer</a>
-          </p>
+          {{-- Actions --}}
+          <div class="flex space-x-3 mt-3">
+            <p>
+              @can('ExercisePolicy.edit', exercise)
+                <a href="{{ route('exercises.edit', {id: exercise.id}) }}" class="text-primary hover:underline">Editer</a>
+              @end
+            </p>
+            @can('ExercisePolicy.delete', exercise)
+              {{-- HTMX ACTIONS --}}
+              <form
+                method="post"
+                hx-post="{{ route('exercises.destroy', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
+                hx-confirm="Êtes-vous sûr de vouloir supprimer cet exercice ?"
+                hx-target="body"
+                hx-push-url="true"
+              >
+                {{ csrfField() }}
+                <button class="text-primary hover:underline" type="submit">Supprimer</button>
+              </form>
+            @end
+          </div>
+          {{-- End Actions --}}
         </div>
         @if(auth.isAuthenticated)
           {{-- TODO: Convert to components --}}
@@ -56,8 +75,8 @@
   </header>
   <section class="my-6 container">
     <article class="lg:flex space-y-3 lg:space-x-3 lg:space-y-0">
-      <div>
-        {{ exercise.content }}
+      <div class="flex-1">
+        {{{ nl2br(exercise.content) }}}
       </div>
       <div>
         <h3 class="text-xl mb-3">

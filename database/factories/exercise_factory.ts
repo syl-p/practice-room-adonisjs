@@ -12,7 +12,7 @@ export const ExerciseFactory = factory
       title: faker.lorem.sentence(),
       content: faker.lorem.paragraphs(),
       posterUrl: faker.image.url(),
-      statusId: ExerciseStatuses.PUBLIC,
+      status: ExerciseStatuses.PUBLIC,
       userId: 1,
     }
   })
@@ -21,12 +21,12 @@ export const ExerciseFactory = factory
   .relation('media', () => MediumFactory)
   .relation('comments', () => CommentFactory)
   .state('public', (row) => {
-    row.statusId = ExerciseStatuses.PUBLIC
+    row.status = ExerciseStatuses.PUBLIC
   })
   .state('draft', (row) => {
-    row.statusId = ExerciseStatuses.DRAFT
+    row.status = ExerciseStatuses.DRAFT
   })
   .state('not referenced', (row) => {
-    row.statusId = ExerciseStatuses.NOT_REFERENCED
+    row.status = ExerciseStatuses.NOT_REFERENCED
   })
   .build()

@@ -34,7 +34,10 @@ router
   .as('page.show')
   .where('slug', router.matchers.slug())
 
-router.resource('exercises', ExercisesController).except(['show'])
+router
+  .resource('exercises', ExercisesController)
+  .except(['show'])
+  .use(['edit', 'store', 'destroy', 'create'], middleware.auth())
 router.resource('comments', CommentsController).only(['edit', 'update', 'destroy'])
 router.resource('exercises.comments', ExercisesCommentsController).only(['index', 'store'])
 router.resource('comments.comments', CommentsCommentsController).only(['store'])
