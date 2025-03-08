@@ -16,6 +16,7 @@ const RegistersController = () => import('#controllers/auth/registers_controller
 const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const MediaController = () => import('#controllers/media_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
 
 const ExercisesCommentsController = () => import('#controllers/exercises/comments_controller')
@@ -34,23 +35,39 @@ router
   .as('page.show')
   .where('slug', router.matchers.slug())
 
+// EXERCISES
 router
   .resource('exercises', ExercisesController)
   .except(['show'])
   .use(['edit', 'store', 'destroy', 'create'], middleware.auth())
-router.resource('comments', CommentsController).only(['edit', 'update', 'destroy'])
-router.resource('exercises.comments', ExercisesCommentsController).only(['index', 'store'])
-router.resource('comments.comments', CommentsCommentsController).only(['store'])
-
 router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
   .where('slug', router.matchers.slug())
+
+// COMMENTS
+router.resource('comments', CommentsController).only(['edit', 'update', 'destroy'])
+router.resource('exercises.comments', ExercisesCommentsController).only(['index', 'store'])
+router.resource('comments.comments', CommentsCommentsController).only(['store'])
+
+// PRACTICES
 router
   .post('/exercises/practice/:id', [PracticedExercisesController, 'store'])
   .as('exercise.addToPractice')
   .use(middleware.auth())
 
+router
+  .resource('practices', PracticedExercisesController)
+  .only(['index', 'store', 'destroy'])
+  .use(['index', 'store', 'destroy'], middleware.auth())
+
+// media
+router
+  .resource('media', MediaController)
+  .only(['index', 'show', 'store', 'destroy'])
+  .use(['index', 'store', 'destroy'], middleware.auth())
+
+// AUTH
 router
   .group(() => {
     router.get('/login', [LoginController, 'show']).as('login.show').use(middleware.guest())
@@ -95,8 +112,3 @@ router
 
 router.get('search', [SearchController, 'index']).as('search')
 router.get('dashboard', [DashboardController, 'index']).use(middleware.auth()).as('dashboard')
-
-router
-  .resource('practices', PracticedExercisesController)
-  .only(['index', 'store', 'destroy'])
-  .use(['index', 'store', 'destroy'], middleware.auth())

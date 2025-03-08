@@ -14,8 +14,11 @@
       AdonisJS - A fully featured web framework for Node.js
     </title>
   </head>
-  <body class="">
+  <body>
     @include("partials/nav")
-    {{{ await $slots.main() }}}
+    <main class="min-h-screen">
+      {{{ await $slots.main() }}}
+    </main>
+    @include("partials/footer")
   </body>
 </html>

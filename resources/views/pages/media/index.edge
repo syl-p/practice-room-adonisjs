@@ -1,2 +1,32 @@
 @layout()
+  <section class="container">
+    <header class="my-6">
+      <h1 class="text-3xl">
+        Vos media
+      </h1>
+    </header>
+    <form class="mb-6" method="post" action="{{ route('media.store') }}" enctype="multipart/form-data">
+      {{ csrfField() }}
+      @!ui.form.dropzone({name: 'media[]'})
+      @ui.button({class: 'mt-6'})
+        Envoyer
+      @end
+    </form>
+    <ul class="space-y-4">
+      @each(medium in auth.user.media)
+        <li class="flex items-center gap-2">
+          @media.item({item: medium})
+            @slot('actions')
+              <form method="post" action="{{ route('media.destroy', {id: medium.id}, {qs: {_method: 'DELETE' }}) }}">
+                {{ csrfField() }}
+                @ui.button({variant: 'secondary'})
+                  @svg('heroicons:x-mark')
+                @end
+              </form>
+            @end
+          @end
+        </li>
+      @end
+    </ul>
+  </section>
 @end

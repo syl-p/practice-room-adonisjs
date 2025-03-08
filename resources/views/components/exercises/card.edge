@@ -5,13 +5,52 @@
       user: exercise.user
       })
     </a>
-    <div>
-      <small class="block font-light text-sm text-muted-foreground">
-        Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
-      </small>
-      <h3 class="text-2xl font-semibold leading-none tracking-tight">
-        <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="hover:underline">{{ exercise.title }}</a>
-      </h3>
+    <div class="flex space-x-3 flex-1 justify-between items-center">
+      <div>
+        <small class="block font-light text-sm text-muted-foreground">
+          Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
+        </small>
+        <h3 class="text-2xl font-semibold leading-none tracking-tight">
+          <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="hover:underline">{{ exercise.title }}</a>
+        </h3>
+      </div>
+      @ui.dropdown()
+        @slot("trigger")
+          @svg('heroicons:ellipsis-horizontal',
+          {class: "w-4 h-4"})
+          <span class="sr-only">Exercise settings</span>
+        @end
+        @slot('menu')
+          <ul
+            class="py-1 text-sm text-gray-700 dark:text-gray-200"
+            aria-labelledby="dropdownMenuIconHorizontalButton"
+          >
+            @can('ExercisePolicy.edit', exercise)
+              <li>
+                <a
+                  href="{{ route('exercises.edit', {id: exercise.id}) }}"
+                  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Edit</a>
+              </li>
+            @end
+            @can('ExercisePolicy.delete', exercise)
+              <li>
+                <form
+                  method="POST"
+                  action="{{ route('exercises.destroy', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
+                >
+                  {{ csrfField() }}
+                  <input
+                    type="submit"
+                    value="Supprimer"
+                    class="py-2 px-4 w-full cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  />
+                </form>
+              </li>
+            @end
+          </ul>
+        @end
+      @end
     </div>
   </div>
   <div class="px-6">

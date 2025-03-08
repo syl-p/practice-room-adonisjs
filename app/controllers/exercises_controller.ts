@@ -17,33 +17,35 @@ export default class ExercisesController {
     await exercise.load('user')
     await exercise.load('tags')
     await exercise.load('media')
-    const comments = await exercise
-      .related('comments')
-      .query()
-      .orderBy('createdAt', 'desc')
-      .preload('user')
-    return view.render('pages/exercises/show', { exercise, comments })
+    return view.render('pages/exercises/show', { exercise })
   }
 
-  async create({ view }: HttpContext) {
+  async create({ view, auth }: HttpContext) {
+    await auth.user?.load('media')
     return view.render('pages/exercises/create')
   }
 
   async store({ request, response, auth }: HttpContext) {
-    const { title, content } = await request.validateUsing(exerciseValidator)
+    const { title, content, status, media } = await request.validateUsing(exerciseValidator)
     const exercise = new Exercise()
-    exercise.merge({ title, content })
-    await auth.user?.related('exercises').save(exercise)
+    exercise.merge({ title, content, status })
 
+    if (media) {
+      await exercise.related('media').attach(typeof media === 'number' ? [media] : media)
+    }
+
+    await auth.user?.related('exercises').save(exercise)
     return response.redirect().toRoute('exercise.show', { slug: exercise.slug })
   }
 
-  async edit({ view, params, response, bouncer }: HttpContext) {
+  async edit({ view, params, response, bouncer, auth }: HttpContext) {
     const exercise = await Exercise.findOrFail(params.id)
     if (await bouncer.with('ExercisePolicy').denies('edit', exercise)) {
       return response.forbidden('Cannot edit this exercise')
     }
 
+    await auth.user?.load('media')
+    await exercise.load('media')
     return view.render('pages/exercises/edit', { exercise })
   }
 
@@ -53,8 +55,13 @@ export default class ExercisesController {
       return response.forbidden('Cannot edit this exercise')
     }
 
-    const { title, content } = await request.validateUsing(exerciseValidator)
-    exercise.merge({ title, content })
+    const { title, content, status, media } = await request.validateUsing(exerciseValidator)
+    exercise.merge({ title, content, status })
+
+    await exercise.related('media').detach()
+    if (media) {
+      await exercise.related('media').attach(typeof media === 'number' ? [media] : media)
+    }
 
     await exercise.save()
     return response.redirect().toRoute('exercises.edit', { id: exercise.id })

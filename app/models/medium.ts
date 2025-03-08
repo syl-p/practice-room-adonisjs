@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { afterDelete, BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
+import app from '@adonisjs/core/services/app'
+import fs from 'node:fs/promises'
 
 export default class Medium extends BaseModel {
   static table = 'media'
@@ -26,4 +28,11 @@ export default class Medium extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @afterDelete()
+  static async deleteFile(medium: Medium) {
+    const file = app.makePath(`storage/${medium.fileUrl}`)
+    await fs.access(file)
+    await fs.unlink(file)
+  }
 }

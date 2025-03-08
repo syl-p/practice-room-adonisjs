@@ -6,6 +6,7 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import Exercise from '#models/exercise'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import PracticedExercise from '#models/practiced_exercise'
+import Medium from './medium.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -33,6 +34,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Exercise)
   declare exercises: HasMany<typeof Exercise>
+
+  @hasMany(() => Medium)
+  declare media: HasMany<typeof Medium>
 
   @hasMany(() => PracticedExercise)
   declare practicedExercises: HasMany<typeof PracticedExercise>

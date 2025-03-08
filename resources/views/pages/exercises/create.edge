@@ -1,8 +1,10 @@
 @layout()
   <section class="container">
-    <h1 class="text-2xl font-semibold text-gray-800">
-      Create Exercise
-    </h1>
-    @!exercises.form()
+    <header class="my-6">
+      <h1 class="text-3xl">
+        Créer un exercice
+      </h1>
+    </header>
+    @!exercises.form({media})
   </section>
 @end

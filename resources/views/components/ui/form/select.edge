@@ -1,0 +1,43 @@
+
+@let(valueOld = name ? old(name) : '')
+@let(value = valueOld || $props.value)
+
+<div>
+  {{ selected }}
+  <label for="{{ name || '' }}" class="block mb-2 text-sm font-medium text-gray-900">
+    @if($slots.label || label)
+      @if($slots.label)
+        {{ await $slots.label() }}
+      @else
+        {{ label }}
+      @end
+    @end
+  </label>
+  <select
+    name="{{ name || '' }}"
+    id="{{ name || '' }}"
+    class="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    multiple="{{ multiple }}"
+  >
+    <option value="" disabled>
+      Sélectionnez une option
+    </option>
+    @each(option in options)
+      <option
+        value="{{ option.id }}"
+        {{ html.attrs({
+          selected: (multiple && selected.includes(option.id)) || selected === option.id ? 'selected' : ''
+        }) }}
+      >
+        {{ option.id }}
+      </option>
+    @end
+  </select>
+  @if(name)
+    @inputError(name)
+      <p class="text-sm text-red-500 mb-3">
+        {{ $messages.join(', ') }}
+      </p>
+    @end
+  @end
+</div>

@@ -9,7 +9,7 @@
           <small class="block font-light text-sm text-muted-foreground">
             Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
           </small>
-          <h1 class="text-xl font-bold">
+          <h1 class="text-3xl">
             {{ exercise.title }}
           </h1>
           <p>
@@ -80,7 +80,7 @@
       </div>
       <div>
         <h3 class="text-xl mb-3">
-          Media associés
+          media associés
         </h3>
         <ul class="divide-y divide-gray-200">
           @each(medium in exercise.media)
@@ -105,7 +105,7 @@
   </section>
   <section class="container">
     <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-      Discussion ({{comments.length}})
+      Discussion
     </h2>
 
     @if(auth.isAuthenticated)

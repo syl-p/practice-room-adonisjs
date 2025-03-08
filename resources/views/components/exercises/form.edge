@@ -23,6 +23,16 @@
     selected: exercise ? exercise.status : ExerciseStatuses.DRAFT
   })
 
+  @if(auth.user.media)
+    @!ui.form.select({
+      name: 'media',
+      label: 'Ajouter des medias',
+      multiple: true,
+      options: auth.user.media,
+      selected: exercise && exercise.media ? exercise.media.map(m => m.id) : []
+    })
+  @end
+  
   @ui.button({type: 'submit'})
     {{ exercise ? 'Modifier' : 'Créer' }} l'exercice
   @end
