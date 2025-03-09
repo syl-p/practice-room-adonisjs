@@ -61,6 +61,15 @@ router
   .only(['index', 'store', 'destroy'])
   .use(['index', 'store', 'destroy'], middleware.auth())
 
+router
+  .get('/practices/previous-week', [PracticedExercisesController, 'previousWeek'])
+  .use(middleware.auth())
+  .as('practices.previousWeek')
+router
+  .get('/practices/next-week', [PracticedExercisesController, 'nextWeek'])
+  .use(middleware.auth())
+  .as('practices.nextWeek')
+
 // media
 router
   .resource('media', MediaController)

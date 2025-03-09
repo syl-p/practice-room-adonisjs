@@ -1,6 +1,6 @@
 <div id="practices_week" hx-boost="true" hx-swap="outerHTML" hx-target="#practices_week">
-  <div class="flex space-x-3 items-center">
-    <a href="" class="block">
+  <div class="flex space-x-3 items-center justify-around">
+    <a href="{{ route('practices.previousWeek', {}, {qs: {date: current }}) }}" class="block">
       @svg('heroicons:chevron-left')
     </a>
     <ul class="flex flex-wrap space-x-3 items-center justify-center">
@@ -24,7 +24,7 @@
         </li>
       @end
     </ul>
-    <a href="" class="block">
+    <a href="{{ route('practices.nextWeek', {}, {qs: {date: current }}) }}" class="block">
       @svg('heroicons:chevron-right')
     </a>
   </div>

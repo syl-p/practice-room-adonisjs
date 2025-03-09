@@ -3,42 +3,65 @@ import Exercise from '#models/exercise'
 import { practiceTimeValidator } from '#validators/practice'
 import { DateTime } from 'luxon'
 import PracticedExercise from '#models/practiced_exercise'
-import db from '@adonisjs/lucid/services/db'
+import { inject } from '@adonisjs/core'
+import { PracticeService } from '#services/practice_service'
 
+@inject()
 export default class PracticedExercisesController {
-  async index({ auth, request, view }: HttpContext) {
+  constructor(protected practiceService: PracticeService) {}
+
+  async index({ request, view }: HttpContext) {
     let { date } = request.qs()
     date = DateTime.fromISO(date)
 
-    // GET INPUTS VALIDS
     const current = date.isValid ? date : DateTime.now().startOf('day')
     const weekStart = current.startOf('week')
     const weekEnd = current.endOf('week')
 
-    // WEEK AND DURATION
-    const groupedByDays = await PracticedExercise.query()
-      .select(db.raw('DATE(created_at) as date'))
-      .sum('duration as total_duration')
-      .where('created_at', '>=', weekStart.toSQLDate())
-      .andWhere('created_at', '<=', weekEnd.toSQLDate())
-      .groupBy('date')
+    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
+      current,
+      weekStart,
+      weekEnd
+    )
 
-    // CONSTRUCT MY WEEK
-    const myWeek = Array.from({ length: 7 }, (_, i) => weekStart.plus({ days: i }))
-    const weekAndDurations = myWeek.map((wd) => ({
-      date: wd.toISO(),
-      luxonObject: wd,
-      duration:
-        groupedByDays.find((p) => wd.equals(DateTime.fromJSDate(p.$extras.date)))?.$extras
-          .total_duration || 0,
-    }))
+    return view.render('fragments/practices', {
+      current: current.toISO(),
+      weekAndDurations,
+      practices,
+    })
+  }
 
-    // PRACTICES FOR CURRENT DATE
-    const practices = await auth
-      .user!.related('practicedExercises')
-      .query()
-      .preload('exercise')
-      .apply((scope) => scope.atSpecificDate(current))
+  async previousWeek({ view, request }: HttpContext) {
+    const { date } = request.qs()
+    const current = DateTime.fromISO(date).minus({ weeks: 1 }).startOf('week')
+    const weekStart = current.startOf('week')
+    const weekEnd = current.endOf('week')
+
+    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
+      current,
+      weekStart,
+      weekEnd
+    )
+
+    return view.render('fragments/practices', {
+      current: current.toISO(),
+      weekAndDurations,
+      practices,
+    })
+  }
+
+  async nextWeek({ request, view }: HttpContext) {
+    const { date } = request.qs()
+
+    const current = DateTime.fromISO(date).plus({ weeks: 1 }).startOf('week')
+    const weekStart = current.startOf('week')
+    const weekEnd = current.endOf('week')
+
+    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
+      current,
+      weekStart,
+      weekEnd
+    )
 
     return view.render('fragments/practices', {
       current: current.toISO(),

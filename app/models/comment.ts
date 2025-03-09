@@ -1,5 +1,14 @@
 import { DateTime } from 'luxon'
-import { afterDelete, BaseModel, belongsTo, column, computed, hasMany } from '@adonisjs/lucid/orm'
+import {
+  afterDelete,
+  BaseModel,
+  beforeCreate,
+  beforeUpdate,
+  belongsTo,
+  column,
+  computed,
+  hasMany,
+} from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import CommentableType from '#enums/commentable_types'
@@ -29,13 +38,6 @@ export default class Comment extends BaseModel {
     return MentionService.checkMentions(this.content)
   }
 
-  // TODO: Convert mention into links BEFORE Update
-  // @computed()
-  // get contentParsed() {
-  //   const content = MentionService.convertMentionsToLinks(this.content)
-  //   return content
-  // }
-
   @hasMany(() => Comment, {
     foreignKey: 'commentableId',
     onQuery: (query) => query.where('commentable_type', CommentableType.COMMENT),
@@ -47,6 +49,12 @@ export default class Comment extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @beforeCreate()
+  @beforeUpdate()
+  static async convertMentionsToLinks(comment: Comment) {
+    comment.content = await MentionService.convertMentionsToLinks(comment.content)
+  }
 
   @afterDelete()
   static async removeChilds(comment: Comment) {
