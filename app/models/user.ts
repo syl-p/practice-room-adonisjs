@@ -7,6 +7,7 @@ import Exercise from '#models/exercise'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import PracticedExercise from '#models/practiced_exercise'
 import Medium from './medium.js'
+import { DbRememberMeTokensProvider } from '@adonisjs/auth/session'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -62,4 +63,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  static rememberMeTokens = DbRememberMeTokensProvider.forModel(User)
 }

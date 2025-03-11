@@ -68,7 +68,7 @@
     "@iconify-json/heroicons": "^1.2.2",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
-    "@vinejs/vine": "^2.1.0",
+    "@vinejs/vine": "^3.0.0",
     "alpinejs": "^3.14.8",
     "edge-iconify": "^2.0.1",
     "edge.js": "^6.2.0",

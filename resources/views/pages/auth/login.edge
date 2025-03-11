@@ -20,6 +20,11 @@
         type: 'password'
       })
 
+      @!ui.form.checkbox({
+        name: 'isRemberMe',
+        label: 'Se souvenir de moi ?'
+      })
+
       @ui.button({type: "submit"})
         Se connecter
       @end

@@ -1,0 +1,23 @@
+
+@let(valueOld = name ? old(name) : '')
+@let(value = valueOld || $props.value)
+
+<label for="{{ name || '' }}" class="flex space-x-3 items-center">
+  <input type="checkbox" name="{{ name || '' }}" {{ $props.except(['class', 'type', 'value']).toAttrs() }} />
+  @if($slots.label || label)
+    <span class="block flex-1 text-sm font-medium text-gray-900">
+      @if($slots.label)
+        {{ await $slots.label() }}
+      @else
+        {{ label }}
+      @end
+    </span>
+  @end
+</label>
+@if(name)
+  @inputError(name)
+    <p class="text-sm text-red-500 mb-3">
+      {{ $messages.join(', ') }}
+    </p>
+  @end
+@end
