@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, computed } from '@adonisjs/lucid/orm'
-import TaggableType from '#enums/taggable_type'
+import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
+import Exercise from './exercise.js'
+import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 
 export default class Tag extends BaseModel {
   @column({ isPrimary: true })
@@ -15,24 +16,11 @@ export default class Tag extends BaseModel {
   @column()
   declare label: string
 
-  @column()
-  declare taggableType: TaggableType
-
-  @column()
-  declare taggableId: number
-
-  @computed()
-  get relatedEntity() {
-    const ModelClass = this.getModelClass(this.taggableType)
-    return ModelClass[this.taggableType]
-  }
-
-  private getModelClass(type: string) {
-    const models = {
-      Exercise: () => import('#models/exercise'),
-    }
-
-    //@ts-ignore
-    return models[type]?.().then((module) => module.default)
-  }
+  @manyToMany(() => Exercise, {
+    pivotTable: 'tag_taggable',
+    pivotForeignKey: 'tag_id',
+    pivotRelatedForeignKey: 'taggable_id',
+    // pivotTimestamps: true,
+  })
+  declare exercises: ManyToMany<typeof Exercise>
 }

@@ -47,12 +47,6 @@ export default class Exercise extends BaseModel {
   @hasMany(() => PracticedExercise)
   declare practiced: HasMany<typeof PracticedExercise>
 
-  @hasMany(() => Tag, {
-    foreignKey: 'taggableId',
-    onQuery: (query) => query.where('taggable_type', CommentableType.EXERCISE),
-  })
-  declare tags: HasMany<typeof Tag>
-
   @hasMany(() => Comment, {
     foreignKey: 'commentableId',
     onQuery: (query) => query.where('commentable_type', CommentableType.EXERCISE),
@@ -66,6 +60,14 @@ export default class Exercise extends BaseModel {
     pivotTimestamps: true,
   })
   declare media: ManyToMany<typeof Medium>
+
+  @manyToMany(() => Tag, {
+    pivotTable: 'tag_taggable',
+    pivotForeignKey: 'taggable_id',
+    pivotRelatedForeignKey: 'tag_id',
+    // pivotTimestamps: true,
+  })
+  declare tags: ManyToMany<typeof Tag>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

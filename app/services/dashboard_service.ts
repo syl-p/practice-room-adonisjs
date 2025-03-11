@@ -41,11 +41,13 @@ export default class DashboardService {
   }
 
   async exerciseTop10(): Promise<Exercise[]> {
-    const exercises = await Exercise.query()
+    const exercises = await this.ctx.auth
+      .user!.related('exercises')
+      .query()
       .has('practiced')
       .withCount('practiced', (query) => {
         query
-          .where('user_id', this.ctx.auth.user!.id)
+          // .where('user_id', this.ctx.auth.user!.id)
           .where('duration', '>', 0)
           .as('practiceAssociatedTime')
       })

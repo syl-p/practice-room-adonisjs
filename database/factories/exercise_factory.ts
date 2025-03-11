@@ -17,7 +17,6 @@ export const ExerciseFactory = factory
     }
   })
   .relation('user', () => UserFactory)
-  .relation('tags', () => TagFactory)
   .relation('media', () => MediumFactory)
   .relation('comments', () => CommentFactory)
   .state('public', (row) => {

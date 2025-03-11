@@ -36,6 +36,7 @@
             @can('ExercisePolicy.delete', exercise)
               <li>
                 <form
+                  class=""
                   method="POST"
                   action="{{ route('exercises.destroy', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
                 >
@@ -43,7 +44,7 @@
                   <input
                     type="submit"
                     value="Supprimer"
-                    class="block w-full px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                   />
                 </form>
               </li>

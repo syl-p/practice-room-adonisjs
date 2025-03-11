@@ -13,6 +13,7 @@ import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import CommentableType from '#enums/commentable_types'
 import MentionService from '#services/mention_service'
+import CommentService from '#services/comment_service'
 
 export default class Comment extends BaseModel {
   @column({ isPrimary: true })
@@ -52,8 +53,9 @@ export default class Comment extends BaseModel {
 
   @beforeCreate()
   @beforeUpdate()
-  static async convertMentionsToLinks(comment: Comment) {
+  static async parseContent(comment: Comment) {
     comment.content = await MentionService.convertMentionsToLinks(comment.content)
+    comment.content = CommentService.convertUrlToLink(comment.content)
   }
 
   @afterDelete()

@@ -1,4 +1,3 @@
-import PracticedExercise from '#models/practiced_exercise'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { dd } from '@adonisjs/core/services/dumper'

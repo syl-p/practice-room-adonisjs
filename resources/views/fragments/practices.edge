@@ -55,15 +55,18 @@
                   action="{{ route('practices.destroy', {id: item.id}, {qs: {_method: 'DELETE' }}) }}"
                 >
                   {{ csrfField() }}
-                  @ui.button()
-                    Supprimer
-                  @end
+                  <input
+                    type="submit"
+                    value="Supprimer"
+                    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                  />
                 </form>
-              </ul>
-            @end
+              </form>
+            </ul>
           @end
         @end
-      </li>
-    @end
-  </ul>
+      @end
+    </li>
+  @end
+</ul>
 </div>

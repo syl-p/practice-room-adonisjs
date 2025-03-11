@@ -1,11 +1,13 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import { UserFactory } from '#database/factories/user_factory'
 import Exercise from '#models/exercise'
+import { TagFactory } from '#database/factories/tag_factory'
+import TaggableType from '#enums/taggable_type'
 
 export default class extends BaseSeeder {
   static environment = ['development', 'testing']
   async run() {
-    // Write your database queries inside the run method
+    // USERS
     const defaultUsers = await UserFactory.with('exercises', 3, (exercise) =>
       exercise
         .apply('public')
@@ -16,27 +18,40 @@ export default class extends BaseSeeder {
             .apply('exercise')
             .with('replies', 4, (commentRow) => commentRow.apply('comment'))
         )
-        .with('tags', 5, (tag) => tag.apply('exercise'))
     )
-      // .with('practicedExercises', 10)
       .with('exercises', 3, (exercise) => exercise.apply('draft'))
       .with('exercises', 3, (exercise) => exercise.apply('not referenced'))
       .createMany(3)
 
+    // TAGS
+    const tags = await TagFactory.createMany(20)
+
+    // GET ALL EXS
     let exercises: Exercise[] = []
     for (const user of defaultUsers) {
       await user.load('exercises')
       exercises = [...exercises, ...user.exercises]
     }
 
-    // const exIds = exercises.map((e) => e.id)
-    const userOds = defaultUsers.map((e) => e.id)
-    const promises = defaultUsers.map(async (user) => {
-      await user.related('followers').attach(this.#getRandom(userOds, 10))
-      // await user.related('practicedExercises').attach(this.#getRandom(exIds, 10))
+    const exerciseIds = exercises.map((e) => e.id)
+    const userIds = defaultUsers.map((e) => e.id)
+
+    // PROMISES
+    const promisesUsers = defaultUsers.map(async (user) => {
+      await user.related('followers').attach(this.#getRandom(userIds, 10))
     })
 
-    await Promise.all(promises)
+    const promisesTags = tags.map(async (tag) => {
+      const ex = this.#getRandom(exerciseIds, 10).map((id) => [
+        id,
+        { taggable_type: TaggableType.EXERCISE },
+      ]) // = [3, {taggable_type: 'Exercise'}][]
+
+      // attach {3: {taggable_type: 'Exercise'}}
+      await tag.related('exercises').attach(Object.fromEntries(ex))
+    })
+
+    await Promise.all([...promisesUsers, ...promisesTags])
   }
 
   #getRandom<T>(array: T[], pluck: number) {
