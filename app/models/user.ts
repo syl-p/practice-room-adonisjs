@@ -58,6 +58,14 @@ export default class User extends compose(BaseModel, AuthFinder) {
   })
   declare followers: ManyToMany<typeof User>
 
+  @manyToMany(() => Exercise, {
+    pivotTable: 'favorites',
+    pivotForeignKey: 'user_id',
+    pivotRelatedForeignKey: 'exercise_id',
+    pivotTimestamps: true,
+  })
+  declare favorites: ManyToMany<typeof Exercise>
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

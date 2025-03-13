@@ -15,8 +15,16 @@
           <p>
             {{ excerpt(exercise.content, 200) }}
           </p>
+
           {{-- Actions --}}
-          <div class="flex space-x-3 mt-3">
+          <div class="flex space-x-3 mt-3 items-center">
+            <form action="{{ route('favorites.add', {id: exercise.id}) }}" method="post">
+              {{ csrfField() }}
+              @ui.button({type: 'submit', variant: 'outline', class: "flex space-x-3"})
+                @svg('heroicons:star-solid')
+                <span>Ajouter aux favoris</span>
+              @end
+            </form>
             <p>
               @can('ExercisePolicy.edit', exercise)
                 <a href="{{ route('exercises.edit', {id: exercise.id}) }}" class="text-primary hover:underline">Editer</a>

@@ -9,6 +9,7 @@ export default class ExercisesController {
       .preload('tags')
       .apply((scope) => scope.public())
       .orderBy('createdAt', 'desc')
+
     return view.render('pages/exercises/index', { exercises })
   }
 

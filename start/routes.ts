@@ -16,13 +16,12 @@ const RegistersController = () => import('#controllers/auth/registers_controller
 const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const FavoritesController = () => import('#controllers/favorites_controller')
 const MediaController = () => import('#controllers/media_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
-
 const ExercisesCommentsController = () => import('#controllers/exercises/comments_controller')
 const CommentsCommentsController = () => import('#controllers/comments/comments_controller')
 const CommentsController = () => import('#controllers/comments_controller')
-
 const LogoutController = () => import('#controllers/auth/logout_controller')
 const ExercisesController = () => import('#controllers/exercises_controller')
 const PagesController = () => import('#controllers/pages_controller')
@@ -40,10 +39,22 @@ router
   .resource('exercises', ExercisesController)
   .except(['show'])
   .use(['edit', 'store', 'destroy', 'create'], middleware.auth())
+
 router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
   .where('slug', router.matchers.slug())
+
+// FAVORITES
+router.get('/favorites', [FavoritesController, 'index']).as('favorites').use(middleware.auth())
+router
+  .post('/favorites/:id', [FavoritesController, 'store'])
+  .as('favorites.add')
+  .use(middleware.auth())
+router
+  .delete('/favorites/:id', [FavoritesController, 'destroy'])
+  .as('favorites.remove')
+  .use(middleware.auth())
 
 // COMMENTS
 router.resource('comments', CommentsController).only(['edit', 'update', 'destroy'])
@@ -70,7 +81,7 @@ router
   .use(middleware.auth())
   .as('practices.nextWeek')
 
-// media
+// MEDIA
 router
   .resource('media', MediaController)
   .only(['index', 'show', 'store', 'destroy'])
@@ -107,17 +118,17 @@ router
   .prefix('auth')
   .as('auth')
 
+// USERS
 router.resource('users', UsersController).only(['index', 'show', 'edit'])
-
 router
   .post('user/:id/follow', [UsersController, 'follow'])
   .use(middleware.auth())
   .as('users.follow')
-
 router
   .delete('user/:id/unfollow', [UsersController, 'unfollow'])
   .use(middleware.auth())
   .as('users.unfollow')
 
+// OTHER
 router.get('search', [SearchController, 'index']).as('search')
 router.get('dashboard', [DashboardController, 'index']).use(middleware.auth()).as('dashboard')

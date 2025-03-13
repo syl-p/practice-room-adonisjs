@@ -3,7 +3,6 @@ import Exercise from '#models/exercise'
 import { newCommentValidator } from '#validators/comment'
 import { HttpContext } from '@adonisjs/core/http'
 import CommentableType from '#enums/commentable_types'
-import { errors } from '@vinejs/vine'
 
 export default class CommentsController {
   async index({ params, view }: HttpContext) {
@@ -20,7 +19,7 @@ export default class CommentsController {
     return view.render('fragments/comments', { comments })
   }
 
-  async store({ request, params, auth, view, session, response }: HttpContext) {
+  async store({ request, params, auth, view }: HttpContext) {
     const exercise = await Exercise.findByOrFail({ id: params.exercise_id })
 
     const data = await request.validateUsing(newCommentValidator)

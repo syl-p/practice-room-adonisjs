@@ -1,0 +1,17 @@
+<ul id="favorites">
+  @each(exercise in auth.user.favorites)
+    <li>
+      @favorites.item({exercise})
+        <form
+          method="post"
+          action="{{ route('favorites.remove', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
+        >
+          {{ csrfField() }}
+          @ui.button({variant: 'outline'})
+            @svg('heroicons:x-mark')
+          @end
+        </form>
+      @end
+    </li>
+  @end
+</ul>

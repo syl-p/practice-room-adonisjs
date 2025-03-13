@@ -1,0 +1,13 @@
+<div class="flex space-x-6 min-w-0 relative items-center p-4">
+  <div class="flex-1 flex space-x-6 items-center min-w-0">
+    <div class="hidden flex-shrink-0 md:block">
+      @svg('heroicons:star-solid')
+    </div>
+    <div class="min-w-0 font-semibold truncate">
+      <a href="{{ route('exercise.show', {slug: exercise.slug}) }}">{{ exercise.title }}</a>
+    </div>
+  </div>
+  <div>
+    {{{ await $slots.main() }}}
+  </div>
+</div>

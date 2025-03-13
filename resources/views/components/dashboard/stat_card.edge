@@ -1,3 +1,5 @@
-<div class="bg-background shadow-lg rounded-md p-6">
+<div {{ $props.merge({
+  class: ["bg-background shadow-lg rounded-md p-6"]
+}).toAttrs() }}>
   {{{ await $slots.main() }}}
 </div>

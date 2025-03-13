@@ -18,7 +18,13 @@
           @!dashboard.daily({...dailyPracticeTime})
         @end
       </div>
-
+      @dashboard.statCard({class: 'mb-6'})
+        <h2 class="text-xl mb-3">
+          Vos favoris
+        </h2>
+        <ul id="favorites" hx-get="{{ route('favorites') }}" hx-trigger="load" hx-swap="outerHTML">
+        </ul>
+      @end
       @dashboard.statCard()
         <h2 class="text-xl mb-3">
           Exercices que vous avez le plus pratiqués
