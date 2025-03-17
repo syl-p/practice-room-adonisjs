@@ -1,8 +1,12 @@
-<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+<div
+  {{ $props.except(['exercise']).merge({
+    class: ["rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden", $props.class]
+  }).toAttrs() }}
+>
   <div class="flex space-x-3 align-middle p-6">
     <a href="{{ route('users.show', {id: exercise.user.id}) }}">
       @!users.avatar({
-      user: exercise.user
+        user: exercise.user
       })
     </a>
     <div class="flex space-x-3 flex-1 justify-between items-center">
@@ -10,51 +14,13 @@
         <small class="block font-light text-sm text-muted-foreground">
           Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
         </small>
-        <h3 class="text-2xl font-semibold leading-none tracking-tight">
+        <h3 class="text-xl font-semibold leading-none tracking-tight">
           <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="hover:underline">{{ exercise.title }}</a>
         </h3>
       </div>
-      @ui.dropdown()
-        @slot("trigger")
-          @svg('heroicons:ellipsis-horizontal',
-          {class: "w-4 h-4"})
-          <span class="sr-only">Exercise settings</span>
-        @end
-        @slot('menu')
-          <ul
-            class="py-1 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownMenuIconHorizontalButton"
-          >
-            @can('ExercisePolicy.edit', exercise)
-              <li>
-                <a
-                  href="{{ route('exercises.edit', {id: exercise.id}) }}"
-                  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Edit</a>
-              </li>
-            @end
-            @can('ExercisePolicy.delete', exercise)
-              <li>
-                <form
-                  class=""
-                  method="POST"
-                  action="{{ route('exercises.destroy', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
-                >
-                  {{ csrfField() }}
-                  <input
-                    type="submit"
-                    value="Supprimer"
-                    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                  />
-                </form>
-              </li>
-            @end
-          </ul>
-        @end
-      @end
     </div>
   </div>
-  <div class="px-6">
+  <div class="px-6 text-ellipsis">
     {{ exercise.content?.substring(0, 100) + "..." }}
   </div>
   <footer class="p-6">

@@ -16,6 +16,7 @@ const RegistersController = () => import('#controllers/auth/registers_controller
 const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const HomeController = () => import('#controllers/home_controller')
 const FavoritesController = () => import('#controllers/favorites_controller')
 const MediaController = () => import('#controllers/media_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
@@ -26,7 +27,7 @@ const LogoutController = () => import('#controllers/auth/logout_controller')
 const ExercisesController = () => import('#controllers/exercises_controller')
 const PagesController = () => import('#controllers/pages_controller')
 
-router.get('/', [PagesController, 'index']).as('home')
+router.get('/', [HomeController, 'index']).as('home')
 router.get('/avatars/:filename', [UsersController, 'avatar'])
 
 router
@@ -37,7 +38,7 @@ router
 // EXERCISES
 router
   .resource('exercises', ExercisesController)
-  .except(['show'])
+  .except(['show', 'index'])
   .use(['edit', 'store', 'destroy', 'create'], middleware.auth())
 
 router

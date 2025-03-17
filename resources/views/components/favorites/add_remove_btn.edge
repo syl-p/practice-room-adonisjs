@@ -1,0 +1,15 @@
+@let(exist = auth.user.favorites.map(f => f.id).includes(exercise.id))
+@let(action = exist ? 'remove' : 'add')
+@let(method = exist ? 'DELETE' : 'POST')
+
+<form
+  id="favoriteBtn"
+  hx-{{ method.toLowerCase() }}="{{ route(`favorites.${action}`, {id: exercise.id}, {qs: {_method: method }}) }}"
+  method="post"
+>
+  {{ csrfField() }}
+  @ui.button({type: 'submit', variant: 'outline', class: "flex space-x-3"})
+    @svg('heroicons:star-solid')
+    <span>{{ exist ? 'Supprimer des ' : 'Ajouter aux' }} favoris</span>
+  @end
+</form>

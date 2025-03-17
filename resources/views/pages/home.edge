@@ -1,9 +1,31 @@
 @layout()
-  @ui.button({href: "#"})
-    My button
-  @end
-  
-  <h1>
-    My home test
-  </h1>
+  <section class="container mt-8">
+    @if(auth.isAuthenticated)
+      <article class="mb-6">
+        <h2 class="text-3xl mb-6 flex-1">
+          Vos derniers exercices pratiqués
+        </h2>
+        <ul class="grid grid-cols-4 gap-6">
+          @each(exercise in lastPracticedExercises)
+            <li>
+              @!exercises.card({exercise})
+            </li>
+          @end
+        </ul>
+      </article>
+    @end
+    
+    <article>
+      <h2 class="text-3xl mb-6 flex-1">
+        Les derniers exercices de la communauté
+      </h2>
+      <ul class="space-y-6">
+        @each(exercise in exercises)
+          <li>
+            @!exercises.card({exercise})
+          </li>
+        @end
+      </ul>
+    </article>
+  </section>
 @end

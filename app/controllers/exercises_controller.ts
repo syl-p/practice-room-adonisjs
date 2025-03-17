@@ -13,11 +13,17 @@ export default class ExercisesController {
     return view.render('pages/exercises/index', { exercises })
   }
 
-  async show({ view, params }: HttpContext) {
+  async show({ view, params, auth }: HttpContext) {
     const exercise = await Exercise.findByOrFail('slug', params.slug)
     await exercise.load('user')
     await exercise.load('tags')
     await exercise.load('media')
+
+    if (auth.isAuthenticated) {
+      const user = auth.use('web').user
+      await user?.load('favorites')
+    }
+
     return view.render('pages/exercises/show', { exercise })
   }
 

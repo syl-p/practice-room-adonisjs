@@ -17,33 +17,29 @@
           </p>
 
           {{-- Actions --}}
-          <div class="flex space-x-3 mt-3 items-center">
-            <form action="{{ route('favorites.add', {id: exercise.id}) }}" method="post">
-              {{ csrfField() }}
-              @ui.button({type: 'submit', variant: 'outline', class: "flex space-x-3"})
-                @svg('heroicons:star-solid')
-                <span>Ajouter aux favoris</span>
-              @end
-            </form>
-            <p>
-              @can('ExercisePolicy.edit', exercise)
-                <a href="{{ route('exercises.edit', {id: exercise.id}) }}" class="text-primary hover:underline">Editer</a>
-              @end
-            </p>
-            @can('ExercisePolicy.delete', exercise)
-              {{-- HTMX ACTIONS --}}
-              <form
-                method="post"
-                hx-post="{{ route('exercises.destroy', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
-                hx-confirm="Êtes-vous sûr de vouloir supprimer cet exercice ?"
-                hx-target="body"
-                hx-push-url="true"
-              >
-                {{ csrfField() }}
+          @if(auth.isAuthenticated)
+            <div class="flex space-x-3 mt-3 items-center">
+              @!favorites.addRemoveBtn({exercise})
+              <p>
+                @can('ExercisePolicy.edit', exercise)
+                  <a href="{{ route('exercises.edit', {id: exercise.id}) }}" class="text-primary hover:underline">Editer</a>
+                @end
+              </p>
+              @can('ExercisePolicy.delete', exercise)
+                {{-- HTMX ACTIONS --}}
+                <form
+                  method="post"
+                  hx-post="{{ route('exercises.destroy', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
+                  hx-confirm="Êtes-vous sûr de vouloir supprimer cet exercice ?"
+                  hx-target="body"
+                  hx-push-url="true"
+                >
+                  {{ csrfField() }}
                 <button class="text-primary hover:underline" type="submit">Supprimer</button>
-              </form>
-            @end
-          </div>
+                </form>
+              @end
+            </div>
+          @end
           {{-- End Actions --}}
         </div>
         @if(auth.isAuthenticated)
