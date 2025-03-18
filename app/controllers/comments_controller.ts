@@ -20,6 +20,7 @@ export default class CommentsController {
     return view.render('fragments/comments', { comments })
   }
 
+  // TODO: Move logic into a service
   async store({ request, params, auth, view }: HttpContext) {
     const data = await request.validateUsing(newCommentValidator)
 

@@ -6,18 +6,20 @@ import {
   column,
   computed,
   hasMany,
+  hasOne,
   manyToMany,
   scope,
 } from '@adonisjs/lucid/orm'
 import ExerciseStatuses from '#enums/exercise_statuses'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import User from './user.js'
-import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Tag from './tag.js'
 import Comment from '#models/comment'
 import CommentableType from '#enums/commentable_types'
 import PracticedExercise from '#models/practiced_exercise'
 import Medium from '#models/medium'
+import Goal from './goal.js'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })
@@ -68,6 +70,9 @@ export default class Exercise extends BaseModel {
     // pivotTimestamps: true,
   })
   declare tags: ManyToMany<typeof Tag>
+
+  @hasOne(() => Goal)
+  declare goal: HasOne<typeof Goal>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

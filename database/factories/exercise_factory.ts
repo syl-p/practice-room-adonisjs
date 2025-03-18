@@ -2,9 +2,9 @@ import factory from '@adonisjs/lucid/factories'
 import Exercise from '#models/exercise'
 import ExerciseStatuses from '#enums/exercise_statuses'
 import { UserFactory } from './user_factory.js'
-import { TagFactory } from './tag_factory.js'
 import { CommentFactory } from './comment_factory.js'
 import { MediumFactory } from './medium_factory.js'
+import { GoalFactory } from './goal_factory.js'
 
 export const ExerciseFactory = factory
   .define(Exercise, async ({ faker }) => {
@@ -16,6 +16,7 @@ export const ExerciseFactory = factory
       userId: 1,
     }
   })
+  .relation('goal', () => GoalFactory)
   .relation('user', () => UserFactory)
   .relation('media', () => MediumFactory)
   .relation('comments', () => CommentFactory)
