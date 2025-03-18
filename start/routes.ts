@@ -20,8 +20,6 @@ const HomeController = () => import('#controllers/home_controller')
 const FavoritesController = () => import('#controllers/favorites_controller')
 const MediaController = () => import('#controllers/media_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
-const ExercisesCommentsController = () => import('#controllers/exercises/comments_controller')
-const CommentsCommentsController = () => import('#controllers/comments/comments_controller')
 const CommentsController = () => import('#controllers/comments_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 const ExercisesController = () => import('#controllers/exercises_controller')
@@ -59,8 +57,8 @@ router
 
 // COMMENTS
 router.resource('comments', CommentsController).only(['edit', 'update', 'destroy'])
-router.resource('exercises.comments', ExercisesCommentsController).only(['index', 'store'])
-router.resource('comments.comments', CommentsCommentsController).only(['store'])
+router.resource('exercises.comments', CommentsController).only(['index', 'store'])
+router.resource('comments.comments', CommentsController).only(['store'])
 
 // PRACTICES
 router

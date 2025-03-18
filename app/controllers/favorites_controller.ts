@@ -1,6 +1,5 @@
 import Exercise from '#models/exercise'
 import type { HttpContext } from '@adonisjs/core/http'
-import { dd } from '@adonisjs/core/services/dumper'
 
 export default class FavoritesController {
   async index({ auth, view }: HttpContext) {
