@@ -19,7 +19,7 @@ import Comment from '#models/comment'
 import CommentableType from '#enums/commentable_types'
 import PracticedExercise from '#models/practiced_exercise'
 import Medium from '#models/medium'
-import Goal from './goal.js'
+import Goal from '#models/goal'
 
 export default class Exercise extends BaseModel {
   @column({ isPrimary: true })

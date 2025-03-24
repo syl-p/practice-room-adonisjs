@@ -16,6 +16,7 @@ const RegistersController = () => import('#controllers/auth/registers_controller
 const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const ProgressionsController = () => import('#controllers/progressions_controller')
 const HomeController = () => import('#controllers/home_controller')
 const FavoritesController = () => import('#controllers/favorites_controller')
 const MediaController = () => import('#controllers/media_controller')
@@ -43,6 +44,12 @@ router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
   .where('slug', router.matchers.slug())
+
+// PROGRESSIONS
+router
+  .post('progression/:id', [ProgressionsController, 'save'])
+  .as('progression.save')
+  .use(middleware.auth())
 
 // FAVORITES
 router.get('/favorites', [FavoritesController, 'index']).as('favorites').use(middleware.auth())

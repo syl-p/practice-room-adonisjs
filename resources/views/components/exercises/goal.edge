@@ -1,0 +1,32 @@
+@let(user_progression = progression.$extras.pivot_value ? progression.$extras.pivot_value : 0)
+
+<h3 class="text-xl mb-3">
+  Objectifs
+</h3>
+<form
+  hx-post="{{ route('progression.save', {id: goal.id}) }}"
+  hx-trigger="change"
+  hx-preserve
+  hx-swap="none"
+  class="flex items-center justify-between space-x-3"
+  x-data="{ progression: {{ user_progression }} }"
+>
+  {{ csrfField() }}
+  <span class="text-gray-600 dark:text-gray-400" x-text="progression">
+    0
+  </span>
+  <input
+    class="flex-1"
+    x-model="progression"
+    name="value"
+    type="range"
+    min="0"
+    max="{{ goal.objective }}"
+    step="{{ goal.step }}"
+    value="0"
+    class="w-full"
+  />
+  <span class="text-gray-600 dark:text-gray-400">
+    {{ goal.objective }} {{ goal.label }}
+  </span>
+</form>

@@ -12,9 +12,9 @@ export default class extends BaseSchema {
         .references('exercises.id')
         .notNullable()
         .onDelete('CASCADE')
-      table.integer('goal')
-      table.integer('step')
-      table.string('label')
+      table.integer('objective').notNullable()
+      table.integer('step').defaultTo(1)
+      table.string('label').notNullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
 

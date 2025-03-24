@@ -83,19 +83,16 @@
         {{{ nl2br(exercise.content) }}}
       </div>
       <div>
-        <h3 class="text-xl mb-3">
-          media associés
-        </h3>
-        <ul class="divide-y divide-gray-200">
-          @each(medium in exercise.media)
-            <li class="flex space-x-6 relative items-center p-4 hover:bg-gray-50">
-              @media.item({item: medium})
-                @slot('actions')
-                @end
-              @end
-            </li>
-          @end
-        </ul>
+        @if(auth.isAuthenticated)
+          <div class="mb-6">
+            @!exercises.goal({goal: exercise.goal, progression})
+          </div>
+          <div class="border w-full mb-6">
+          </div>
+        @end
+        <div>
+          @!exercises.mediaList({media: exercise.media})
+        </div>
       </div>
     </article>
     <footer>

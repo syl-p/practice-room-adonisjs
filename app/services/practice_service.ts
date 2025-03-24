@@ -1,6 +1,5 @@
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
-import { dd } from '@adonisjs/core/services/dumper'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 

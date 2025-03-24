@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Exercise from '#models/exercise'
 import { exerciseValidator } from '#validators/exercise'
+import Goal from '#models/goal'
+import { dd } from '@adonisjs/core/services/dumper'
 
 export default class ExercisesController {
   async index({ view }: HttpContext) {
@@ -18,13 +20,21 @@ export default class ExercisesController {
     await exercise.load('user')
     await exercise.load('tags')
     await exercise.load('media')
+    await exercise.load('goal')
+    let progression: Goal | undefined | null
 
     if (auth.isAuthenticated) {
       const user = auth.use('web').user
       await user?.load('favorites')
+
+      progression = await user
+        ?.related('progressions')
+        .query()
+        .where('exercise_id', exercise.id)
+        .first()
     }
 
-    return view.render('pages/exercises/show', { exercise })
+    return view.render('pages/exercises/show', { exercise, progression })
   }
 
   async create({ view, auth }: HttpContext) {

@@ -8,6 +8,8 @@ import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import PracticedExercise from '#models/practiced_exercise'
 import Medium from './medium.js'
 import { DbRememberMeTokensProvider } from '@adonisjs/auth/session'
+import Progression from './progression.js'
+import Goal from './goal.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -41,6 +43,15 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => PracticedExercise)
   declare practicedExercises: HasMany<typeof PracticedExercise>
+
+  @manyToMany(() => Goal, {
+    pivotTable: 'progressions',
+    pivotForeignKey: 'user_id',
+    pivotRelatedForeignKey: 'goal_id',
+    pivotTimestamps: true,
+    pivotColumns: ['value'],
+  })
+  declare progressions: ManyToMany<typeof Goal>
 
   @manyToMany(() => User, {
     pivotTable: 'followers',

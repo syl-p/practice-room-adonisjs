@@ -1,0 +1,13 @@
+<h3 class="text-xl mb-3">
+  Media associés
+</h3>
+<ul class="divide-y divide-gray-200">
+  @each(medium in media)
+    <li class="flex space-x-6 relative items-center p-4 hover:bg-gray-50">
+      @media.item({item: medium})
+        @slot('actions')
+        @end
+      @end
+    </li>
+  @end
+</ul>
