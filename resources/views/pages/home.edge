@@ -3,7 +3,7 @@
     @if(auth.isAuthenticated)
       <article class="mb-6">
         <header class="flex space-x-3 items-center justify-center  mb-6">
-          @svg('heroicons:bookmark', {class: "w-8 h-8"})
+          @svg('heroicons:clock', {class: "w-8 h-8"})
           <h2 class="text-3xl flex-1">
             Vos derniers exercices pratiqués
           </h2>
@@ -11,7 +11,7 @@
         <ul class="grid grid-cols-4 gap-6">
           @each(exercise in lastPracticedExercises)
             <li>
-              @!exercises.card({exercise})
+              @!exercises.lastPracticedCard({exercise})
             </li>
           @end
         </ul>

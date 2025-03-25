@@ -1,9 +1,9 @@
 <div
   {{ $props.except(['exercise']).merge({
-    class: ["flex space-x-6 rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden p-6", $props.class]
+    class: ["rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden p-6", $props.class]
   }).toAttrs() }}
 >
-  <figure class="w-1/6 rounded-lg overflow-hidden">
+  <figure class="rounded-lg overflow-hidden mb-6">
     <a href="{{ route('exercise.show', {slug: exercise.slug}) }}">
       <img src="{{ exercise.posterUrl }}" alt="{{ exercise.title }}" class="w-full h-48 object-cover" />
     </a>
@@ -12,13 +12,14 @@
     <div class="flex space-x-3 align-middle mb-6">
       <a href="{{ route('users.show', {id: exercise.user.id}) }}">
         @!users.avatar({
-          user: exercise.user
+          user: exercise.user,
+          size: 'small'
         })
       </a>
       <div class="flex space-x-3 flex-1 justify-between items-center">
         <div>
           <small class="block font-light text-sm text-muted-foreground">
-            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
+            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>
           </small>
           <h3 class="text-xl font-semibold leading-none tracking-tight">
             <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="hover:underline">{{ exercise.title }}</a>
@@ -26,15 +27,8 @@
         </div>
       </div>
     </div>
-    <div class="text-ellipsis flex-1">
-      {{ exercise.content?.substring(0, 300) + "..." }}
+    <div>
+      {{ exercise.goal.$extras.value ?? 0 }} / {{ exercise.goal.objective }} {{ exercise.goal.label }}
     </div>
-    <footer>
-      @each(tag in exercise.tags)
-        @ui.badge({variant: "secondary"})
-          {{ tag.label }}
-        @end
-      @end
-    </footer>
   </div>
 </div>

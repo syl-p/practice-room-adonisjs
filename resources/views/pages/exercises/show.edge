@@ -4,7 +4,7 @@
       <a href="{{ route('users.show', {id: exercise.id}) }}">
         @!users.avatar({user: exercise.user})
       </a>
-      <div class="flex-1 flex items-center space-x-3">
+      <div class="flex-1 flex items-center space-x-6">
         <div class="flex-1">
           <small class="block font-light text-sm text-muted-foreground">
             Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
@@ -78,12 +78,12 @@
     </div>
   </header>
   <section class="my-6 container">
-    <article class="lg:flex space-y-3 lg:space-x-3 lg:space-y-0">
+    <article class="lg:flex space-y-3 lg:space-x-6 lg:space-y-0">
       <div class="flex-1">
         {{{ nl2br(exercise.content) }}}
       </div>
       <div>
-        @if(auth.isAuthenticated)
+        @if(auth.isAuthenticated && exercise.goal)
           <div class="mb-6">
             @!exercises.goal({goal: exercise.goal, progression})
           </div>
