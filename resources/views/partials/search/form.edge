@@ -1,4 +1,10 @@
-<form method="get" hx-get="{{ route('search') }}" hx-swap="outerHTML" hx-trigger="keyup delay:1s from:find (input)" hx-target="#search_results">
+<form
+  method="get"
+  hx-get="{{ route('search') }}"
+  hx-swap="outerHTML"
+  hx-trigger="keyup delay:1s from:find (input)"
+  hx-target="#search_results"
+>
   @!ui.form.input({name: "pattern"})
   <hr class="shrink-0 bg-border h-[1px] w-full my-4" />
   @include('partials/search/results')

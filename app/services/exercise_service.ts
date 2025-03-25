@@ -5,6 +5,7 @@ import { inject } from '@adonisjs/core'
 @inject()
 export default class ExerciseService {
   async search(pattern: string | null | undefined) {
+    if (!pattern) return []
     const results = await Exercise.query()
       .where('title', 'ILIKE', `%${pattern}%`)
       .orWhere('content', 'ILIKE', `%${pattern}%`)

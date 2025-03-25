@@ -4,6 +4,7 @@ import { inject } from '@adonisjs/core'
 @inject()
 export default class UserService {
   async search(pattern: string | null | undefined) {
+    if (!pattern) return []
     const results = await User.query()
       .where('username', 'like', `%${pattern}%`)
       .orWhere('bio', 'like', `%${pattern}%`)

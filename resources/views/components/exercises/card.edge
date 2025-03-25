@@ -1,9 +1,9 @@
 <div
   {{ $props.except(['exercise']).merge({
-    class: ["flex space-x-6 rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden p-6", $props.class]
+    class: ["md:flex md:space-x-6 rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden p-6", $props.class]
   }).toAttrs() }}
 >
-  <figure class="w-1/6 rounded-lg overflow-hidden">
+  <figure class="w-full mb-6 md:w-1/6 md:mb-0 rounded-lg overflow-hidden">
     <a href="{{ route('exercise.show', {slug: exercise.slug}) }}">
       <img src="{{ exercise.posterUrl }}" alt="{{ exercise.title }}" class="w-full h-48 object-cover" />
     </a>

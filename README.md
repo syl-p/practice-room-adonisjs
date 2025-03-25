@@ -14,7 +14,7 @@ Bienvenue sur **"Practice Room"**, la plateforme communautaire et open source qu
 
 - **Gestion du Temps :** Tenez un journal de pratique détaillé, suivez votre progression, et recevez des statistiques quotidiennes pour rester motivé.
 
-- **Enrichissez vos Exercices :** Ajoutez des ressources (pdf, mp3, etc.) à vos exercices pour les rendre plus complets et efficaces.
+- **Enrichissez vos Exercices :** Ajoutez des ressources (pdf, images, mp3, etc.) à vos exercices pour les rendre plus complets et efficaces.
 
 ## 🌟 Fonctionnalités Principales :
 
@@ -46,12 +46,13 @@ Bienvenue sur **"Practice Room"**, la plateforme communautaire et open source qu
 
 ## 🛠️ Détails Techniques
 
-- Backend développé avec Ruby on Rails 7.
-- Frontend utilisant Node.js LTS.
+- Backend développé avec AdonisJs.
+- Frontend utilisant AlpineJS et HTMX.
+- Base de données PostgreSQL.
 
 ## 🗺️ Roadmap & Corrections
 
-Suivez notre progression directement sur [l'onglet "projects"](https://github.com/syl-p/practice-room/projects/1).
+Suivez notre progression directement sur [l'onglet "projects"](https://github.com/users/syl-p/projects/13/views/1).
 
 ## 👋 Communauté, Contact, Équipe...
 
@@ -61,4 +62,4 @@ Rejoignez notre Discord, que vous soyez membre actif ou que vous souhaitiez part
 
 ---
 
-*Prêt à transformer votre pratique quotidienne en une aventure passionnante ? Rejoignez Practice Room aujourd'hui !* 🎸🏋️‍♂️
+_Prêt à transformer votre pratique quotidienne en une aventure passionnante ? Rejoignez Practice Room aujourd'hui !_ 🎸🏋️‍♂️
