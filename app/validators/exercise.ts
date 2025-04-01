@@ -12,5 +12,15 @@ export const exerciseValidator = vine.compile(
     content: vine.string().trim().notSameAs('').minLength(1),
     status: vine.enum(ExerciseStatuses),
     media: mediaType,
+    tags: vine
+      .string()
+      .trim()
+      .optional()
+      .transform((value) => { // Convert 'tag1, tag2' to ['tag1', 'tag2']
+        if (value === '') {
+          return []
+        }
+        return value.split(',').map((tag) => tag.trim())
+      }),
   })
 )

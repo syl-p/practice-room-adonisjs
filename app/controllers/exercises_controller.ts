@@ -1,8 +1,10 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Exercise from '#models/exercise'
 import { exerciseValidator } from '#validators/exercise'
-import Goal from '#models/goal'
+import type Goal from '#models/goal'
+import Tag from '#models/tag'
 import { dd } from '@adonisjs/core/services/dumper'
+import TaggableType from '#enums/taggable_type'
 
 export default class ExercisesController {
   async index({ view }: HttpContext) {
@@ -15,8 +17,12 @@ export default class ExercisesController {
     return view.render('pages/exercises/index', { exercises })
   }
 
-  async show({ view, params, auth }: HttpContext) {
+  async show({ view, params, auth, bouncer, response }: HttpContext) {
     const exercise = await Exercise.findByOrFail('slug', params.slug)
+    if (await bouncer.with('ExercisePolicy').denies('show', exercise)) {
+      return response.redirect().toRoute('exercises.index')
+    }
+
     await exercise.load('user')
     await exercise.load('tags')
     await exercise.load('media')
@@ -43,15 +49,28 @@ export default class ExercisesController {
   }
 
   async store({ request, response, auth }: HttpContext) {
-    const { title, content, status, media } = await request.validateUsing(exerciseValidator)
+    const { title, content, status, media, tags } = await request.validateUsing(exerciseValidator)
     const exercise = new Exercise()
     exercise.merge({ title, content, status })
+    await auth.user?.related('exercises').save(exercise)
 
     if (media) {
       await exercise.related('media').attach(typeof media === 'number' ? [media] : media)
     }
 
-    await auth.user?.related('exercises').save(exercise)
+    if (tags) {
+      const tagsEntities = await Tag.query().whereIn('label', tags)
+
+      // Attach tags to the exercise
+      const tagsToAttach = tagsEntities.map(({ id }) => [
+        id,
+        { taggable_type: TaggableType.EXERCISE },
+      ])
+
+      await exercise.related('tags').detach()
+      await exercise.related('tags').attach(Object.fromEntries(tagsToAttach))
+    }
+
     return response.redirect().toRoute('exercise.show', { slug: exercise.slug })
   }
 
@@ -63,6 +82,9 @@ export default class ExercisesController {
 
     await auth.user?.load('media')
     await exercise.load('media')
+    await exercise.load('tags')
+    await exercise.load('goal')
+
     return view.render('pages/exercises/edit', { exercise })
   }
 
@@ -72,13 +94,28 @@ export default class ExercisesController {
       return response.forbidden('Cannot edit this exercise')
     }
 
-    const { title, content, status, media } = await request.validateUsing(exerciseValidator)
+    const { title, content, status, media, tags } = await request.validateUsing(exerciseValidator)
     exercise.merge({ title, content, status })
 
     await exercise.related('media').detach()
     if (media) {
       await exercise.related('media').attach(typeof media === 'number' ? [media] : media)
     }
+
+    if (tags) {
+      const tagsEntities = await Tag.query().whereIn('label', tags)
+
+      // Attach tags to the exercise
+      const tagsToAttach = tagsEntities.map(({ id }) => [
+        id,
+        { taggable_type: TaggableType.EXERCISE },
+      ])
+
+      await exercise.related('tags').detach()
+      await exercise.related('tags').attach(Object.fromEntries(tagsToAttach))
+    }
+
+    await exercise.load('tags')
 
     await exercise.save()
     return response.redirect().toRoute('exercises.edit', { id: exercise.id })

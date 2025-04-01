@@ -35,7 +35,8 @@ export default class ExerciseService {
       .join('practiced_exercises', 'practiced_exercises.exercise_id', 'exercises.id')
       .where('practiced_exercises.user_id', user.id)
       .select('exercises.*')
-      .orderBy('practiced_exercises.updated_at', 'desc')
+      .distinctOn('exercises.id')
+      .orderBy('exercises.id')
       .limit(limit)
   }
 }

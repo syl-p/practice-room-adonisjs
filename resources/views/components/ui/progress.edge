@@ -1,0 +1,9 @@
+<div
+  {{ $props.merge({
+    class: ["w-full bg-muted-foreground/10 rounded-full h-2.5 dark:bg-gray-700", $props.class]
+  }).toAttrs() }}
+>
+  <div class="bg-primary h-2.5 rounded-full" style="width: {{ value || 0 }}%">
+  </div>
+</div>
+

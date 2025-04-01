@@ -51,6 +51,9 @@
       <nav class="flex items-center space-x-3 items-center">
         @include('partials/search/btn_modal')
         @if(auth.isAuthenticated)
+          @ui.button({href: route('exercises.create'), toggle: 'Ajouter un nouvel exercice', variant: 'ghost'})
+            @svg('heroicons:plus')
+          @end
           @include('partials/user_dropdown')
         @else
           <a href="{{ route('auth.login.show') }}">Se connecter</a>

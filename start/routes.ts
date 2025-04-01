@@ -16,6 +16,7 @@ const RegistersController = () => import('#controllers/auth/registers_controller
 const LoginController = () => import('#controllers/auth/login_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const TagsController = () => import('#controllers/tags_controller')
 const ProgressionsController = () => import('#controllers/progressions_controller')
 const HomeController = () => import('#controllers/home_controller')
 const FavoritesController = () => import('#controllers/favorites_controller')
@@ -44,6 +45,9 @@ router
   .get('/exercises/:slug', [ExercisesController, 'show'])
   .as('exercise.show')
   .where('slug', router.matchers.slug())
+
+// TAGS
+router.get('/tags', [TagsController, 'index']).as('tags').use(middleware.auth())
 
 // PROGRESSIONS
 router

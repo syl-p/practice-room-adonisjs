@@ -1,39 +1,111 @@
 @let(formRoute = exercise ? route('exercises.update', {id: exercise.id}, {qs: {_method: 'PUT' } }) : route('exercises.store', {}, {qs: {_method: 'POST' } }))
 
-<form class="space-y-4 md:space-y-6" method="post" action="{{ formRoute }}">
+<form class="lg:grid lg:grid-cols-12 lg:gap-6" method="post" action="{{ formRoute }}">
   {{ csrfField() }}
-  @!ui.form.input({
-    name: 'title',
-    label: 'Le titre de l\'exercice',
-    value: exercise && exercise.title
-  })
+  <fieldset class="border p-6 rounded-lg lg:col-span-8 mb-6">
+    <legend>
+      Contenu
+    </legend>
 
-  @!ui.form.textarea({
-    name: 'content',
-    label: 'Le contenu de l\'exercice',
-    type: 'textarea',
-    value: exercise && exercise.content
-  })
-
-  @!ui.form.radioGroup({
-    label: 'Status de l\'exercice',
-    name: 'status',
-    value: exercise && exercise.status,
-    options: ExerciseStatuses,
-    selected: exercise ? exercise.status : ExerciseStatuses.DRAFT
-  })
-
-  @if(auth.user.media)
-    @!ui.form.select({
-      name: 'media',
-      label: 'Ajouter des medias',
-      multiple: true,
-      options: auth.user.media,
-      selected: exercise && exercise.media ? exercise.media.map(m => m.id) : []
+    @!ui.form.input({
+        name: 'title',
+        label: 'Le titre de l\'exercice',
+        value: exercise && exercise.title
     })
-  @end
-  
-  @ui.button({type: 'submit'})
-    {{ exercise ? 'Modifier' : 'Créer' }} l'exercice
-  @end
+
+    @!ui.form.textarea({
+        name: 'content',
+        label: 'Le contenu de l\'exercice',
+        type: 'textarea',
+        value: exercise && exercise.content,
+        rows: 20,
+    })
+  </fieldset>
+  <div class="lg:col-span-4">
+    <fieldset class="mb-6 border p-6 rounded-lg">
+      <legend>
+        Visibilité
+      </legend>
+      @!ui.form.radioGroup({
+        label: 'Status de l\'exercice',
+        name: 'status',
+        value: exercise && exercise.status,
+        options: ExerciseStatuses,
+        selected: exercise ? exercise.status : ExerciseStatuses.DRAFT
+      })
+    </fieldset>
+    <fieldset class="mb-6 border p-6 rounded-lg">
+      <legend>
+        Objectif
+      </legend>
+      @!ui.form.input({
+        name: 'objective',
+        label: 'L\'objectif de l\'exercice',
+        type: 'number'
+      })
+      @!ui.form.select({
+        name: 'unit',
+        label: 'Unité de l\'objectif',
+        options: GoalLabels
+      })
+    </fieldset>
+    <fieldset class="mb-6 border p-6 rounded-lg">
+      <legend>
+        Media associés
+      </legend>
+      @if(auth.user.media)
+        @!ui.form.select({
+          name: 'media',
+          label: 'Ajouter des medias',
+          multiple: true,
+          options: auth.user.media,
+          selected: exercise && exercise.media ? exercise.media.map(m => m.id) : []
+        })
+      @end
+    </fieldset>
+  </div>
+  <fieldset class="lg:col-span-12">
+    <legend>
+      Tags
+    </legend>
+    @let(tags = exercise && exercise.tags ? exercise.tags.map(t => t.label) : [])
+
+    <div x-data="{ tags: [], newTag: '' }"
+      {{
+        html.attrs({
+          'x-init': `tags=[${tags.map(tag => "'"+tag+"'").join(',')}]`,
+        })
+      }}
+      class="p-4">
+      @!ui.form.input({
+        'list': 'tags',
+        'name': 'tag',
+        'hx-get': route('tags'),
+        'hx-trigger':"keyup delay:500ms",
+        'x-model': 'newTag',
+        'x-on:keydown.enter.prevent': 'if (newTag.trim() !== \'\' && !tags.includes(newTag.trim())) { tags.push(newTag.trim()); newTag = \'\'; }',
+        placeholder: 'Ajouter un tag...',
+        class: 'border p-2 rounded w-full'
+      })
+      <datalist id="tags">
+      </datalist>
+
+      <!-- Liste des tags -->
+      <div class="mt-2 flex flex-wrap gap-2">
+        <template x-for="(tag, index) in tags" :key="index">
+          @ui.badge({variant: "secondary"})
+            <span x-text="tag"></span>
+            <button @click="tags.splice(index, 1)" class="ml-2 text-black font-bold">&times;</button>
+          @end
+        </template>
+      </div>
+      <input type="hidden" name="tags" :value="tags" />
+    </div>
+
+  </fieldset>
+  <div class="lg:col-span-12">
+    @ui.button({type: 'submit'})
+      {{ exercise ? 'Modifier' : 'Créer' }} l'exercice
+    @end
+  </div>
 </form>
