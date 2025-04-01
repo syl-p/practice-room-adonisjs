@@ -22,13 +22,14 @@
       Sélectionnez une option
     </option>
     @each(option in options)
+      @let(value = optionKey ? option[optionKey] : option)
       <option
-        value="{{ option.id }}"
+        value="{{ value }}"
         {{ html.attrs({
-          selected: (multiple && selected.includes(option.id)) || selected === option.id ? 'selected' : ''
+          selected: (multiple && selected.includes(value)) || selected === value ? 'selected' : ''
         }) }}
       >
-        {{ option.id }}
+        {{ optionLabel ? option[optionLabel] : option }}
       </option>
     @end
   </select>

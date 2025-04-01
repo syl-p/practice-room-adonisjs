@@ -6,7 +6,6 @@
     <legend>
       Contenu
     </legend>
-
     @!ui.form.input({
         name: 'title',
         label: 'Le titre de l\'exercice',
@@ -46,7 +45,7 @@
       @!ui.form.select({
         name: 'unit',
         label: 'Unité de l\'objectif',
-        options: GoalLabels
+        options: GoalLabels,
       })
     </fieldset>
     <fieldset class="mb-6 border p-6 rounded-lg">
@@ -59,6 +58,8 @@
           label: 'Ajouter des medias',
           multiple: true,
           options: auth.user.media,
+          optionKey: 'id',
+          optionLabel: 'fileUrl',
           selected: exercise && exercise.media ? exercise.media.map(m => m.id) : []
         })
       @end
