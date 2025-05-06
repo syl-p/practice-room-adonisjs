@@ -3,6 +3,7 @@ import { UserFactory } from '#database/factories/user_factory'
 import Exercise from '#models/exercise'
 import { TagFactory } from '#database/factories/tag_factory'
 import TaggableType from '#enums/taggable_type'
+import { PracticeFactory } from '#database/factories/practice_factory'
 
 export default class extends BaseSeeder {
   static environment = ['development', 'testing']
@@ -37,6 +38,9 @@ export default class extends BaseSeeder {
     const exerciseIds = exercises.map((e) => e.id)
     const userIds = defaultUsers.map((e) => e.id)
 
+    // PRACTICE
+    let practices = await PracticeFactory.createMany(10)
+
     // PROMISES
     const promisesUsers = defaultUsers.map(async (user) => {
       await user.related('followers').attach(this.#getRandom(userIds, 10))
@@ -48,10 +52,15 @@ export default class extends BaseSeeder {
         { taggable_type: TaggableType.EXERCISE },
       ]) // = [3, {taggable_type: 'Exercise'}][]
 
-      // attach {3: {taggable_type: 'Exercise'}}
-      await tag.related('exercises').attach(Object.fromEntries(ex))
-    })
+      const prts = this.#getRandom(
+        practices.map((p) => p.id),
+        10
+      ).map((id) => [id, { taggable_type: TaggableType.PRACTICE }]) // = [3, {taggable_type: 'Practice'}][]
 
+      // attach {3: {taggable_type: 'Exercise'/'Practice'}}
+      await tag.related('exercises').attach(Object.fromEntries(ex))
+      await tag.related('practices').attach(Object.fromEntries(prts))
+    })
     await Promise.all([...promisesUsers, ...promisesTags])
   }
 
