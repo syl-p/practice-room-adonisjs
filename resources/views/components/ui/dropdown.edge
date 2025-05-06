@@ -1,4 +1,10 @@
-<div class="relative" x-data="{isOpen: false}" @keydown.esc.window="isOpen = false">
+<div
+  x-data="{isOpen: false}"
+  @keydown.esc.window="isOpen = false"
+  {{ $props.merge({
+  class: ["relative", $props.class]
+}).toAttrs() }}
+>
   <button
     type="button"
     @click="isOpen = !isOpen"

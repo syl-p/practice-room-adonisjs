@@ -26,7 +26,9 @@ const CommentsController = () => import('#controllers/comments_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
 const ExercisesController = () => import('#controllers/exercises_controller')
 const PagesController = () => import('#controllers/pages_controller')
+import transmit from '@adonisjs/transmit/services/main'
 
+transmit.registerRoutes()
 router.get('/', [HomeController, 'index']).as('home')
 router.get('/avatars/:filename', [UsersController, 'avatar'])
 

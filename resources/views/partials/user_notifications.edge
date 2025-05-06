@@ -1,0 +1,20 @@
+@ui.dropdown({id: "user-notifications"})
+  @slot('trigger')
+    <div class="relative flex items-center justify-center">
+      @svg('heroicons:bell', {class: "h-6 w-6"})
+      <span
+        class="indicator hidden top-0 left-0 absolute w-3.5 h-3.5 bg-red-400 animate-pulse border-2 border-white dark:border-gray-800 rounded-full"
+      ></span>
+    </div>
+  @end
+  
+  @slot('menu')
+    <ul class="py-1" role="none">
+      <li>
+        <a href="{{ route('home') }}" class="block px-4 py-2 text-sm text-gray-700">
+          Nouvelle user_notification
+        </a>
+      </li>
+    </ul>
+  @end
+@end

@@ -3,7 +3,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Exercise from '#models/exercise'
 import { inject } from '@adonisjs/core'
 import ExerciseService from '#services/exercise_service'
-import { dd } from '@adonisjs/core/services/dumper'
 
 @inject()
 export default class HomeController {

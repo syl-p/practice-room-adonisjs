@@ -17,7 +17,10 @@ const shieldConfig = defineConfig({
    */
   csrf: {
     enabled: true,
-    exceptRoutes: [],
+    exceptRoutes: (ctx) => {
+      // Exclude csrf for transmit routes
+      return ctx.request.url().includes('__transmit')
+    },
     enableXsrfCookie: false,
     methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
   },

@@ -54,6 +54,7 @@
           @ui.button({href: route('exercises.create'), toggle: 'Ajouter un nouvel exercice', variant: 'ghost'})
             @svg('heroicons:plus')
           @end
+          @include('partials/user_notifications')
           @include('partials/user_dropdown')
         @else
           <a href="{{ route('auth.login.show') }}">Se connecter</a>

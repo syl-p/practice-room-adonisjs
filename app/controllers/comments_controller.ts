@@ -4,8 +4,13 @@ import CommentPolicy from '#policies/comment_policy'
 import { newCommentValidator } from '#validators/comment'
 import CommentableType from '#enums/commentable_types'
 import Exercise from '#models/exercise'
+import CommentService from '#services/comment_service'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class CommentsController {
+  constructor(private commentService: CommentService) {}
+
   async index({ params, view }: HttpContext) {
     const comments = await Comment.query()
       .preload('user')
@@ -23,24 +28,13 @@ export default class CommentsController {
   // TODO: Move logic into a service
   async store({ request, params, auth, view }: HttpContext) {
     const data = await request.validateUsing(newCommentValidator)
-
     const commentable = await this.getCommentable(params)
 
-    const comment = new Comment()
-    comment.merge({
-      ...data,
-      userId: auth.user!.id,
-      commentableType:
-        commentable instanceof Comment ? CommentableType.COMMENT : CommentableType.EXERCISE,
-    })
+    const comment = await this.commentService.store(data, commentable)
 
-    if (commentable instanceof Comment) {
-      await commentable.related('replies').save(comment)
-    } else {
-      await commentable.related('comments').save(comment)
+    if (auth.user!.id === commentable.userId) {
+      await this.commentService.notificationForAuthor(commentable, auth.user!)
     }
-
-    await comment.load('user')
 
     return view.render('fragments/comment', { comment })
   }
