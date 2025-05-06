@@ -20,7 +20,7 @@ export default class ExercisesController {
   async show({ view, params, auth, bouncer, response }: HttpContext) {
     const exercise = await Exercise.findByOrFail('slug', params.slug)
     if (await bouncer.with('ExercisePolicy').denies('show', exercise)) {
-      return response.redirect().toRoute('exercises.index')
+      return response.redirect().toRoute('home')
     }
 
     await exercise.load('user')

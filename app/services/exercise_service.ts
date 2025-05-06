@@ -1,3 +1,4 @@
+import ExerciseStatuses from '#enums/exercise_statuses'
 import Exercise from '#models/exercise'
 import User from '#models/user'
 import { inject } from '@adonisjs/core'
@@ -7,6 +8,7 @@ export default class ExerciseService {
   async search(pattern: string | null | undefined) {
     if (!pattern) return []
     const results = await Exercise.query()
+      .apply((scope) => scope.public())
       .where('title', 'ILIKE', `%${pattern}%`)
       .orWhere('content', 'ILIKE', `%${pattern}%`)
       .orWhereHas('tags', (builder) => {

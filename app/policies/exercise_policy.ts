@@ -1,7 +1,7 @@
 import User from '#models/user'
 import Exercise from '#models/exercise'
-import { BasePolicy } from '@adonisjs/bouncer'
-import { AuthorizerResponse } from '@adonisjs/bouncer/types'
+import { allowGuest, BasePolicy } from '@adonisjs/bouncer'
+import type { AuthorizerResponse } from '@adonisjs/bouncer/types'
 import ExerciseStatuses from '#enums/exercise_statuses'
 
 export default class ExercisePolicy extends BasePolicy {
@@ -9,8 +9,17 @@ export default class ExercisePolicy extends BasePolicy {
     return user.id !== null
   }
 
-  show(user: User, exercise: Exercise): AuthorizerResponse {
-    return user.id === exercise.userId || exercise.status === ExerciseStatuses.PUBLIC
+  @allowGuest()
+  show(user: User | null, exercise: Exercise): AuthorizerResponse {
+    if (exercise.status === ExerciseStatuses.PUBLIC) {
+      return true
+    }
+
+    if (!user) {
+      return false
+    }
+
+    return user.id === exercise.userId
   }
 
   edit(user: User, exercise: Exercise): AuthorizerResponse {
