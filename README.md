@@ -26,7 +26,7 @@ Bienvenue sur **"Practice Room"**, la plateforme communautaire et open source qu
 
 ### ⏰ Gérez votre temps de pratique
 
-- Utilisez votre journal de pratique pour enregistrer le temps passé sur chaque exercice.
+- Utilisez votre journal de pratique pour enregistrer le temps passé sur chaque activité.
 - Visualisez des statistiques dans votre espace personnel pour un suivi quotidien.
 
 ### 🤝 Pratiquez à plusieurs

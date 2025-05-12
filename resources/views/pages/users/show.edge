@@ -21,14 +21,19 @@
   </header>
   <section class="grid grid-cols-6 gap-x-3 gap-y-3 container">
     <aside class="col-span-2">
-      <h2 class="text-xl mb-3">A propos</h2>
-      <p class="mb-6">{{user.bio}}</p>
-      <h2 class="text-xl mb-3">Suivi par {{user.followers.length}} abonnés</h2>
+      <h2 class="text-xl mb-3">
+        A propos
+      </h2>
+      <p class="mb-6">
+        {{ user.bio }}
+      </p>
+      <h2 class="text-xl mb-3">
+        Suivi par {{user.followers.length}} abonnés
+      </h2>
       <ul class="flex space-x-3">
         @each(follower in user.followers)
           <li>
-            <a href="{{ route('users.show', {id: follower.id}) }}"
-              title="{{follower.username}}">
+            <a href="{{ route('users.show', {id: follower.id}) }}" title="{{ follower.username }}">
               @!users.avatar({user: follower, size: 'small'})
             </a>
           </li>
@@ -36,9 +41,9 @@
       </ul>
     </aside>
     <article class="col-span-4 space-y-3">
-      @each(exercise in exercises)
-        @!exercises.card({exercise})
+      @each(activity in activities)
+        @!activities.card({activity})
       @end
     </article>
-</section>
+  </section>
 @end

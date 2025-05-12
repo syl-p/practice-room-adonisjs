@@ -1,7 +1,7 @@
-enum ExerciseStatuses {
+enum ActivityStatuses {
   DRAFT = 'draft',
   PUBLIC = 'public',
   NOT_REFERENCED = 'not_referenced',
 }
 
-export default ExerciseStatuses
+export default ActivityStatuses

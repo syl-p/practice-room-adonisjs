@@ -9,9 +9,9 @@
           </h2>
         </header>
         <ul class="grid grid-cols-4 gap-6">
-          @each(exercise in lastPracticedExercises)
+          @each(activity in lastPracticedActivities)
             <li>
-              @!exercises.lastPracticedCard({exercise})
+              @!activities.lastPracticedCard({activity})
             </li>
           @end
         </ul>
@@ -22,13 +22,13 @@
       <header class="flex space-x-3 items-center justify-center  mb-6">
         @svg('heroicons:users', {class: "w-8 h-8"})
         <h2 class="text-3xl flex-1">
-          Les derniers exercices des utilisateurs
+          Les dernieres activités publiées
         </h2>
       </header>
       <ul class="space-y-6">
-        @each(exercise in exercises)
+        @each(activity in activities)
           <li>
-            @!exercises.card({exercise})
+            @!activities.card({activity})
           </li>
         @end
       </ul>

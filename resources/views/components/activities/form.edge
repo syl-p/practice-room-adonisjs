@@ -1,4 +1,4 @@
-@let(formRoute = exercise ? route('exercises.update', {id: exercise.id}, {qs: {_method: 'PUT' } }) : route('exercises.store', {}, {qs: {_method: 'POST' } }))
+@let(formRoute = activity ? route('activities.update', {id: activity.id}, {qs: {_method: 'PUT' } }) : route('activities.store', {}, {qs: {_method: 'POST' } }))
 
 <form class="lg:grid lg:grid-cols-12 lg:gap-6" method="post" action="{{ formRoute }}">
   {{ csrfField() }}
@@ -8,15 +8,15 @@
     </legend>
     @!ui.form.input({
         name: 'title',
-        label: 'Le titre de l\'exercice',
-        value: exercise && exercise.title
+        label: 'Le titre de l\'activité',
+        value: activity && activity.title
     })
 
     @!ui.form.textarea({
         name: 'content',
-        label: 'Le contenu de l\'exercice',
+        label: 'Le contenu de l\'activité',
         type: 'textarea',
-        value: exercise && exercise.content,
+        value: activity && activity.content,
         rows: 20,
     })
   </fieldset>
@@ -26,11 +26,11 @@
         Visibilité
       </legend>
       @!ui.form.radioGroup({
-        label: 'Status de l\'exercice',
+        label: 'Status de l\'activité',
         name: 'status',
-        value: exercise && exercise.status,
-        options: ExerciseStatuses,
-        selected: exercise ? exercise.status : ExerciseStatuses.DRAFT
+        value: activity && activity.status,
+        options: ActivityStatuses,
+        selected: activity ? activity.status : ActivityStatuses.DRAFT
       })
     </fieldset>
     <fieldset class="mb-6 border p-6 rounded-lg">
@@ -39,7 +39,7 @@
       </legend>
       @!ui.form.input({
         name: 'objective',
-        label: 'L\'objectif de l\'exercice',
+        label: 'L\'objectif de l\'activité',
         type: 'number'
       })
       @!ui.form.select({
@@ -60,7 +60,7 @@
           options: auth.user.media,
           optionKey: 'id',
           optionLabel: 'fileUrl',
-          selected: exercise && exercise.media ? exercise.media.map(m => m.id) : []
+          selected: activity && activity.media ? activity.media.map(m => m.id) : []
         })
       @end
     </fieldset>
@@ -69,7 +69,7 @@
     <legend>
       Tags
     </legend>
-    @let(tags = exercise && exercise.tags ? exercise.tags.map(t => t.label) : [])
+    @let(tags = activity && activity.tags ? activity.tags.map(t => t.label) : [])
 
     <div x-data="{ tags: [], newTag: '' }"
       {{
@@ -106,7 +106,7 @@
   </fieldset>
   <div class="lg:col-span-12">
     @ui.button({type: 'submit'})
-      {{ exercise ? 'Modifier' : 'Créer' }} l'exercice
+      {{ activity ? 'Modifier' : 'Créer' }} l'activité
     @end
   </div>
 </form>

@@ -3,9 +3,9 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import Exercise from '#models/exercise'
+import Activity from '#models/activity'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
-import PracticedExercise from '#models/practiced_exercise'
+import PracticedActivity from '#models/practiced_activity'
 import Medium from './medium.js'
 import { DbRememberMeTokensProvider } from '@adonisjs/auth/session'
 import Progression from './progression.js'
@@ -35,14 +35,14 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ serializeAs: null })
   declare password: string
 
-  @hasMany(() => Exercise)
-  declare exercises: HasMany<typeof Exercise>
+  @hasMany(() => Activity)
+  declare activities: HasMany<typeof Activity>
 
   @hasMany(() => Medium)
   declare media: HasMany<typeof Medium>
 
-  @hasMany(() => PracticedExercise)
-  declare practicedExercises: HasMany<typeof PracticedExercise>
+  @hasMany(() => PracticedActivity)
+  declare practicedActivities: HasMany<typeof PracticedActivity>
 
   @manyToMany(() => Goal, {
     pivotTable: 'progressions',
@@ -69,13 +69,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
   })
   declare followers: ManyToMany<typeof User>
 
-  @manyToMany(() => Exercise, {
+  @manyToMany(() => Activity, {
     pivotTable: 'favorites',
     pivotForeignKey: 'user_id',
-    pivotRelatedForeignKey: 'exercise_id',
+    pivotRelatedForeignKey: 'activity_id',
     pivotTimestamps: true,
   })
-  declare favorites: ManyToMany<typeof Exercise>
+  declare favorites: ManyToMany<typeof Activity>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

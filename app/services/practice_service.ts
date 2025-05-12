@@ -10,7 +10,7 @@ export class PracticeService {
   async weekAndDurations(current: DateTime, weekStart: DateTime<true>, weekEnd: DateTime<true>) {
     // WEEK AND DURATION
     const groupedByDays = await this.ctx.auth.user
-      ?.related('practicedExercises')
+      ?.related('practicedActivities')
       .query()
       .select(db.raw('DATE(created_at) as date'))
       .sum('duration as total_duration')
@@ -33,9 +33,9 @@ export class PracticeService {
 
     // PRACTICES FOR CURRENT DATE
     const practices = await this.ctx.auth
-      .user!.related('practicedExercises')
+      .user!.related('practicedActivities')
       .query()
-      .preload('exercise')
+      .preload('activity')
       .apply((scope) => scope.atSpecificDate(current))
 
     return { weekAndDurations, practices }

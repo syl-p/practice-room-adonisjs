@@ -1,10 +1,10 @@
 <ul id="favorites">
-  @each(exercise in auth.user.favorites)
+  @each(activity in auth.user.favorites)
     <li>
-      @favorites.item({exercise})
+      @favorites.item({activity})
         <form
           method="post"
-          action="{{ route('favorites.remove', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
+          action="{{ route('favorites.remove', {id: activity.id}, {qs: {_method: 'DELETE' }}) }}"
         >
           {{ csrfField() }}
           @ui.button({variant: 'outline'})

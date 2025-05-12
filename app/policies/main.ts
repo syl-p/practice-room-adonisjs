@@ -13,6 +13,6 @@
 */
 
 export const policies = {
-  ExercisePolicy: () => import('#policies/exercise_policy'),
+  ActivityPolicy: () => import('#policies/activity_policy'),
   CommentPolicy: () => import('#policies/comment_policy'),
 }

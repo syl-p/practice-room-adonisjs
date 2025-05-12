@@ -1,6 +1,6 @@
 @if(comment.id)
   <div
-    hx-swap-oob="afterbegin:#{{ comment.commentableType === 'Exercise' ? 'comments' : `comment_${comment.commentableId}_replies` }}"
+    hx-swap-oob="afterbegin:#{{ comment.commentableType === 'Activity' ? 'comments' : `comment_${comment.commentableId}_replies` }}"
   >
     @!comments.comment({comment})
   </div>

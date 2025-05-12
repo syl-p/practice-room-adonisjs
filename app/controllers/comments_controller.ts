@@ -3,7 +3,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import CommentPolicy from '#policies/comment_policy'
 import { newCommentValidator } from '#validators/comment'
 import CommentableType from '#enums/commentable_types'
-import Exercise from '#models/exercise'
+import Activity from '#models/activity'
 import CommentService from '#services/comment_service'
 import { inject } from '@adonisjs/core'
 
@@ -18,8 +18,8 @@ export default class CommentsController {
         query.preload('user')
         query.orderBy('createdAt', 'asc')
       })
-      .where('commentableId', params.exercise_id)
-      .andWhere('commentableType', CommentableType.EXERCISE)
+      .where('commentableId', params.activity_id)
+      .andWhere('commentableType', CommentableType.ACTIVITY)
       .orderBy('createdAt', 'desc')
 
     return view.render('fragments/comments', { comments })
@@ -39,11 +39,11 @@ export default class CommentsController {
     return view.render('fragments/comment', { comment })
   }
 
-  private async getCommentable(params: any): Promise<Exercise | Comment> {
+  private async getCommentable(params: any): Promise<Activity | Comment> {
     if (params.comment_id !== undefined) {
       return await Comment.findOrFail(params.comment_id)
     }
-    return await Exercise.findOrFail(params.exercise_id)
+    return await Activity.findOrFail(params.activity_id)
   }
 
   async edit({ params, view }: HttpContext) {

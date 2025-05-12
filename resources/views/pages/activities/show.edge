@@ -1,36 +1,36 @@
 @layout()
   <header class="bg-secondary py-6">
     <div class="container flex space-x-3">
-      <a href="{{ route('users.show', {id: exercise.id}) }}">
-        @!users.avatar({user: exercise.user})
+      <a href="{{ route('users.show', {id: activity.id}) }}">
+        @!users.avatar({user: activity.user})
       </a>
       <div class="flex-1 flex items-center space-x-6">
         <div class="flex-1">
           <small class="block font-light text-sm text-muted-foreground">
-            Posté par <a href="{{ route('users.show', {id: exercise.user.id}) }}">{{ exercise.user.username }}</a>, le <time datetime="{{ exercise.createdAt }}">{{ exercise.publishedAt }}</time>
+            Posté par <a href="{{ route('users.show', {id: activity.user.id}) }}">{{ activity.user.username }}</a>, le <time datetime="{{ activity.createdAt }}">{{ activity.publishedAt }}</time>
           </small>
           <h1 class="text-3xl">
-            {{ exercise.title }}
+            {{ activity.title }}
           </h1>
           <p>
-            {{ excerpt(exercise.content, 200) }}
+            {{ excerpt(activity.content, 200) }}
           </p>
 
           {{-- Actions --}}
           @if(auth.isAuthenticated)
             <div class="flex space-x-3 mt-3 items-center">
-              @!favorites.addRemoveBtn({exercise})
+              @!favorites.addRemoveBtn({activity})
               <p>
-                @can('ExercisePolicy.edit', exercise)
-                  <a href="{{ route('exercises.edit', {id: exercise.id}) }}" class="text-primary hover:underline">Editer</a>
+                @can('ActivityPolicy.edit', activity)
+                  <a href="{{ route('activities.edit', {id: activity.id}) }}" class="text-primary hover:underline">Editer</a>
                 @end
               </p>
-              @can('ExercisePolicy.delete', exercise)
+              @can('ActivityPolicy.delete', activity)
                 {{-- HTMX ACTIONS --}}
                 <form
                   method="post"
-                  hx-post="{{ route('exercises.destroy', {id: exercise.id}, {qs: {_method: 'DELETE' }}) }}"
-                  hx-confirm="Êtes-vous sûr de vouloir supprimer cet exercice ?"
+                  hx-post="{{ route('activities.destroy', {id: activity.id}, {qs: {_method: 'DELETE' }}) }}"
+                  hx-confirm="Êtes-vous sûr de vouloir supprimer cet activité ?"
                   hx-target="body"
                   hx-push-url="true"
                 >
@@ -45,7 +45,7 @@
         @if(auth.isAuthenticated)
           {{-- TODO: Convert to components --}}
           <form
-            hx-post="{{ route('exercise.addToPractice', {id: exercise.id}) }}"
+            hx-post="{{ route('activity.addToPractice', {id: activity.id}) }}"
             hx-target="#practiceTime"
             hx-swap="outerHTML"
             x-data="timer"
@@ -80,24 +80,24 @@
   <section class="my-6 container">
     <article class="lg:flex space-y-3 lg:space-x-6 lg:space-y-0">
       <div class="flex-1">
-        {{{ nl2br(exercise.content) }}}
+        {{{ nl2br(activity.content) }}}
       </div>
       <div>
-        @if(auth.isAuthenticated && exercise.goal)
+        @if(auth.isAuthenticated && activity.goal)
           <div class="mb-6">
-            @!exercises.goal({goal: exercise.goal, progression})
+            @!activities.goal({goal: activity.goal, progression})
           </div>
           <div class="border w-full mb-6">
           </div>
         @end
         <div>
-          @!exercises.mediaList({media: exercise.media})
+          @!activities.mediaList({media: activity.media})
         </div>
       </div>
     </article>
     <footer>
       <hr class="shrink-0 bg-border h-[1px] w-full my-4" />
-      @each(tag in exercise.tags)
+      @each(tag in activity.tags)
         @ui.badge({variant: "secondary"})
           {{ tag.label }}
         @end
@@ -110,13 +110,13 @@
     </h2>
 
     @if(auth.isAuthenticated)
-      @!comments.form({controller_name: "exercises", params: {exercise_id: exercise.id}})
+      @!comments.form({controller_name: "activities", params: {activity_id: activity.id}})
     @end
-    
+
     <div
       id="comments"
       hx-swap="outerHTML"
-      hx-get="{{ route('exercises.comments.index', {exercise_id: exercise.id}) }}"
+      hx-get="{{ route('activities.comments.index', {activity_id: activity.id}) }}"
       hx-trigger="load"
     >
       Chargement des commentaires...

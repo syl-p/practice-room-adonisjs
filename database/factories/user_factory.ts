@@ -1,6 +1,6 @@
 import factory from '@adonisjs/lucid/factories'
 import User from '#models/user'
-import { ExerciseFactory } from './exercise_factory.js'
+import { ActivityFactory } from './activity_factory.js'
 
 export const UserFactory = factory
   .define(User, async ({ faker }) => {
@@ -12,6 +12,6 @@ export const UserFactory = factory
       password: faker.internet.password(),
     }
   })
-  .relation('exercises', () => ExerciseFactory)
-  .relation('practicedExercises', () => ExerciseFactory)
+  .relation('activities', () => ActivityFactory)
+  .relation('practicedActivities', () => ActivityFactory)
   .build()

@@ -1,5 +1,5 @@
 enum TaggableType {
-  EXERCISE = 'Exercise',
+  ACTIVITY = 'Activity',
 }
 
 export default TaggableType

@@ -12,8 +12,8 @@ export const CommentFactory = factory
   })
   .relation('user', () => UserFactory)
   .relation('replies', () => CommentFactory)
-  .state('exercise', (row) => {
-    row.commentableType = CommentableType.EXERCISE
+  .state('activity', (row) => {
+    row.commentableType = CommentableType.ACTIVITY
   })
   .state('comment', (row) => {
     row.commentableType = CommentableType.COMMENT

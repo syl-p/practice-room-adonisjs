@@ -7,7 +7,7 @@ export default class Goal extends BaseModel {
   declare id: number
 
   @column()
-  declare exerciseId: number
+  declare activityId: number
 
   @column()
   declare objective: number

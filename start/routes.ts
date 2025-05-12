@@ -9,7 +9,7 @@
 
 const SearchController = () => import('#controllers/search_controller')
 
-const PracticedExercisesController = () => import('#controllers/practiced_exercises_controller')
+const PracticedActivitiesController = () => import('#controllers/practiced_activities_controller')
 
 const UsersController = () => import('#controllers/users_controller')
 const RegistersController = () => import('#controllers/auth/registers_controller')
@@ -24,7 +24,7 @@ const MediaController = () => import('#controllers/media_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
 const CommentsController = () => import('#controllers/comments_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
-const ExercisesController = () => import('#controllers/exercises_controller')
+const ActivitiesController = () => import('#controllers/activities_controller')
 const PagesController = () => import('#controllers/pages_controller')
 import transmit from '@adonisjs/transmit/services/main'
 
@@ -39,13 +39,13 @@ router
 
 // EXERCISES
 router
-  .resource('exercises', ExercisesController)
+  .resource('activities', ActivitiesController)
   .except(['show', 'index'])
   .use(['edit', 'store', 'destroy', 'create'], middleware.auth())
 
 router
-  .get('/exercises/:slug', [ExercisesController, 'show'])
-  .as('exercise.show')
+  .get('/activities/:slug', [ActivitiesController, 'show'])
+  .as('activity.show')
   .where('slug', router.matchers.slug())
 
 // TAGS
@@ -70,26 +70,26 @@ router
 
 // COMMENTS
 router.resource('comments', CommentsController).only(['edit', 'update', 'destroy'])
-router.resource('exercises.comments', CommentsController).only(['index', 'store'])
+router.resource('activities.comments', CommentsController).only(['index', 'store'])
 router.resource('comments.comments', CommentsController).only(['store'])
 
 // PRACTICES
 router
-  .post('/exercises/practice/:id', [PracticedExercisesController, 'store'])
-  .as('exercise.addToPractice')
+  .post('/activities/practice/:id', [PracticedActivitiesController, 'store'])
+  .as('activity.addToPractice')
   .use(middleware.auth())
 
 router
-  .resource('practices', PracticedExercisesController)
+  .resource('practices', PracticedActivitiesController)
   .only(['index', 'store', 'destroy'])
   .use(['index', 'store', 'destroy'], middleware.auth())
 
 router
-  .get('/practices/previous-week', [PracticedExercisesController, 'previousWeek'])
+  .get('/practices/previous-week', [PracticedActivitiesController, 'previousWeek'])
   .use(middleware.auth())
   .as('practices.previousWeek')
 router
-  .get('/practices/next-week', [PracticedExercisesController, 'nextWeek'])
+  .get('/practices/next-week', [PracticedActivitiesController, 'nextWeek'])
   .use(middleware.auth())
   .as('practices.nextWeek')
 

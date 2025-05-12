@@ -1,13 +1,13 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Exercise from '#models/exercise'
+import Activity from '#models/activity'
 import { practiceTimeValidator } from '#validators/practice'
 import { DateTime } from 'luxon'
-import PracticedExercise from '#models/practiced_exercise'
+import PracticedActivity from '#models/practiced_activity'
 import { inject } from '@adonisjs/core'
 import { PracticeService } from '#services/practice_service'
 
 @inject()
-export default class PracticedExercisesController {
+export default class PracticedActivitiesController {
   constructor(protected practiceService: PracticeService) {}
 
   async index({ request, view }: HttpContext) {
@@ -71,14 +71,14 @@ export default class PracticedExercisesController {
   }
 
   async store({ view, request, params, auth }: HttpContext) {
-    const exercise = await Exercise.findByOrFail('id', params.id)
+    const activity = await Activity.findByOrFail('id', params.id)
     const { duration } = await request.validateUsing(practiceTimeValidator)
 
     const user = auth.user
-    await user?.related('practicedExercises').create({ exerciseId: exercise.id, duration })
+    await user?.related('practicedActivities').create({ activityId: activity.id, duration })
 
     const practices = await auth.user
-      ?.related('practicedExercises')
+      ?.related('practicedActivities')
       .query()
       .apply((scope) => scope.today())
       .sum('duration')
@@ -88,8 +88,8 @@ export default class PracticedExercisesController {
   }
 
   async destroy({ params, response, session }: HttpContext) {
-    const practicedExercise = await PracticedExercise.findOrFail(params.id)
-    await practicedExercise.delete()
+    const practicedActivity = await PracticedActivity.findOrFail(params.id)
+    await practicedActivity.delete()
 
     session.flash('success', 'Your practice has been deleted')
     return response.redirect().back()
