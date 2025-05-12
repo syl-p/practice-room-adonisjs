@@ -33,7 +33,7 @@ export default class CommentsController {
     const comment = await this.commentService.store(data, commentable)
 
     if (auth.user!.id === commentable.userId) {
-      await this.commentService.notificationForAuthor(commentable, auth.user!)
+      await this.commentService.notificationForAuthor(commentable, comment, auth.user!)
     }
 
     return view.render('fragments/comment', { comment })

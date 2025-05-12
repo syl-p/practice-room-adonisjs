@@ -27,23 +27,8 @@ subscription.onMessage((data) => {
   if (!list) return
   const li = document.createElement('li')
 
-  // Message format
-  let message = ''
-  switch (data.type) {
-    case 'new_comment':
-      message = 'Un nouveau commentaire à été posté votre exercice'
-      break
-    case 'identified':
-      message = "Quelqu'un vous a identifié dans un commentaire"
-      break
-    default:
-      message = 'New notification'
-  }
-
   li.innerHTML = `
-    <a href="${data.link || '#'}" class="block px-4 py-2 text-sm text-gray-700">
-      ${message}
-    </a>
+    ${data.html}
   `
   list.prepend(li)
 

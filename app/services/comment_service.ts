@@ -6,6 +6,7 @@ import Comment from '#models/comment'
 import { inject } from '@adonisjs/core'
 import CommentableType from '#enums/commentable_types'
 import { HttpContext } from '@adonisjs/core/http'
+import edge from 'edge.js'
 
 @inject()
 export default class CommentService {
@@ -35,10 +36,11 @@ export default class CommentService {
     }
 
     await comment.load('user')
+
+    return comment
   }
 
-  // TODO: Keep notification for comment reply ? Hmm I don't know
-  async notificationForAuthor(commentable: Comment | Exercise, author: User) {
+  async notificationForAuthor(commentable: Comment | Exercise, comment: Comment, author: User) {
     const channel = 'user/' + author.id + '/notifications'
     let slug = ''
     if (commentable instanceof Exercise) {
@@ -48,13 +50,22 @@ export default class CommentService {
       slug = exercise.slug
     }
 
-    const link = router.makeUrl('exercise.show', {
-      slug,
+    await comment.load('user')
+
+    const html = await edge.render('components/notifications/item', {
+      href:
+        router.makeUrl('exercise.show', {
+          slug,
+        }) +
+        '#comment-' +
+        comment.id,
+      message: 'à écrit un commentaire sur votre exercice',
+      user: comment.user,
+      createdAt: comment.createdAt,
     })
 
     transmit.broadcast(channel, {
-      link,
-      type: 'new_comment',
+      html,
     })
   }
 }
