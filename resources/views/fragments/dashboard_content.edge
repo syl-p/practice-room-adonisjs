@@ -5,7 +5,7 @@
   hx-swap="outerHTML show:no-scroll'"
   hx-target="#practices_week"
 >
-  <div class="flex space-x-3 items-center justify-around">
+  <nav class="flex space-x-3 items-center justify-around">
     <a href="{{ route('practices.previousWeek', {}, {qs: {date: current }}) }}" class="block">
       @svg('heroicons:chevron-left')
     </a>
@@ -32,6 +32,14 @@
     <a href="{{ route('practices.nextWeek', {}, {qs: {date: current }}) }}" class="block">
       @svg('heroicons:chevron-right')
     </a>
+  </nav>
+  <div class="flex space-x-3 mb-6">
+    @dashboard.statCard()
+      @!dashboard.daily({...dailyActivities})
+    @end
+    @dashboard.statCard()
+      @!dashboard.daily({...dailyPracticeTime})
+    @end
   </div>
   <ul id="practices-list">
     @if(practices.length === 0)

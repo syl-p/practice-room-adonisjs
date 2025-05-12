@@ -81,15 +81,22 @@ router
 
 router
   .resource('practices', PracticedActivitiesController)
-  .only(['index', 'store', 'destroy'])
-  .use(['index', 'store', 'destroy'], middleware.auth())
+  .only(['store', 'destroy'])
+  .use(['store', 'destroy'], middleware.auth())
+
+// DASHBOARD
+router
+  .get('/practices', [DashboardController, 'byDate'])
+  .use(middleware.auth())
+  .as('practices.index')
 
 router
-  .get('/practices/previous-week', [PracticedActivitiesController, 'previousWeek'])
+  .get('/practices/previous-week', [DashboardController, 'previousWeek'])
   .use(middleware.auth())
   .as('practices.previousWeek')
+
 router
-  .get('/practices/next-week', [PracticedActivitiesController, 'nextWeek'])
+  .get('/practices/next-week', [DashboardController, 'nextWeek'])
   .use(middleware.auth())
   .as('practices.nextWeek')
 

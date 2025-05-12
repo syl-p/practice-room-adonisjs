@@ -10,66 +10,6 @@ import { PracticeService } from '#services/practice_service'
 export default class PracticedActivitiesController {
   constructor(protected practiceService: PracticeService) {}
 
-  async index({ request, view }: HttpContext) {
-    let { date } = request.qs()
-    date = DateTime.fromISO(date)
-
-    const current = date.isValid ? date : DateTime.now().startOf('day')
-    const weekStart = current.startOf('week')
-    const weekEnd = current.endOf('week')
-
-    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
-      current,
-      weekStart,
-      weekEnd
-    )
-
-    return view.render('fragments/practices', {
-      current: current.toISO(),
-      weekAndDurations,
-      practices,
-    })
-  }
-
-  async previousWeek({ view, request }: HttpContext) {
-    const { date } = request.qs()
-    const current = DateTime.fromISO(date).minus({ weeks: 1 }).startOf('week')
-    const weekStart = current.startOf('week')
-    const weekEnd = current.endOf('week')
-
-    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
-      current,
-      weekStart,
-      weekEnd
-    )
-
-    return view.render('fragments/practices', {
-      current: current.toISO(),
-      weekAndDurations,
-      practices,
-    })
-  }
-
-  async nextWeek({ request, view }: HttpContext) {
-    const { date } = request.qs()
-
-    const current = DateTime.fromISO(date).plus({ weeks: 1 }).startOf('week')
-    const weekStart = current.startOf('week')
-    const weekEnd = current.endOf('week')
-
-    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
-      current,
-      weekStart,
-      weekEnd
-    )
-
-    return view.render('fragments/practices', {
-      current: current.toISO(),
-      weekAndDurations,
-      practices,
-    })
-  }
-
   async store({ view, request, params, auth }: HttpContext) {
     const activity = await Activity.findByOrFail('id', params.id)
     const { duration } = await request.validateUsing(practiceTimeValidator)

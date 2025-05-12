@@ -1,6 +1,7 @@
 import Activity from '#models/activity'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
 
 type DailyStat = {
   progress: number
@@ -12,11 +13,11 @@ type DailyStat = {
 export default class DashboardService {
   constructor(protected ctx: HttpContext) {}
 
-  async dailyActivities(): Promise<DailyStat> {
+  async dailyActivities(date: DateTime): Promise<DailyStat> {
     const practices = await this.ctx.auth.user
       ?.related('practicedActivities')
       .query()
-      .apply((scope) => scope.today())
+      .apply((scope) => scope.atSpecificDate(date))
       .countDistinct('activity_id')
 
     return {
@@ -26,11 +27,11 @@ export default class DashboardService {
     }
   }
 
-  async dailyPracticeTime(): Promise<DailyStat> {
+  async dailyPracticeTime(date: DateTime): Promise<DailyStat> {
     const practices = await this.ctx.auth.user
       ?.related('practicedActivities')
       .query()
-      .apply((scope) => scope.today())
+      .apply((scope) => scope.atSpecificDate(date))
       .sum('duration')
 
     return {
@@ -38,19 +39,5 @@ export default class DashboardService {
       goal: 600,
       label: 'Pratiquer au moins 10 minutes',
     }
-  }
-
-  async activityTop10(): Promise<Activity[]> {
-    return await Activity.query()
-      .has('practiced')
-      .withCount('practiced', (query) => {
-        query
-          .where('user_id', this.ctx.auth.user!.id)
-          .where('duration', '>', 0)
-          .as('practiceAssociatedTime')
-      })
-      .preload('practiced')
-      .orderBy('practiceAssociatedTime', 'desc')
-      .limit(10)
   }
 }

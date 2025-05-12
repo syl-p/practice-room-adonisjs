@@ -2,29 +2,19 @@
   <header class="bg-secondary py-6 mb-6">
     <div class="container flex space-x-3">
       <div class="flex-1">
-        <h1 class="text-3xl">
-          Dashboard
+        <h1 class="text-3xl text-center">
+          Tableau de bord
         </h1>
       </div>
     </div>
   </header>
   <section class="container lg:grid lg:grid-cols-3 gap-6 mb-6">
     <div class="lg:col-span-2 mb-6">
-      <div class="flex space-x-3 mb-6">
-        @dashboard.statCard()
-          @!dashboard.daily({...dailyActivities})
-        @end
-        @dashboard.statCard()
-          @!dashboard.daily({...dailyPracticeTime})
-        @end
+      <div id="practices_week" hx-get="{{ route('practices.index') }}" hx-trigger="load">
+        ...
       </div>
-      @dashboard.statCard({class: 'mb-6'})
-        <h2 class="text-xl mb-3">
-          Vos favoris
-        </h2>
-        <ul id="favorites" hx-get="{{ route('favorites') }}" hx-trigger="load" hx-swap="outerHTML">
-        </ul>
-      @end
+    </div>
+    <div>
       @dashboard.statCard()
         <h2 class="text-xl mb-3">
           Top 10 de vos activités
@@ -42,14 +32,6 @@
           @end
         </ul>
       @end
-    </div>
-    <div>
-      <h2 class="text-xl text-center mb-6">
-        Votre semaine de pratique
-      </h2>
-      <div id="practices_week" hx-get="{{ route('practices.index') }}" hx-trigger="load">
-        ...
-      </div>
     </div>
   </section>
 @end
