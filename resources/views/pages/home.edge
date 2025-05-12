@@ -11,7 +11,7 @@
         <ul class="grid grid-cols-4 gap-6">
           @each(activity in lastPracticedActivities)
             <li>
-              @!activities.lastPracticedCard(activity)
+              @!activities.lastPracticedCard({activity})
             </li>
           @end
         </ul>

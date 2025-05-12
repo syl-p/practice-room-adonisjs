@@ -34,8 +34,8 @@ export default class ActivityService {
       .preload('goal', (builder) => {
         builder.leftJoin('progressions', 'progressions.goal_id', 'goals.id')
       })
-      .join('practiced_activitys', 'practiced_activitys.activity_id', 'activities.id')
-      .where('practiced_activitys.user_id', user.id)
+      .join('practiced_activities', 'practiced_activities.activity_id', 'activities.id')
+      .where('practiced_activities.user_id', user.id)
       .select('activities.*')
       .distinctOn('activities.id')
       .orderBy('activities.id')

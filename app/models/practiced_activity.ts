@@ -7,6 +7,8 @@ import CacheService from '#services/cache_service'
 import type { Valid } from 'luxon/src/_util.js'
 
 export default class PracticedActivity extends BaseModel {
+  protected tableName = 'practiced_activities'
+
   @column({ isPrimary: true })
   declare id: number
 
