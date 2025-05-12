@@ -1,13 +1,13 @@
-import ExerciseStatuses from '#enums/exercise_statuses'
-import Exercise from '#models/exercise'
+import ActivityStatuses from '#enums/activity_statuses'
+import Activity from '#models/activity'
 import User from '#models/user'
 import { inject } from '@adonisjs/core'
 
 @inject()
-export default class ExerciseService {
+export default class ActivityService {
   async search(pattern: string | null | undefined) {
     if (!pattern) return []
-    const results = await Exercise.query()
+    const results = await Activity.query()
       .apply((scope) => scope.public())
       .where('title', 'ILIKE', `%${pattern}%`)
       .orWhere('content', 'ILIKE', `%${pattern}%`)
@@ -19,7 +19,7 @@ export default class ExerciseService {
   }
 
   async getLatest(limit = 10) {
-    return await Exercise.query()
+    return await Activity.query()
       .preload('user')
       .preload('tags')
       .apply((scope) => scope.public())
@@ -29,16 +29,16 @@ export default class ExerciseService {
 
   async getLastPracticed(user: User, limit = 10) {
     if (!user) return []
-    return await Exercise.query()
+    return await Activity.query()
       .preload('user')
       .preload('goal', (builder) => {
         builder.leftJoin('progressions', 'progressions.goal_id', 'goals.id')
       })
-      .join('practiced_exercises', 'practiced_exercises.exercise_id', 'exercises.id')
-      .where('practiced_exercises.user_id', user.id)
-      .select('exercises.*')
-      .distinctOn('exercises.id')
-      .orderBy('exercises.id')
+      .join('practiced_activitys', 'practiced_activitys.activity_id', 'activities.id')
+      .where('practiced_activitys.user_id', user.id)
+      .select('activities.*')
+      .distinctOn('activities.id')
+      .orderBy('activities.id')
       .limit(limit)
   }
 }

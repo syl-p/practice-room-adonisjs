@@ -1,21 +1,21 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
-// import ExerciseStatuses from '#enums/exercise_statuses'
-// import ExerciseStatus from '#models/exercise_status'
+// import ActivityStatuses from '#enums/activity_statuses'
+// import ActivityStatus from '#models/activity_status'
 
 export default class extends BaseSeeder {
   async run() {
     // // Write your database queries inside the run method
-    // await ExerciseStatus.createMany([
+    // await ActivityStatus.createMany([
     //   {
-    //     id: ExerciseStatuses.DRAFT,
+    //     id: ActivityStatuses.DRAFT,
     //     name: 'Draft',
     //   },
     //   {
-    //     id: ExerciseStatuses.PUBLIC,
+    //     id: ActivityStatuses.PUBLIC,
     //     name: 'Public',
     //   },
     //   {
-    //     id: ExerciseStatuses.NOT_REFERENCED,
+    //     id: ActivityStatuses.NOT_REFERENCED,
     //     name: 'Not referenced',
     //   },
     // ])

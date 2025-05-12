@@ -1,4 +1,4 @@
-import ExerciseStatuses from '#enums/exercise_statuses'
+import ActivityStatuses from '#enums/activity_statuses'
 import vine from '@vinejs/vine'
 
 const mediaType = vine.union([
@@ -6,17 +6,18 @@ const mediaType = vine.union([
   vine.union.else(vine.array(vine.number().positive()).optional()),
 ])
 
-export const exerciseValidator = vine.compile(
+export const activityValidator = vine.compile(
   vine.object({
     title: vine.string().trim().notSameAs('').minLength(1),
     content: vine.string().trim().notSameAs('').minLength(1),
-    status: vine.enum(ExerciseStatuses),
+    status: vine.enum(ActivityStatuses),
     media: mediaType,
     tags: vine
       .string()
       .trim()
       .optional()
-      .transform((value) => { // Convert 'tag1, tag2' to ['tag1', 'tag2']
+      .transform((value) => {
+        // Convert 'tag1, tag2' to ['tag1', 'tag2']
         if (value === '') {
           return []
         }

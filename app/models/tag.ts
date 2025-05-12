@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
-import Exercise from './exercise.js'
+import Activity from './activity.js'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 
 export default class Tag extends BaseModel {
@@ -16,11 +16,11 @@ export default class Tag extends BaseModel {
   @column()
   declare label: string
 
-  @manyToMany(() => Exercise, {
+  @manyToMany(() => Activity, {
     pivotTable: 'tag_taggable',
     pivotForeignKey: 'tag_id',
     pivotRelatedForeignKey: 'taggable_id',
     // pivotTimestamps: true,
   })
-  declare exercises: ManyToMany<typeof Exercise>
+  declare activities: ManyToMany<typeof Activity>
 }

@@ -1,5 +1,5 @@
 enum CommentableType {
-  EXERCISE = 'Exercise',
+  ACTIVITY = 'Activity',
   COMMENT = 'Comment',
 }
 

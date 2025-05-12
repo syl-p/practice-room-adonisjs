@@ -8,7 +8,7 @@ export const TagFactory = factory
       label: faker.lorem.words({ min: 1, max: 2 }),
     }
   })
-  // .state('exercise', (row) => {
-  //   row.taggableType = TaggableType.EXERCISE
+  // .state('activity', (row) => {
+  //   row.taggableType = TaggableType.ACTIVITY
   // })
   .build()

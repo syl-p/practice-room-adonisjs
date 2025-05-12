@@ -12,7 +12,7 @@
     <div class="lg:col-span-2 mb-6">
       <div class="flex space-x-3 mb-6">
         @dashboard.statCard()
-          @!dashboard.daily({...dailyExercises})
+          @!dashboard.daily({...dailyActivities})
         @end
         @dashboard.statCard()
           @!dashboard.daily({...dailyPracticeTime})
@@ -27,16 +27,16 @@
       @end
       @dashboard.statCard()
         <h2 class="text-xl mb-3">
-          Exercices que vous avez le plus pratiqués
+          Top 10 de vos activités
         </h2>
         <ul class="divide-y divide-primary-foreground">
-          @each(exercise in exerciseTop10)
+          @each(activity in activityTop10)
             <li class="py-1">
               <p class="font-semibold">
-                <a href="{{ route('exercise.show', {slug: exercise.slug}) }}">{{ exercise.title }}</a>
+                <a href="{{ route('activity.show', {slug: activity.slug}) }}">{{ activity.title }}</a>
               </p>
               <p class="text-sm font-light">
-                Pratiqué {{ exercise.$extras.practiceAssociatedTime }} fois.
+                Pratiqué {{ activity.$extras.practiceAssociatedTime }} fois.
               </p>
             </li>
           @end

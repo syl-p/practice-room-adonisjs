@@ -7,9 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
-        .integer('exercise_id')
+        .integer('activity_id')
         .unsigned()
-        .references('exercises.id')
+        .references('activities.id')
         .notNullable()
         .onDelete('CASCADE')
       table.integer('objective').notNullable()
@@ -18,7 +18,7 @@ export default class extends BaseSchema {
       table.timestamp('created_at')
       table.timestamp('updated_at')
 
-      table.unique('exercise_id')
+      table.unique('activity_id')
     })
   }
 

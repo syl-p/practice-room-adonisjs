@@ -1,25 +1,25 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
-import Exercise from '#models/exercise'
+import Activity from '#models/activity'
 import { inject } from '@adonisjs/core'
-import ExerciseService from '#services/exercise_service'
+import ActivityService from '#services/activity_service'
 
 @inject()
 export default class HomeController {
-  constructor(private exerciseService: ExerciseService) {}
+  constructor(private activityService: ActivityService) {}
   // TODO: SHOW LASTED PRACTICED EX AND NEW EX FROM COMMUNITY
   async index({ view, auth }: HttpContext) {
-    const exercises = await this.exerciseService.getLatest()
+    const activities = await this.activityService.getLatest()
 
-    let lastPracticedExercises: Exercise[] = []
+    let lastPracticedActivities: Activity[] = []
 
     if (auth.isAuthenticated) {
       const user = auth.getUserOrFail()
-      lastPracticedExercises = await this.exerciseService.getLastPracticed(user)
+      lastPracticedActivities = await this.activityService.getLastPracticed(user)
 
-      // dd(lastPracticedExercises)
+      // dd(lastPracticedActivities)
     }
 
-    return view.render('pages/home', { exercises, lastPracticedExercises })
+    return view.render('pages/home', { activities, lastPracticedActivities })
   }
 }

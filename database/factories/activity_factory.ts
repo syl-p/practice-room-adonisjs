@@ -1,18 +1,18 @@
 import factory from '@adonisjs/lucid/factories'
-import Exercise from '#models/exercise'
-import ExerciseStatuses from '#enums/exercise_statuses'
+import Activity from '#models/activity'
+import ActivityStatuses from '#enums/activity_statuses'
 import { UserFactory } from './user_factory.js'
 import { CommentFactory } from './comment_factory.js'
 import { MediumFactory } from './medium_factory.js'
 import { GoalFactory } from './goal_factory.js'
 
-export const ExerciseFactory = factory
-  .define(Exercise, async ({ faker }) => {
+export const ActivityFactory = factory
+  .define(Activity, async ({ faker }) => {
     return {
       title: faker.lorem.sentence(),
       content: faker.lorem.paragraphs(),
       posterUrl: faker.image.url(),
-      status: ExerciseStatuses.PUBLIC,
+      status: ActivityStatuses.PUBLIC,
       userId: 1,
     }
   })
@@ -21,12 +21,12 @@ export const ExerciseFactory = factory
   .relation('media', () => MediumFactory)
   .relation('comments', () => CommentFactory)
   .state('public', (row) => {
-    row.status = ExerciseStatuses.PUBLIC
+    row.status = ActivityStatuses.PUBLIC
   })
   .state('draft', (row) => {
-    row.status = ExerciseStatuses.DRAFT
+    row.status = ActivityStatuses.DRAFT
   })
   .state('not referenced', (row) => {
-    row.status = ExerciseStatuses.NOT_REFERENCED
+    row.status = ActivityStatuses.NOT_REFERENCED
   })
   .build()

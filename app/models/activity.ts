@@ -10,18 +10,18 @@ import {
   manyToMany,
   scope,
 } from '@adonisjs/lucid/orm'
-import ExerciseStatuses from '#enums/exercise_statuses'
+import ActivityStatuses from '#enums/activity_statuses'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import User from './user.js'
 import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Tag from './tag.js'
 import Comment from '#models/comment'
 import CommentableType from '#enums/commentable_types'
-import PracticedExercise from '#models/practiced_exercise'
+import PracticedActivity from '#models/practiced_activity'
 import Medium from '#models/medium'
 import Goal from '#models/goal'
 
-export default class Exercise extends BaseModel {
+export default class Activity extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
@@ -38,7 +38,7 @@ export default class Exercise extends BaseModel {
   declare posterUrl: string | null
 
   @column()
-  declare status: ExerciseStatuses
+  declare status: ActivityStatuses
 
   @column()
   declare userId: number
@@ -46,18 +46,18 @@ export default class Exercise extends BaseModel {
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @hasMany(() => PracticedExercise)
-  declare practiced: HasMany<typeof PracticedExercise>
+  @hasMany(() => PracticedActivity)
+  declare practiced: HasMany<typeof PracticedActivity>
 
   @hasMany(() => Comment, {
     foreignKey: 'commentableId',
-    onQuery: (query) => query.where('commentable_type', CommentableType.EXERCISE),
+    onQuery: (query) => query.where('commentable_type', CommentableType.ACTIVITY),
   })
   declare comments: HasMany<typeof Comment>
 
   @manyToMany(() => Medium, {
-    pivotTable: 'exercise_medium',
-    pivotForeignKey: 'exercise_id',
+    pivotTable: 'activity_medium',
+    pivotForeignKey: 'activity_id',
     pivotRelatedForeignKey: 'medium_id',
     pivotTimestamps: true,
   })
@@ -86,21 +86,21 @@ export default class Exercise extends BaseModel {
   }
 
   @beforeCreate()
-  static async makeSlug(exercise: Exercise) {
-    if (exercise.slug) return
-    const slug = stringHelpers.slug(exercise.title, {
+  static async makeSlug(activity: Activity) {
+    if (activity.slug) return
+    const slug = stringHelpers.slug(activity.title, {
       replacement: '-',
       lower: true,
       strict: true,
     })
 
-    const rows = await Exercise.query()
+    const rows = await Activity.query()
       .select('slug')
       .whereRaw('lower(??) = ?', ['slug', slug])
       .orWhereRaw('lower(??) like ?', ['slug', `${slug}-%`])
 
     if (rows.length < 1) {
-      exercise.slug = slug
+      activity.slug = slug
       return
     }
 
@@ -122,19 +122,19 @@ export default class Exercise extends BaseModel {
     }, [])
 
     const increment = increments.length ? Math.max(...increments) : 1
-    exercise.slug = `${slug}-${increment}`
+    activity.slug = `${slug}-${increment}`
     return
   }
 
   static public = scope((query) => {
-    query.where('status', ExerciseStatuses.PUBLIC)
+    query.where('status', ActivityStatuses.PUBLIC)
   })
 
   static draft = scope((query) => {
-    query.where('status', ExerciseStatuses.DRAFT)
+    query.where('status', ActivityStatuses.DRAFT)
   })
 
   static private = scope((query) => {
-    query.where('status', ExerciseStatuses.NOT_REFERENCED)
+    query.where('status', ActivityStatuses.NOT_REFERENCED)
   })
 }

@@ -8,7 +8,7 @@ export const GoalFactory = factory
       objective: 100,
       step: 10,
       label: GoalLabels.POURCENT,
-      exercise_id: 1,
+      activity_id: 1,
     }
   })
   .build()

@@ -11,8 +11,8 @@ export default class UsersController {
   async show({ view, params }: HttpContext) {
     const user = await User.findOrFail(params.id)
     await user.load('followers')
-    const exercises = await user.related('exercises').query().preload('user')
-    return view.render('pages/users/show', { user, exercises })
+    const activities = await user.related('activities').query().preload('user')
+    return view.render('pages/users/show', { user, activities })
   }
 
   async follow({ view, params, auth }: HttpContext) {

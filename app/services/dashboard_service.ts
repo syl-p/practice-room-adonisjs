@@ -1,4 +1,4 @@
-import Exercise from '#models/exercise'
+import Activity from '#models/activity'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
@@ -12,23 +12,23 @@ type DailyStat = {
 export default class DashboardService {
   constructor(protected ctx: HttpContext) {}
 
-  async dailyExercises(): Promise<DailyStat> {
+  async dailyActivities(): Promise<DailyStat> {
     const practices = await this.ctx.auth.user
-      ?.related('practicedExercises')
+      ?.related('practicedActivities')
       .query()
       .apply((scope) => scope.today())
-      .countDistinct('exercise_id')
+      .countDistinct('activity_id')
 
     return {
       progress: practices?.[0].$extras.count ? practices[0].$extras.count : 0,
       goal: 3,
-      label: 'Pratiquer 3 exercices',
+      label: 'Pratiquer 3 activités différentes',
     }
   }
 
   async dailyPracticeTime(): Promise<DailyStat> {
     const practices = await this.ctx.auth.user
-      ?.related('practicedExercises')
+      ?.related('practicedActivities')
       .query()
       .apply((scope) => scope.today())
       .sum('duration')
@@ -40,8 +40,8 @@ export default class DashboardService {
     }
   }
 
-  async exerciseTop10(): Promise<Exercise[]> {
-    const exercises = await Exercise.query()
+  async activityTop10(): Promise<Activity[]> {
+    return await Activity.query()
       .has('practiced')
       .withCount('practiced', (query) => {
         query
@@ -52,7 +52,5 @@ export default class DashboardService {
       .preload('practiced')
       .orderBy('practiceAssociatedTime', 'desc')
       .limit(10)
-
-    return exercises
   }
 }

@@ -1,7 +1,7 @@
 import transmit from '@adonisjs/transmit/services/main'
 import router from '@adonisjs/core/services/router'
 import User from '#models/user'
-import Exercise from '#models/exercise'
+import Activity from '#models/activity'
 import Comment from '#models/comment'
 import { inject } from '@adonisjs/core'
 import CommentableType from '#enums/commentable_types'
@@ -20,13 +20,13 @@ export default class CommentService {
     )
   }
 
-  async store(data: { content: string }, commentable: Comment | Exercise) {
+  async store(data: { content: string }, commentable: Comment | Activity) {
     const comment = new Comment()
     comment.merge({
       ...data,
       userId: this.ctx.auth.user!.id,
       commentableType:
-        commentable instanceof Comment ? CommentableType.COMMENT : CommentableType.EXERCISE,
+        commentable instanceof Comment ? CommentableType.COMMENT : CommentableType.ACTIVITY,
     })
 
     if (commentable instanceof Comment) {
@@ -40,26 +40,26 @@ export default class CommentService {
     return comment
   }
 
-  async notificationForAuthor(commentable: Comment | Exercise, comment: Comment, author: User) {
+  async notificationForAuthor(commentable: Comment | Activity, comment: Comment, author: User) {
     const channel = 'user/' + author.id + '/notifications'
     let slug = ''
-    if (commentable instanceof Exercise) {
+    if (commentable instanceof Activity) {
       slug = commentable.slug
     } else {
-      const exercise = await Exercise.findOrFail(commentable.commentableId)
-      slug = exercise.slug
+      const activity = await Activity.findOrFail(commentable.commentableId)
+      slug = activity.slug
     }
 
     await comment.load('user')
 
     const html = await edge.render('components/notifications/item', {
       href:
-        router.makeUrl('exercise.show', {
+        router.makeUrl('activity.show', {
           slug,
         }) +
         '#comment-' +
         comment.id,
-      message: 'à écrit un commentaire sur votre exercice',
+      message: 'à posté un commentaire sur une de vos activités',
       user: comment.user,
       createdAt: comment.createdAt,
     })

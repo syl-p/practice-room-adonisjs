@@ -7,22 +7,22 @@ export default class DashboardController {
   constructor(protected dashboardService: DashboardService) {}
 
   async index({ view, auth }: HttpContext) {
-    const [practices, dailyExercises, dailyPracticeTime, exerciseTop10] = await Promise.all([
+    const [practices, dailyActivities, dailyPracticeTime, activityTop10] = await Promise.all([
       auth.user
-        ?.related('practicedExercises')
+        ?.related('practicedActivities')
         .query()
-        .preload('exercise')
+        .preload('activity')
         .apply((scope) => scope.today()),
-      this.dashboardService.dailyExercises(),
+      this.dashboardService.dailyActivities(),
       this.dashboardService.dailyPracticeTime(),
-      this.dashboardService.exerciseTop10(),
+      this.dashboardService.activityTop10(),
     ])
 
     return view.render('pages/dashboard', {
       practices,
-      dailyExercises,
+      dailyActivities,
       dailyPracticeTime,
-      exerciseTop10,
+      activityTop10,
     })
   }
 }

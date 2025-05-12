@@ -8,15 +8,15 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('user_id').unsigned().references('users.id').notNullable().onDelete('CASCADE')
       table
-        .integer('exercise_id')
+        .integer('activity_id')
         .unsigned()
-        .references('exercises.id')
+        .references('activities.id')
         .notNullable()
         .onDelete('CASCADE')
       table.timestamp('created_at')
       table.timestamp('updated_at')
 
-      table.unique(['user_id', 'exercise_id'])
+      table.unique(['user_id', 'activity_id'])
     })
   }
 

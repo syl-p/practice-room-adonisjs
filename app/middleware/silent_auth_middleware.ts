@@ -18,7 +18,7 @@ export default class SilentAuthMiddleware {
       const cacheKey = `practice_time:${ctx.auth.user.id}:${DateTime.now().toFormat('yyyy-LL-dd')}`
       const practiceTime = await CacheService.fetch(cacheKey, async () => {
         const practices = await ctx.auth.user
-          ?.related('practicedExercises')
+          ?.related('practicedActivities')
           .query()
           .apply((scope) => scope.today())
 

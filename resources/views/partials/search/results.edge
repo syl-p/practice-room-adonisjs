@@ -13,11 +13,11 @@
     </ul>
   </li>
   <li>
-    <span class="block font-semibold uppercase text-sm text-muted-foreground mb-3">Exercices:</span>
+    <span class="block font-semibold uppercase text-sm text-muted-foreground mb-3">Activités:</span>
     <ul role="list" class="divide-y divide-primary-foreground">
-      @each(exercise in exercises)
+      @each(activity in activities)
         <li class="hover:bg-gray-50">
-          <a href="{{ route('exercise.show', {slug: exercise.slug}) }}" class="p-4 block">{{ exercise.title }}</a>
+          <a href="{{ route('activity.show', {slug: activity.slug}) }}" class="p-4 block">{{ activity.title }}</a>
         </li>
       @end
     </ul>
