@@ -1,4 +1,3 @@
-import DashboardService from '#services/dashboard_service'
 import { PracticeService } from '#services/practice_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -47,16 +46,20 @@ export default class DashboardController {
     const weekStart = current.startOf('week')
     const weekEnd = current.endOf('week')
 
-    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
-      current,
-      weekStart,
-      weekEnd
+    const [dailyActivities, dailyPracticeTime, { weekAndDurations, practices }] = await Promise.all(
+      [
+        this.practiceService.dailyActivities(current),
+        this.practiceService.dailyPracticeTime(current),
+        await this.practiceService.weekAndDurations(current, weekStart, weekEnd),
+      ]
     )
 
     return view.render('fragments/dashboard_content', {
       current: current.toISO(),
       weekAndDurations,
       practices,
+      dailyActivities,
+      dailyPracticeTime,
     })
   }
 
@@ -67,16 +70,20 @@ export default class DashboardController {
     const weekStart = current.startOf('week')
     const weekEnd = current.endOf('week')
 
-    const { weekAndDurations, practices } = await this.practiceService.weekAndDurations(
-      current,
-      weekStart,
-      weekEnd
+    const [dailyActivities, dailyPracticeTime, { weekAndDurations, practices }] = await Promise.all(
+      [
+        this.practiceService.dailyActivities(current),
+        this.practiceService.dailyPracticeTime(current),
+        await this.practiceService.weekAndDurations(current, weekStart, weekEnd),
+      ]
     )
 
     return view.render('fragments/dashboard_content', {
       current: current.toISO(),
       weekAndDurations,
       practices,
+      dailyActivities,
+      dailyPracticeTime,
     })
   }
 }

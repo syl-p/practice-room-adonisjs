@@ -1,7 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Activity from '#models/activity'
 import { practiceTimeValidator } from '#validators/practice'
-import { DateTime } from 'luxon'
 import PracticedActivity from '#models/practiced_activity'
 import { inject } from '@adonisjs/core'
 import { PracticeService } from '#services/practice_service'
