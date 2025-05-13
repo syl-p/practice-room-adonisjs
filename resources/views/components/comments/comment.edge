@@ -1,6 +1,6 @@
 <article
   class="pt-6 text-base bg-white rounded-lg dark:bg-gray-900"
-  id="comment-{{ comment.id }}"
+  id="comment_{{ comment.id }}"
   data-author="{{ comment.user.username }}"
   @if(comment.commentableType !== CommentableType.COMMENT)
     x-data="{formOpened: false}"

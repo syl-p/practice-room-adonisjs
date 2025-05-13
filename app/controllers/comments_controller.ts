@@ -36,7 +36,14 @@ export default class CommentsController {
       await this.commentService.notificationForAuthor(commentable, comment, auth.user!)
     }
 
-    return view.render('fragments/comment', { comment })
+    return view.render('fragments/comment', {
+      comment,
+      controller_name: commentable instanceof Comment ? 'comments' : 'activities',
+      params: {
+        ...(commentable instanceof Comment && { comment_id: comment.id }),
+        ...(commentable instanceof Activity && { activity_id: commentable.id }),
+      },
+    })
   }
 
   private async getCommentable(params: any): Promise<Activity | Comment> {
@@ -58,7 +65,13 @@ export default class CommentsController {
     await comment.save()
     await comment.load('user')
 
-    return view.render('fragments/comment', { comment })
+    return view.render('fragments/comment', {
+      comment,
+      controller_name: 'comments',
+      params: {
+        comment_id: comment.id,
+      },
+    })
   }
 
   async destroy({ params, session, response, bouncer }: HttpContext) {

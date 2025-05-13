@@ -57,7 +57,7 @@ export default class CommentService {
         router.makeUrl('activity.show', {
           slug,
         }) +
-        '#comment-' +
+        '#comment_' +
         comment.id,
       message: 'à posté un commentaire sur une de vos activités',
       user: comment.user,
