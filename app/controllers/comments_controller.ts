@@ -43,6 +43,9 @@ export default class CommentsController {
   }
 
   private async getCommentable(params: any): Promise<Activity | Comment> {
+    if (params.comment_id !== undefined) {
+      return await Comment.findOrFail(params.comment_id)
+    }
     return await Activity.findOrFail(params.activity_id)
   }
 

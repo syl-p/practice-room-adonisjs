@@ -9,13 +9,16 @@
   @end
   
   @slot('menu')
+    <p class="text-xl p-3 border-b">
+      Notifications
+    </p>
     <ul
-      class="py-1"
-      role="none"
       id="notifications_list"
       hx-get="{{ route('notifications.index') }}"
       hx-trigger="load"
+      hx-swap="outerHTML"
     >
+      ...
     </ul>
   @end
 @end

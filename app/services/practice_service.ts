@@ -84,7 +84,7 @@ export class PracticeService {
     const practices = await this.ctx.auth
       .user!.related('practicedActivities')
       .query()
-      .preload('activity')
+      .preload('activity', (query) => query.preload('user'))
       .apply((scope) => scope.atSpecificDate(current))
 
     return { weekAndDurations, practices }

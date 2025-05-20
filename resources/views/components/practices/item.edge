@@ -6,10 +6,15 @@
       {{ utils.secondsToTime(item.duration) }}
     </div>
     <div class="min-w-0">
-      <a
-        class="block font-semibold truncate"
-        href="{{ route('activity.show', {slug: item.activity.slug}) }}"
-      >{{ item.activity.title }}</a>
+      <p class="text-xs">
+        Posté par {{item.activity.user.username}}
+      </p>
+      <p>
+        <a
+          class="block font-semibold truncate"
+          href="{{ route('activity.show', {slug: item.activity.slug}) }}"
+        >{{ item.activity.title }}</a>
+      </p>
       <p class="font-light text-sm text-muted-foreground">
         {{ item.activity.content?.substring(0, 150) + "..." }}
       </p>

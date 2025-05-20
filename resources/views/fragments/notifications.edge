@@ -1,6 +1,6 @@
-<ul id="notifications_list">
+<ul id="notifications_list" class="divide-y">
   @each(notification in notifications)
-    <li>
+    <li class="hover:bg-primary-foreground">
       @!notifications.item({notification})
     </li>
   @end

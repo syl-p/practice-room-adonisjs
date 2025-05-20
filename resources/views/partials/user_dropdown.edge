@@ -14,19 +14,19 @@
       </p>
     </div>
     <ul class="py-1" role="none">
-      <li>
+      <li class="hover:bg-primary-foreground">
         <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700">Mon tableau de bord</a>
       </li>
-      <li>
+      <li class="hover:bg-primary-foreground">
         <a href="{{ route('auth.register.edit') }}" class="block px-4 py-2 text-sm text-gray-700">Mes informations</a>
       </li>
-      <li>
+      <li class="hover:bg-primary-foreground">
         <a
           href="{{ route('users.show', {id: auth.user.id}) }}"
           class="block px-4 py-2 text-sm text-gray-700"
         >Mon profil</a>
       </li>
-      <li>
+      <li class="hover:bg-primary-foreground">
         <form method="POST" action="{{ route('auth.logout') }}">
           {{ csrfField() }}
         <input
