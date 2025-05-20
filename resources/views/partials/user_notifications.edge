@@ -9,7 +9,13 @@
   @end
   
   @slot('menu')
-    <ul class="py-1" role="none">
+    <ul
+      class="py-1"
+      role="none"
+      id="notifications_list"
+      hx-get="{{ route('notifications.index') }}"
+      hx-trigger="load"
+    >
     </ul>
   @end
 @end

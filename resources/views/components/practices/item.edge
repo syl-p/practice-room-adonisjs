@@ -1,10 +1,18 @@
-<div class="flex space-x-6 min-w-0 relative items-center p-4">
+<div
+  class="flex space-x-6 min-w-0 relative items-center rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+>
   <div class="flex-1 flex space-x-6 items-center min-w-0">
     <div class="hidden flex-shrink-0 md:block">
       {{ utils.secondsToTime(item.duration) }}
     </div>
-    <div class="min-w-0 font-semibold truncate">
-      <a href="{{ route('activity.show', {slug: item.activity.slug}) }}">{{ item.activity.title }}</a>
+    <div class="min-w-0">
+      <a
+        class="block font-semibold truncate"
+        href="{{ route('activity.show', {slug: item.activity.slug}) }}"
+      >{{ item.activity.title }}</a>
+      <p class="font-light text-sm text-muted-foreground">
+        {{ item.activity.content?.substring(0, 150) + "..." }}
+      </p>
     </div>
   </div>
   <div>

@@ -12,9 +12,8 @@ import { DateTime } from 'luxon'
 export default class SilentAuthMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
     await ctx.auth.check()
-
-    // Load PracticeTime info
     if (ctx.auth.isAuthenticated && ctx.auth.user) {
+      // Cache for practice Time
       const cacheKey = `practice_time:${ctx.auth.user.id}:${DateTime.now().toFormat('yyyy-LL-dd')}`
       const practiceTime = await CacheService.fetch(cacheKey, async () => {
         const practices = await ctx.auth.user
@@ -24,6 +23,8 @@ export default class SilentAuthMiddleware {
 
         return practices?.reduce((accumulator, practice) => accumulator + practice.duration, 0)
       })
+
+      // Share data to view
       ctx.view.share({ practiceTime })
     }
     return next()

@@ -1,14 +1,14 @@
-<a href="{{{ href }}}" class="flex w-full items-center space-x-3 p-1.5">
+<a href="{{ notification.data.href }}" class="flex w-full items-center space-x-3 p-1.5">
   <div>
-    @!users.avatar({user})
+    @!users.avatar({user: notification.data.comment.user})
   </div>
   <div class="flex flex-col gap-1 flex-1">
     <p class="block font-sans text-sm font-normal leading-normal text-gray-700 antialiased">
-      <span class="font-medium text-blue-gray-900">{{ user.username }}</span>&nbsp;{{ message }}
+      <span class="font-medium text-blue-gray-900">{{ notification.data.comment.user.username }}</span>&nbsp;{{ notification.data.message }}
     </p>
     <p class="flex items-center gap-1 font-sans text-xs font-light text-gray-600 antialiased">
       @svg('heroicons:clock', {class: "h-4 w-4 text-gray-400"})
-      {{ utils.timeago(createdAt) }}
+      {{ utils.timeago(notification.createdAt) }}
     </p>
   </div>
 </a>

@@ -7,6 +7,7 @@ import Activity from '#models/activity'
 import CommentService from '#services/comment_service'
 import { inject } from '@adonisjs/core'
 
+// TODO: Not use "Activity" model direcly use comment.commentableType to query comments
 @inject()
 export default class CommentsController {
   constructor(private commentService: CommentService) {}
@@ -25,16 +26,11 @@ export default class CommentsController {
     return view.render('fragments/comments', { comments })
   }
 
-  // TODO: Move logic into a service
   async store({ request, params, auth, view }: HttpContext) {
     const data = await request.validateUsing(newCommentValidator)
     const commentable = await this.getCommentable(params)
 
     const comment = await this.commentService.store(data, commentable)
-
-    if (auth.user!.id === commentable.userId) {
-      await this.commentService.notificationForAuthor(commentable, comment, auth.user!)
-    }
 
     return view.render('fragments/comment', {
       comment,
@@ -47,9 +43,6 @@ export default class CommentsController {
   }
 
   private async getCommentable(params: any): Promise<Activity | Comment> {
-    if (params.comment_id !== undefined) {
-      return await Comment.findOrFail(params.comment_id)
-    }
     return await Activity.findOrFail(params.activity_id)
   }
 

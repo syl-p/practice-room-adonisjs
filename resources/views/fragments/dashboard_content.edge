@@ -33,53 +33,63 @@
       @svg('heroicons:chevron-right')
     </a>
   </nav>
-  <div class="flex space-x-3 mb-6">
-    @dashboard.statCard()
-      @!dashboard.daily({...dailyActivities})
-    @end
-    @dashboard.statCard()
-      @!dashboard.daily({...dailyPracticeTime})
-    @end
-  </div>
-  <ul id="practices-list">
-    @if(practices.length === 0)
-      <li>
-        <p class="text-center text-gray-500 dark:text-gray-400">
-          Aucune pratique pour cette date
-        </p>
-      </li>
-    @end
-    @each(item in practices)
-      <li hx-boost="false">
-        @practices.item({item})
-          @ui.dropdown()
-            @slot('trigger')
-              @svg('heroicons:ellipsis-horizontal',
-              {class: "w-4 h-4"})
-              <span class="sr-only">Practice item settings</span>
-            @end
-            @slot('menu')
-              <ul
-                class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownMenuIconHorizontalButton"
-              >
-                <form
-                  method="POST"
-                  action="{{ route('practices.destroy', {id: item.id}, {qs: {_method: 'DELETE' }}) }}"
+  <section>
+    <h2 class="text-xl mb-6">
+      Objectifs
+    </h2>
+    <div class="flex space-x-3 mb-6">
+      @dashboard.statCard()
+        @!dashboard.daily({...dailyActivities})
+      @end
+      @dashboard.statCard()
+        @!dashboard.daily({...dailyPracticeTime})
+      @end
+    </div>
+  </section>
+  <section>
+    <h2 class="text-xl mb-6">
+      Activités réalisées
+    </h2>
+    <ul id="practices-list" class="space-y-3">
+      @if(practices.length === 0)
+        <li>
+          <p class="text-center text-gray-500 dark:text-gray-400">
+            Aucune pratique pour cette date
+          </p>
+        </li>
+      @end
+      @each(item in practices)
+        <li hx-boost="false">
+          @practices.item({item})
+            @ui.dropdown()
+              @slot('trigger')
+                @svg('heroicons:ellipsis-horizontal',
+                {class: "w-4 h-4"})
+                <span class="sr-only">Practice item settings</span>
+              @end
+              @slot('menu')
+                <ul
+                  class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownMenuIconHorizontalButton"
                 >
-                  {{ csrfField() }}
-                  <input
-                    type="submit"
-                    value="Supprimer"
-                    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                  />
+                  <form
+                    method="POST"
+                    action="{{ route('practices.destroy', {id: item.id}, {qs: {_method: 'DELETE' }}) }}"
+                  >
+                    {{ csrfField() }}
+                    <input
+                      type="submit"
+                      value="Supprimer"
+                      class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                    />
+                  </form>
                 </form>
-              </form>
-            </ul>
+              </ul>
+            @end
           @end
         @end
-      @end
-    </li>
-  @end
-</ul>
+      </li>
+    @end
+  </ul>
+</section>
 </div>

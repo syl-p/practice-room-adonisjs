@@ -10,6 +10,7 @@ import Medium from './medium.js'
 import { DbRememberMeTokensProvider } from '@adonisjs/auth/session'
 import Progression from './progression.js'
 import Goal from './goal.js'
+import Notification from './notification.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -43,6 +44,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => PracticedActivity)
   declare practicedActivities: HasMany<typeof PracticedActivity>
+
+  @hasMany(() => Notification)
+  declare notifications: HasMany<typeof Notification>
 
   @manyToMany(() => Goal, {
     pivotTable: 'progressions',

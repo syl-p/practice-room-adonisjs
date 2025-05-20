@@ -27,6 +27,7 @@ const LogoutController = () => import('#controllers/auth/logout_controller')
 const ActivitiesController = () => import('#controllers/activities_controller')
 const PagesController = () => import('#controllers/pages_controller')
 import transmit from '@adonisjs/transmit/services/main'
+const NotificationsController = () => import('#controllers/notifications_controller')
 
 transmit.registerRoutes()
 router.get('/', [HomeController, 'index']).as('home')
@@ -147,6 +148,11 @@ router
   .delete('user/:id/unfollow', [UsersController, 'unfollow'])
   .use(middleware.auth())
   .as('users.unfollow')
+
+router
+  .get('notifications', [NotificationsController, 'index'])
+  .as('notifications.index')
+  .use(middleware.auth())
 
 // OTHER
 router.get('search', [SearchController, 'index']).as('search')

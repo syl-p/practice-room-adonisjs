@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import {
+  afterCreate,
   afterDelete,
   BaseModel,
   beforeCreate,
@@ -14,6 +15,8 @@ import User from '#models/user'
 import CommentableType from '#enums/commentable_types'
 import MentionService from '#services/mention_service'
 import CommentService from '#services/comment_service'
+import { NotificationService } from '#services/notification_service'
+import NotificationType from '#enums/notification_type'
 
 export default class Comment extends BaseModel {
   @column({ isPrimary: true })
@@ -56,6 +59,18 @@ export default class Comment extends BaseModel {
   static async parseContent(comment: Comment) {
     comment.content = await MentionService.convertMentionsToLinks(comment.content)
     comment.content = CommentService.convertUrlToLink(comment.content)
+  }
+
+  @afterCreate()
+  static async notification(comment: Comment) {
+    await comment.load('user')
+    // TODO: Get the target user = comment.commentable.user ?
+
+    await NotificationService.do(NotificationType.COMMENT, comment.user, {
+      comment: comment.serialize(),
+      user: comment.user.serialize(),
+      href: '#',
+    })
   }
 
   @afterDelete()
