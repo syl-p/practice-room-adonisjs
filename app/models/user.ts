@@ -8,7 +8,6 @@ import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import PracticedActivity from '#models/practiced_activity'
 import Medium from './medium.js'
 import { DbRememberMeTokensProvider } from '@adonisjs/auth/session'
-import Progression from './progression.js'
 import Goal from './goal.js'
 import Notification from './notification.js'
 

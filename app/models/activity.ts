@@ -18,10 +18,15 @@ import PracticedActivity from '#models/practiced_activity'
 import Medium from '#models/medium'
 import Goal from '#models/goal'
 import { compose } from '@adonisjs/core/helpers'
-import withTags from './mixins/with_tags.js'
-import withComments from './mixins/with_comments.js'
+import { withTags } from './mixins/with_tags.js'
+import { withComments } from './mixins/with_comments.js'
+import TaggableType from '#enums/taggable_type'
+import CommentableType from '#enums/commentable_types'
 
-export default class Activity extends compose(BaseModel, withTags, withComments) {
+const withTagsMixin = withTags(TaggableType.ACTIVITY)
+const withCommentsMixin = withComments(CommentableType.ACTIVITY)
+
+export default class Activity extends compose(BaseModel, withTagsMixin, withCommentsMixin) {
   @column({ isPrimary: true })
   declare id: number
 
