@@ -15,8 +15,13 @@ const transmit = new Transmit({
   baseUrl: window.location.origin,
 })
 
-const subscription = transmit.subscription('user/' + 94 + '/notifications')
-await subscription.create()
+async function initSubscription() {
+  const subscription = transmit.subscription('user/' + 94 + '/notifications')
+  await subscription.create()
+  return subscription
+}
+
+const subscription = await initSubscription()
 
 subscription.onMessage((data) => {
   const notificationsBlock = document.querySelector('#user-notifications')
