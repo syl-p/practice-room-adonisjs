@@ -16,7 +16,7 @@
 
 
 <{{node}} {{$props.merge({
-  class: [classNames, variantClasses]
+  class: [classNames, variantClasses, $props.class]
 }).toAttrs()}}>
 {{{await $slots.main()}}}
 </{{node}}>

@@ -16,17 +16,23 @@
     </div>
     <div>
       @dashboard.statCard()
-        <h2 class="text-xl mb-3">
-          Top 10 de vos activités
-        </h2>
+        <div class="mb-3">
+          <h2 class="text-xl">
+            Top 10 de vos activités
+          </h2>
+          <p>
+            Retrouvez ici, les 10 activités que vous avez le plus répétées
+          </p>
+        </div>
         <ul class="divide-y divide-primary-foreground">
           @each(activity in activityTop10)
-            <li class="py-1">
-              <p class="font-semibold">
-                <a href="{{ route('activity.show', {slug: activity.slug}) }}">{{ activity.title }}</a>
+            <li class="py-1 flex items-center space-x-3">
+              <p class="font-light">
+                <span class="block text-3xl">{{ activity.$extras.practiceAssociatedTime }}</span>
+                <span class="block text-sm">fois</span>
               </p>
-              <p class="text-sm font-light">
-                Pratiqué {{ activity.$extras.practiceAssociatedTime }} fois.
+              <p class="font-semibold flex-1">
+                <a href="{{ route('activity.show', {slug: activity.slug}) }}">{{ activity.title }}</a>
               </p>
             </li>
           @end

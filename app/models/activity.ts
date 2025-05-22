@@ -14,14 +14,14 @@ import ActivityStatuses from '#enums/activity_statuses'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import User from './user.js'
 import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
-import Tag from './tag.js'
-import Comment from '#models/comment'
-import CommentableType from '#enums/commentable_types'
 import PracticedActivity from '#models/practiced_activity'
 import Medium from '#models/medium'
 import Goal from '#models/goal'
+import { compose } from '@adonisjs/core/helpers'
+import withTags from './mixins/with_tags.js'
+import withComments from './mixins/with_comments.js'
 
-export default class Activity extends BaseModel {
+export default class Activity extends compose(BaseModel, withTags, withComments) {
   @column({ isPrimary: true })
   declare id: number
 
@@ -49,12 +49,6 @@ export default class Activity extends BaseModel {
   @hasMany(() => PracticedActivity)
   declare practiced: HasMany<typeof PracticedActivity>
 
-  @hasMany(() => Comment, {
-    foreignKey: 'commentableId',
-    onQuery: (query) => query.where('commentable_type', CommentableType.ACTIVITY),
-  })
-  declare comments: HasMany<typeof Comment>
-
   @manyToMany(() => Medium, {
     pivotTable: 'activity_medium',
     pivotForeignKey: 'activity_id',
@@ -62,14 +56,6 @@ export default class Activity extends BaseModel {
     pivotTimestamps: true,
   })
   declare media: ManyToMany<typeof Medium>
-
-  @manyToMany(() => Tag, {
-    pivotTable: 'tag_taggable',
-    pivotForeignKey: 'taggable_id',
-    pivotRelatedForeignKey: 'tag_id',
-    // pivotTimestamps: true,
-  })
-  declare tags: ManyToMany<typeof Tag>
 
   @hasOne(() => Goal)
   declare goal: HasOne<typeof Goal>

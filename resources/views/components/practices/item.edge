@@ -1,26 +1,35 @@
 <div
   class="flex space-x-6 min-w-0 relative items-center rounded-lg border bg-card text-card-foreground shadow-sm p-4"
 >
-  <div class="flex-1 flex space-x-6 items-center min-w-0">
-    <div class="hidden flex-shrink-0 md:block">
-      {{ utils.secondsToTime(item.duration) }}
-    </div>
-    <div class="min-w-0">
-      <p class="text-xs">
-        Posté par {{item.activity.user.username}}
-      </p>
-      <p>
-        <a
-          class="block font-semibold truncate"
-          href="{{ route('activity.show', {slug: item.activity.slug}) }}"
-        >{{ item.activity.title }}</a>
-      </p>
-      <p class="font-light text-sm text-muted-foreground">
-        {{ item.activity.content?.substring(0, 150) + "..." }}
-      </p>
-    </div>
+  <div class="hidden flex-shrink-0 md:block">
+    {{ utils.secondsToTime(item.duration) }}
   </div>
-  <div>
-    {{{ await $slots.main() }}}
+  <div class="flex-1 min-w-0">
+    <div class="flex space-x-6 items-center mb-3">
+      <div class="flex-1">
+        <p class="text-xs">
+          Posté par {{item.activity.user.username}}
+        </p>
+        <p>
+          <a
+            class="block font-semibold truncate"
+            href="{{ route('activity.show', {slug: item.activity.slug}) }}"
+          >{{ item.activity.title }}</a>
+        </p>
+      </div>
+      <div>
+        {{{ await $slots.main() }}}
+      </div>
+    </div>
+    {{-- <p class="font-light text-sm text-muted-foreground mb-3">
+      {{ item.activity.content?.substring(0, 150) + "..." }}
+    </p> --}}
+    <div class="">
+      @each(tag in item.activity.tags)
+        @ui.badge({variant: "secondary", class: 'text-xs block'})
+          {{ tag.label }}
+        @end
+      @end
+    </div>
   </div>
 </div>

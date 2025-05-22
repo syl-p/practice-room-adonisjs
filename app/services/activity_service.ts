@@ -1,4 +1,3 @@
-import ActivityStatuses from '#enums/activity_statuses'
 import Activity from '#models/activity'
 import User from '#models/user'
 import { inject } from '@adonisjs/core'
