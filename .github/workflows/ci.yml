@@ -23,15 +23,29 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     env:
       NODE_ENV: test
-      DB_CONNECTION: pg
-      PG_HOST: localhost
-      PG_PORT: 5432
-      PG_USER: postgres
-      PG_PASSWORD: postgres
-      PG_DB_NAME: adonis_test
+      TZ: UTC
+      PORT: 3333
+      HOST: localhost
+      LOG_LEVEL: info
+      SESSION_DRIVER: cookie
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: adonis_test
+      REDIS_HOST: 27.0.0.1
+      REDIS_PORT: 6379
       APP_KEY: base64:bXlfYXBwX2tleV9mb3JfY2k=
 
     steps:

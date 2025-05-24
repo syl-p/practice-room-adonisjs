@@ -18,27 +18,26 @@ const transmit = new Transmit({
 async function initSubscription() {
   const subscription = transmit.subscription('user/' + 94 + '/notifications')
   await subscription.create()
-  return subscription
-}
 
-const subscription = await initSubscription()
+  subscription.onMessage((data) => {
+    const notificationsBlock = document.querySelector('#user-notifications')
+    if (!notificationsBlock) return
 
-subscription.onMessage((data) => {
-  const notificationsBlock = document.querySelector('#user-notifications')
-  if (!notificationsBlock) return
+    // List
+    const list = notificationsBlock.querySelector('ul')
+    if (!list) return
+    const li = document.createElement('li')
 
-  // List
-  const list = notificationsBlock.querySelector('ul')
-  if (!list) return
-  const li = document.createElement('li')
-
-  li.innerHTML = `
+    li.innerHTML = `
     ${data.html}
   `
-  list.prepend(li)
+    list.prepend(li)
 
-  // Indicator
-  const indicator = notificationsBlock.querySelector('.indicator')
-  if (!indicator) return
-  indicator.classList.remove('hidden')
-})
+    // Indicator
+    const indicator = notificationsBlock.querySelector('.indicator')
+    if (!indicator) return
+    indicator.classList.remove('hidden')
+  })
+}
+
+initSubscription()
