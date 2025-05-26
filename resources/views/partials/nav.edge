@@ -40,15 +40,12 @@
       </a>
       <nav class="flex items-center space-x-6 text-sm font-medium">
         @each(link in links)
-          <a
-            class="transition-colors hover:text-foreground/80 text-foreground/60 text-foreground/60"
-            href="{{ link.route }}"
-          >{{ link.text }}</a>
+          <a class="transition-colors hover:text-foreground/80 text-foreground/60" href="{{ link.route }}">{{ link.text }}</a>
         @end
       </nav>
     </div>
     <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-      <nav class="flex items-center space-x-3 items-center">
+      <nav class="flex items-center space-x-3">
         @include('partials/search/btn_modal')
         @if(auth.isAuthenticated)
           @ui.button({href: route('activities.create'), toggle: 'Ajouter un nouvel activité', variant: 'ghost'})

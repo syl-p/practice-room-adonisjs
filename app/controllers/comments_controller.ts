@@ -26,7 +26,7 @@ export default class CommentsController {
     return view.render('fragments/comments', { comments })
   }
 
-  async store({ request, params, auth, view }: HttpContext) {
+  async store({ request, params, view }: HttpContext) {
     const data = await request.validateUsing(newCommentValidator)
     const commentable = await this.getCommentable(params)
 

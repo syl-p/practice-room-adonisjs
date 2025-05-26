@@ -1,4 +1,3 @@
-import { UserFactory } from '#database/factories/user_factory'
 import User from '#models/user'
 import hash from '@adonisjs/core/services/hash'
 import { test } from '@japa/runner'

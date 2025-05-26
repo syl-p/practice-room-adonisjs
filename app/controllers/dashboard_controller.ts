@@ -1,7 +1,6 @@
 import { PracticeService } from '#services/practice_service'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
-import { dd } from '@adonisjs/core/services/dumper'
 import { DateTime } from 'luxon'
 
 @inject()
@@ -44,6 +43,10 @@ export default class DashboardController {
   async previousWeek({ view, request }: HttpContext) {
     const { date } = request.qs()
     const current = DateTime.fromISO(date).minus({ weeks: 1 }).startOf('week')
+    if (!current.isValid) {
+      throw new Error('Invalid date provided')
+    }
+
     const weekStart = current.startOf('week')
     const weekEnd = current.endOf('week')
 
@@ -66,8 +69,11 @@ export default class DashboardController {
 
   async nextWeek({ request, view }: HttpContext) {
     const { date } = request.qs()
-
     const current = DateTime.fromISO(date).plus({ weeks: 1 }).startOf('week')
+    if (!current.isValid) {
+      throw new Error('Invalid date provided')
+    }
+
     const weekStart = current.startOf('week')
     const weekEnd = current.endOf('week')
 

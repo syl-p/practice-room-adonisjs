@@ -21,8 +21,8 @@ export class NotificationService {
 
     // Transmit it
     const finalChannel = this.channel.replace(':id', user.id.toString())
-    const notificationHtml = await this.render(notification)
-    transmit.broadcast(finalChannel, notificationHtml)
+    const html = await this.render(notification)
+    transmit.broadcast(finalChannel, { html })
   }
 
   static async render(notification: Notification) {

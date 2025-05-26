@@ -3,7 +3,6 @@ import Activity from '#models/activity'
 import { activityValidator } from '#validators/activity'
 import type Goal from '#models/goal'
 import Tag from '#models/tag'
-import { dd } from '@adonisjs/core/services/dumper'
 import TaggableType from '#enums/taggable_type'
 
 export default class ActivitiesController {
@@ -27,6 +26,7 @@ export default class ActivitiesController {
     await activity.load('tags')
     await activity.load('media')
     await activity.load('goal')
+
     let progression: Goal | undefined | null
 
     if (auth.isAuthenticated) {
