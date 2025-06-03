@@ -7,7 +7,6 @@ import {
   beforeUpdate,
   belongsTo,
   column,
-  computed,
   hasMany,
 } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
@@ -37,14 +36,11 @@ export default class Comment extends BaseModel {
   @column()
   declare commentableType: CommentableType
 
-  @computed()
-  get mentions() {
-    return MentionService.checkMentions(this.content)
-  }
+  @column()
+  declare parentId: number
 
   @hasMany(() => Comment, {
-    foreignKey: 'commentableId',
-    onQuery: (query) => query.where('commentable_type', CommentableType.COMMENT),
+    foreignKey: 'parentId',
   })
   declare replies: HasMany<typeof Comment>
 
@@ -54,23 +50,33 @@ export default class Comment extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
+  declare mentions: User[]
+
   @beforeCreate()
   @beforeUpdate()
   static async parseContent(comment: Comment) {
-    comment.content = await MentionService.convertMentionsToLinks(comment.content)
-    comment.content = CommentService.convertUrlToLink(comment.content)
+    // comment.mentions = await MentionService.mentionedUsers(comment.content)
+    // comment.content = await MentionService.convertMentionsToLinks(comment.content, comment.mentions)
+    // comment.content = CommentService.convertUrlToLink(comment.content)
   }
 
   @afterCreate()
-  static async notification(comment: Comment) {
+  static async notifications(comment: Comment) {
     await comment.load('user')
-    // TODO: Get the target user = comment.commentable.user ?
 
     await NotificationService.do(NotificationType.COMMENT, comment.user, {
       comment: comment.serialize(),
       user: comment.user.serialize(),
       href: '#',
     })
+
+    if (!comment.mentions) return
+
+    await Promise.all(
+      comment.mentions.map((user) =>
+        NotificationService.do(NotificationType.MENTION, user, { comment: comment.serialize() })
+      )
+    )
   }
 
   @afterDelete()

@@ -1,7 +1,11 @@
 <ul id="notifications_list" class="divide-y">
   @each(notification in notifications)
     <li class="hover:bg-primary-foreground">
-      @!notifications.item({notification})
+      @if(notification.type === CommentableType.Comment)
+        @!notifications.comment({notification})
+      @else
+        @!notifications.mention({notification})
+      @end
     </li>
   @end
 </ul>

@@ -18,8 +18,22 @@ test.group('Activity create', () => {
   })
 
   test('slug must be unique', async ({ assert }) => {
-    const activity1 = await ActivityFactory.create()
-    const activity2 = await ActivityFactory.create()
+    const user = await UserFactory.create()
+    const activity1 = new Activity()
+    activity1.merge({
+      title: 'my title !',
+      content: 'test content',
+      userId: user.id,
+    })
+    await activity1.save()
+
+    const activity2 = new Activity()
+    activity2.merge({
+      title: 'my title !',
+      content: 'test content',
+      userId: user.id,
+    })
+    await activity2.save()
 
     assert.isNotNull(activity1.slug)
     assert.isNotNull(activity2.slug)

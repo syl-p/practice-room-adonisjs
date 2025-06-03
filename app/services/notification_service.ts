@@ -26,7 +26,9 @@ export class NotificationService {
   }
 
   static async render(notification: Notification) {
-    const html = await edge.render('components/notifications/item', { notification })
+    const html = await edge.render(`components/notifications/${notification.type}`, {
+      notification,
+    })
     return html
   }
 
