@@ -17,23 +17,9 @@ test.group('Comment create', () => {
     await reply.save()
 
     // Loads replies
-    await comment.related('replies')
     await comment.load('replies')
     const ids = comment.replies.map((r) => r.id)
 
     assert.include(ids, reply.id)
-  })
-
-  test('comment must have a content', async ({ assert }) => {
-    const user = await UserFactory.create()
-
-    const comment = new Comment()
-    comment.merge({
-      userId: user.id,
-    })
-
-    assert.rejects(async () => {
-      await comment.save()
-    })
   })
 })

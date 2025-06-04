@@ -16,6 +16,7 @@ test.group('Activities show', () => {
   test('draft activity can be visited by owner', async ({ visit, browserContext }) => {
     const activity = await ActivityFactory.with('user').apply('draft').create()
     await activity.load('user')
+
     await browserContext.loginAs(activity.user)
 
     const response = await visit('/activities/' + activity.slug)
